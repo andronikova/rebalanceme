@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        index
+{% endblock %}
+
+{% block main %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ticker</th>
+            <th scope="col">number</th>
+            <th scope="col">desired fraction</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for r in row %}
+            <tr>
+
+                <td>{{r[1]}}</td> <!--ticker-->
+                <td>{{r[2]}}</td> <!--number-->
+                <td>{{r[3]}}</td> <!--number-->
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
