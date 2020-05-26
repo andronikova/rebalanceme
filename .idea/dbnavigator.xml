@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DataExportManager">
@@ -25,45 +25,23 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="cdc61ee0-9779-4de7-81df-f2348813b5af">
-        <schema name="main" object-types="index, dataset trigger, table, view, column, constraint" />
+        <schema name="main" object-types="view, table" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="8bfd0396-28b5-48e4-969f-3be12160f641">
       <console name="Connection" type="STANDARD" schema="main" session="Main" />
-      <console name="Connection 1" type="STANDARD" schema="main" session="Main"><![CDATA[select
-    p."quote",
-    p.shares,
-    p.userid
-from
-    portfolio p;
-
-select
-    h."date",
-    h.price,
-    h."quote",
-    h.shares,
-    h.userid
-from
-    history h;]]></console>
+      <console name="Connection 1" type="STANDARD" schema="main" session="Main" />
     </connection>
     <connection id="47377ffd-60ee-4126-b90f-b6db67200e78">
-      <console name="Connection 1" type="STANDARD" schema="main" session="Main"><![CDATA[SELECT * FROM users;]]></console>
+      <console name="Connection 1" type="STANDARD" schema="main" session="Main" />
     </connection>
     <connection id="10af2b38-198f-4487-8709-5de73d675ef6">
-      <console name="Connection 2" type="STANDARD" schema="main" session="Main"><![CDATA[CREATE TABLE 'users' ('id' INTEGER PRIMARY KEY NOT NULL, 'username' TEXT NOT NULL, 'hash' TEXT NOT NULL);
-INSERT INTO users (username,hash) VALUES ('test','abc');
-SELECT * FROM users;
-CREATE TABLE 'portfolio' ('userid' INTEGER NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'share' INTEGER NOT NULL, FOREIGN KEY(userid) REFERENCES users(id))
-INSERT INTO portfolio (userid,ticker, share) VALUES (1,'AAPL',2);
-
-SELECT * FROM portfolio;
-INSERT INTO portfolio (userid,ticker, share) VALUES (1,'NFLX', 3);
-SELECT * FROM portfolio;]]></console>
+      <console name="Connection 2" type="STANDARD" schema="main" session="Main" />
     </connection>
     <connection id="cdc61ee0-9779-4de7-81df-f2348813b5af">
-      <console name="Connection 3" type="STANDARD" schema="main" session="Main"><![CDATA[SELECT * FROM portfolio
+      <console name="Connection 3" type="STANDARD" schema="main" session="Main">SELECT * FROM portfolio
 
 DROP TABLE portfolio
 
@@ -72,7 +50,7 @@ CREATE TABLE 'portfolio' ('userid' INTEGER NOT NULL, 'ticker' VARCHAR(255) NOT N
 SELECT * FROM portfolio
 INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'AAPL',2, 50);
 INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'NFLX', 3, 50);
-SELECT * FROM portfolio]]></console>
+SELECT * FROM portfolio</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">

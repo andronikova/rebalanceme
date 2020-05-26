@@ -1,6 +1,8 @@
 from flask import Flask, render_template, g
 import sqlite3 as sql
 
+from helpers import apiprice
+
 app = Flask(__name__)
 
 DATABASE = 'portfolio.db'
@@ -29,6 +31,8 @@ def index_page_landing():
 
     return render_template('index.html', row=rows)
     con.close()
+
+
 
 if __name__ == "__main__":
     app.run()
