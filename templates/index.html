@@ -9,18 +9,22 @@
     <thead>
         <tr>
             <th scope="col">ticker</th>
+            <th scope="col">full name</th>
             <th scope="col">number</th>
+            <th scope="col">full price</th>
             <th scope="col">desired fraction</th>
         </tr>
     </thead>
 
     <tbody>
-        {% for r in row %}
+        {% for i in range(length) %}
             <tr>
 
-                <td>{{r[1]}}</td> <!--ticker-->
-                <td>{{r[2]}}</td> <!--number-->
-                <td>{{r[3]}}</td> <!--number-->
+                <td>{{row[i]['ticker']}}</td>
+                <td>{{row_api[i]['fullName']}}</td>
+                <td>{{row[i]['number']}}</td>
+                <td>{{row_api[i]['fullPrice']}}</td>
+                <td>{{row[i]['fraction']}}</td>
             </tr>
         {% endfor %}
     </tbody>
