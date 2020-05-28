@@ -22,10 +22,10 @@
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
-    <show-object-properties value="true" />
+    <show-object-properties value="false" />
     <loaded-nodes>
       <connection connection-id="cdc61ee0-9779-4de7-81df-f2348813b5af">
-        <schema name="main" object-types="view, table" />
+        <schema name="main" object-types="column, view, table" />
       </connection>
     </loaded-nodes>
   </component>
@@ -41,7 +41,7 @@
       <console name="Connection 2" type="STANDARD" schema="main" session="Main" />
     </connection>
     <connection id="cdc61ee0-9779-4de7-81df-f2348813b5af">
-      <console name="Connection 3" type="STANDARD" schema="main" session="Main">SELECT * FROM portfolio
+      <console name="Connection 3" type="STANDARD" schema="main" session="Main"><![CDATA[SELECT * FROM portfolio
 
 DROP TABLE portfolio
 
@@ -50,7 +50,9 @@ CREATE TABLE 'portfolio' ('userid' INTEGER NOT NULL, 'ticker' VARCHAR(255) NOT N
 SELECT * FROM portfolio
 INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'AAPL',2, 50);
 INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'NFLX', 3, 50);
-SELECT * FROM portfolio</console>
+SELECT * FROM portfolio
+SELECT * FROM users
+INSERT INTO users (username, hash) VALUES ('empty', 123)]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -113,7 +115,7 @@ SELECT * FROM portfolio</console>
           <port value="1234" />
           <database value="database" />
           <files>
-            <file path="C:\DARIA\py\portfolio\finance.db" schema="main" />
+            <file path="" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />
@@ -199,7 +201,7 @@ SELECT * FROM portfolio</console>
           <port value="1234" />
           <database value="database" />
           <files>
-            <file path="C:\DARIA\py\portfolio\finance.db" schema="main" />
+            <file path="" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />
@@ -358,7 +360,7 @@ SELECT * FROM portfolio</console>
       </connection>
       <connection id="cdc61ee0-9779-4de7-81df-f2348813b5af" active="true">
         <database>
-          <name value="Connection 3" />
+          <name value="Connection portfolio" />
           <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
@@ -401,7 +403,7 @@ SELECT * FROM portfolio</console>
           <session-management value="true" />
           <ddl-file-binding value="true" />
           <database-logging value="false" />
-          <connect-automatically value="true" />
+          <connect-automatically value="false" />
           <restore-workspace value="true" />
           <restore-workspace-deep value="true" />
           <environment-type value="default" />

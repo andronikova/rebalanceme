@@ -13,6 +13,7 @@
             <th scope="col">number</th>
             <th scope="col">full price</th>
             <th scope="col">desired fraction</th>
+            <th scope="col">real fraction</th>
         </tr>
     </thead>
 
@@ -23,11 +24,17 @@
                 <td>{{row[i]['ticker']}}</td>
                 <td>{{row_api[i]['fullName']}}</td>
                 <td>{{row[i]['number']}}</td>
-                <td>{{row_api[i]['fullPrice']}}</td>
-                <td>{{row[i]['fraction']}}</td>
+                <td>{{ "${:,.2f}".format(row_api[i]['fullPrice']) }}</td>
+                <td>{{row[i]['fraction']}}%</td>
+                <td>{{row_api[i]['realFraction']}}%</td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+<br>
+<h5>Total portfolio value:
+    {{ "${:,.2f}".format(total) }}
+</h5>
+
 
 {% endblock %}
