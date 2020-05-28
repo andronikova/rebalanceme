@@ -6,6 +6,14 @@
 
 {% block main %}
 
+<form action="\rebalance" method="POST">
+        <button class="btn btn-primary" type="submit">
+            Add new ticker
+        </button>
+        <div class="form-group">
+            <input autocomplete='on' class="form-control" type="text" name="ticker" placeholder="ticker">
+        </div>
 
+</form>
 
 {% endblock %}

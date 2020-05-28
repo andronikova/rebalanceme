@@ -18,23 +18,22 @@
     </thead>
 
     <tbody>
-        {% for i in range(length) %}
+        {% for p in portfolio %}
             <tr>
-
-                <td>{{row[i]['ticker']}}</td>
-                <td>{{row_api[i]['fullName']}}</td>
-                <td>{{row[i]['number']}}</td>
-                <td>{{ "${:,.2f}".format(row_api[i]['fullPrice']) }}</td>
-                <td>{{row[i]['fraction']}}%</td>
-                <td>{{row_api[i]['realFraction']}}%</td>
+                <td>{{p[i]['ticker']}}</td>
+                <td>{{p[i]['fullName']}}</td>
+                <td>{{p[i]['number']}}</td>
+                <td>{{ "${:,.2f}".format(p[i]['fullPrice']) }}</td>
+                <td>{{p[i]['fraction']}}%</td>
+                <td>{{p[i]['realFraction']}}%</td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
 <br>
-<h5>Total portfolio value:
-    {{ "${:,.2f}".format(total) }}
-</h5>
+<!--<h5>Total portfolio value:-->
+    <!--{{ "${:,.2f}".format(total) }}-->
+<!--</h5>-->
 
 
 {% endblock %}
