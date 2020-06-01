@@ -1,5 +1,6 @@
 import os, urllib.parse, requests, math
 import sqlite3 as sql
+from flask import Flask, render_template, request, redirect
 
 def apiprice(ticker):
     # load price from NY
@@ -36,7 +37,7 @@ def load_portfolio(userid, database):
 
         # for new user
         if len(rows) == 0:
-            return None
+            return None, None
 
         # for user WITH PORTFOLIO
         i = 0
@@ -57,4 +58,4 @@ def load_portfolio(userid, database):
             portfolio[j]["realFraction"] = math.floor(100 * portfolio[j]['fullPrice'] / total)
 
     con.close()
-    return portfolio
+    return portfolio, total

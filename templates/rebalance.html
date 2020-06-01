@@ -1,19 +1,52 @@
 {% extends "layout.html" %}
 
 {% block title  %}
-        rebalance
+        index
 {% endblock %}
 
 {% block main %}
 
-<form action="\rebalance" method="POST">
-        <button class="btn btn-primary" type="submit">
-            Add new ticker
-        </button>
-        <div class="form-group">
-            <input autocomplete='on' class="form-control" type="text" name="ticker" placeholder="ticker">
-        </div>
+<h5>Current portfolio, total value {{ "${:,.2f}".format(total) }}</h5>
 
-</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ticker</th>
+            <th scope="col">number</th>
+            <th scope="col">full price</th>
+            <th scope="col">desired fraction</th>
+            <th scope="col">real fraction</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for i in range(length) %}
+            <tr>
+                <td>{{portfolio[i]['ticker']}}</td>
+                <td>{{portfolio[i]['number']}}</td>
+                <td>{{ "${:,.2f}".format(portfolio[i]['fullPrice']) }}</td>
+                <td>{{portfolio[i]['fraction']}}%</td>
+                <td>{{portfolio[i]['realFraction']}}%</td>
+                <td>
+                    <form action="/rebalance/addnew">
+                        <div class="form-group">
+                            <input id={{portfolio[i]['ticker']}} type="submit" value="change" class="form-control"/>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+<br>
+
+    <form action="/rebalance/addnew">
+        <div class="form-group">
+            <input type="submit" value="Add new" class="form-control"/>
+        </div>
+    </form>
+
+
 
 {% endblock %}
