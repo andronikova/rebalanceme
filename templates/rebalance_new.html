@@ -28,21 +28,52 @@
 
 
 {% if type == 2 %}
-    <h5 id="ticker_info">{{ticker}}  </h5>
+    <h5>Adding {{ticker}} to portfolio </h5>
 
-    <form onsubmit="calc(); return false;">
-        <input id="number" autocomplete="off" class="form-group" type="number" name="number" placeholder = "number">
-        <input type='submit'>
-    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ticker</th>
+                <th scope="col">number</th>
+                <th scope="col">full price</th>
+                <th scope="col">desired fraction</th>
+                <th scope="col">real fraction</th>
+            </tr>
+        </thead>
+        <tbody>
+            <th scope="col"> {{ticker}} </th>
+            <th scope="col">
+                <div class="form-group">
+                    <form onsubmit="calc(); return false;">
+                        <input id="number" autocomplete="off" class="form-group" type="number" name="number" placeholder = "number">
+                        <input type='submit' class="form-control" value="Calculate"/>
+                    </form>
+                </div>
+            </th>
+            <th scope="col" id="full_price"></th>
+            <th scope="col">
+
+            </th>
+            <th scope="col" id="real_fraction"></th>
+
+
+        </tbody>
+
+    </table>
+
 
     <script>
+        var jsprice= {{ price }};
+        var jstotal = {{ total }};
         function calc()
         {
-            let full_price = document.querySelector('#number').value;
-            document.querySelector('#ticker_info').innerHTML = {{ ticker }} + full_price
+            let full_price =  jsprice * document.querySelector('#number').value;
+            let real_fraction = 100 * full_price / (jstotal + full_price)
+            document.querySelector('#full_price').innerHTML = '$' + full_price.toFixed(2) ;
+            document.querySelector('#real_fraction').innerHTML = real_fraction.toFixed(0) + '%';
+
         }
     </script>
-{{"${:,.2f}".format(price)}}
 
 {% endif %}
 {% endblock %}

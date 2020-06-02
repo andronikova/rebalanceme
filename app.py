@@ -45,8 +45,9 @@ def rebalance_page_addnew():
             return error_page("Ticker name is not correct!")
 
         price = apiprice(ticker)["price"]
+        portfolio, total = load_portfolio(userid, DATABASE)
 
-        return render_template("rebalance_new.html",type=2, ticker=ticker, price=price)
+        return render_template("rebalance_new.html",type=2, ticker=ticker, price=price,total=total)
 
 
 if __name__ == "__main__":

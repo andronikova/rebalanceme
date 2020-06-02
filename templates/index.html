@@ -10,6 +10,7 @@
         <tr>
             <th scope="col">ticker</th>
             <th scope="col">full name</th>
+            <th scope="col">price</th>
             <th scope="col">number</th>
             <th scope="col">full price</th>
             <th scope="col">desired fraction</th>
@@ -22,12 +23,23 @@
             <tr>
                 <td>{{portfolio[i]['ticker']}}</td>
                 <td>{{portfolio[i]['fullName']}}</td>
+                <td>{{"${:,.2f}".format(portfolio[i]['price'])}}</td>
                 <td>{{portfolio[i]['number']}}</td>
                 <td>{{ "${:,.2f}".format(portfolio[i]['fullPrice']) }}</td>
                 <td>{{portfolio[i]['fraction']}}%</td>
                 <td>{{portfolio[i]['realFraction']}}%</td>
             </tr>
         {% endfor %}
+
+            <tr>
+                <td>cash, rub </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>full price</td>
+                <td></td>
+                <td>calc</td>
+            </tr>
     </tbody>
 </table>
 <br>
