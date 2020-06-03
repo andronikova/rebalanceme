@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 import sqlite3 as sql
 import math
 
@@ -9,21 +9,32 @@ app = Flask(__name__)
 
 DATABASE = 'portfolio.db'
 userid = 1 #TODO - download from session
+app.secret_key = 'xyz'
 
 @app.route('/', methods=['GET'])
-def index_page_landing():
-    portfolio, total = load_portfolio(userid, DATABASE)
+def index_page():
 
-    # for new user
-    if portfolio is None:
-        return render_template('index_newuser.html')
+    #check session for portfolio infromation
+    if session.get('portfolio') is None:
+        boolres = load_portfolio(userid, DATABASE)
+
+        #new user
+        if boolres == False:
+            return render_template('index_newuser.html')
 
     # for user WITH PORTFOLIO
-    return render_template('index.html', portfolio=portfolio,length=len(portfolio),total=total)
+    portfolio = session.get('portfolio')
+    cash = session.get('cash')
+    total = session.get('total')
+    date = session.get('datetime')
+
+    # print(portfolio)
+
+    return render_template('index.html', portfolio=portfolio,length=len(portfolio),total=total, cash=cash,date=date)
 
 @app.route("/rebalance")
 def rebalance_page():
-    portfolio, total = load_portfolio(userid, DATABASE)
+    portfolio, total, cash = load_portfolio(userid, DATABASE)
 
     # for new user
     if portfolio is None:
@@ -45,7 +56,7 @@ def rebalance_page_addnew():
             return error_page("Ticker name is not correct!")
 
         price = apiprice(ticker)["price"]
-        portfolio, total = load_portfolio(userid, DATABASE)
+        portfolio, total, cash = load_portfolio(userid, DATABASE)
 
         return render_template("rebalance_new.html",type=2, ticker=ticker, price=price,total=total)
 

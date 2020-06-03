@@ -5,11 +5,16 @@
 {% endblock %}
 
 {% block main %}
+<h5>Total portfolio value:
+{{ "${:,.2f}".format(session.get('total')) }}
+
+</h5>
+
 <table class="table">
     <thead>
         <tr>
             <th scope="col">ticker</th>
-            <th scope="col">full name</th>
+            <th scope="col">name</th>
             <th scope="col">price</th>
             <th scope="col">number</th>
             <th scope="col">full price</th>
@@ -18,34 +23,50 @@
         </tr>
     </thead>
 
+
     <tbody>
-        {% for i in range(length) %}
+
+        {% for key in session.get('portfolio') %}
             <tr>
-                <td>{{portfolio[i]['ticker']}}</td>
-                <td>{{portfolio[i]['fullName']}}</td>
-                <td>{{"${:,.2f}".format(portfolio[i]['price'])}}</td>
-                <td>{{portfolio[i]['number']}}</td>
-                <td>{{ "${:,.2f}".format(portfolio[i]['fullPrice']) }}</td>
-                <td>{{portfolio[i]['fraction']}}%</td>
-                <td>{{portfolio[i]['realFraction']}}%</td>
+                <td>{{portfolio[key]['ticker']}}</td>
+                <td>{{portfolio[key]['fullName']}}</td>
+                <td>{{"${:,.2f}".format(portfolio[key]['price'])}}</td>
+                <td>{{portfolio[key]['number']}}</td>
+                <td>{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>
+                <td>{{portfolio[key]['fraction']}}%</td>
+                <td>{{portfolio[key]['realFraction']}}%</td>
             </tr>
         {% endfor %}
 
+
+        {% for key in cash %}
             <tr>
-                <td>cash, rub </td>
+                <td>cash </td>
+                <td>{{key}}</td>
+                <td>{{cash[key]['symbol']}}{{cash[key]['value']}}</td>
                 <td></td>
+                <td>${{cash[key]['usdprice']}}</td>
                 <td></td>
-                <td></td>
-                <td>full price</td>
-                <td></td>
-                <td>calc</td>
+                <td>{{cash[key]['realFraction']}}%</td>
             </tr>
+        {% endfor %}
     </tbody>
 </table>
 <br>
 
-<h5>Total portfolio value:
-{{ "${:,.2f}".format(total) }}
-</h5>
+<a href="rebalance_new.html" class="btn btn-primary">Add new ticker</a>
+<a href="rebalance.html" class="btn btn-primary">Rebalance</a>
+
+<br>
+
+<h5>prices and exchange rates are actual for {{ date }} </h5>
+
+    <form action="\" method="POST">
+        <div class="form-group">
+            <input name="refresh" type="submit" value="refresh" class="form-group">
+            </div>
+    </form>
+
+
 
 {% endblock %}
