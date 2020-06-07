@@ -20,6 +20,7 @@
             <th scope="col">full price</th>
             <th scope="col">desired fraction</th>
             <th scope="col">real fraction</th>
+            <th scope="col">Rebalance suggestion</th>
         </tr>
     </thead>
 
@@ -35,6 +36,7 @@
                 <td>{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>
                 <td>{{portfolio[key]['fraction']}}%</td>
                 <td>{{portfolio[key]['realFraction']}}%</td>
+                <td>{{portfolio[key]['suggestion']}}</td>
             </tr>
         {% endfor %}
 
@@ -48,24 +50,37 @@
                 <td>${{cash[key]['usdprice']}}</td>
                 <td></td>
                 <td>{{cash[key]['realFraction']}}%</td>
+                <td></td>
             </tr>
         {% endfor %}
+
+        <tr>
+            <td>
+            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'addnewticker') }}';"> Add new ticker</button>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="rebalance.html" class="btn btn-primary">Rebalance</a></td>
+        </tr>
     </tbody>
 </table>
 <br>
 
-<a href="rebalance_new.html" class="btn btn-primary">Add new ticker</a>
-<a href="rebalance.html" class="btn btn-primary">Rebalance</a>
+
 
 <br>
-
-<h5>prices and exchange rates are actual for {{ date }} </h5>
-
-    <form action="\" method="POST">
-        <div class="form-group">
-            <input name="refresh" type="submit" value="refresh" class="form-group">
-            </div>
-    </form>
+<br>
+<br>
+<h7>prices and exchange rates are actual for {{ date }} </h7>
+<form action="\" method="POST">
+    <div class="form-group">
+        <input name="refresh" type="submit" value="refresh" class="form-group">
+        </div>
+</form>
 
 
 

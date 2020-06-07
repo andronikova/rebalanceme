@@ -1,7 +1,7 @@
 import os, urllib.parse, requests, math
 import sqlite3 as sql
 from flask import Flask, render_template, request, redirect, session
-from datetime import datetime
+import time
 
 def apiprice(ticker):
     # load price from NY
@@ -53,6 +53,13 @@ def error_page(message):
 
 
 def load_portfolio(userid, database):
+
+    # clear portfolio, cash and total info in session
+    session.pop('portfolio',None)
+    session.pop('cash', None)
+    session.pop('total', None)
+    session.pop('datetime', None)
+
     # to load portfolio data from db and combine in with results of API query
     with sql.connect(database) as con:
         # to have result of .execute as dictionary
@@ -102,19 +109,28 @@ def load_portfolio(userid, database):
         for key in cash:
             cash[key]['realFraction'] = math.floor(100 * cash[key]["usdprice"] / total)
 
+
         # real fraction calculation
         for j in range(i):
             portfolio[j]["realFraction"] = math.floor(100 * portfolio[j]['fullPrice'] / total)
-
+            portfolio[j]["suggestion"] = rebalance_suggestion(portfolio[j]["number"],portfolio[j]["price"],portfolio[j]["fraction"],total)
 
     con.close()
+    # print(portfolio)
 
-    print(portfolio)
     # save results in session
     # TODO clear session after 12 hours
     session['portfolio'] = portfolio
     session['cash'] = cash
     session['total'] = total
-    session['datetime'] = datetime.now()
+    session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")
 
     return True
+
+
+def rebalance_suggestion(number, price, fraction, total):
+    # calculate number for ticker based on desired fraction
+    newnumber = math.floor(total * fraction / 100 / price)
+    res = number - newnumber
+
+    return res

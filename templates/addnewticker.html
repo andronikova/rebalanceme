@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        add new ticker
+{% endblock %}
+
+{% block main %}
+Type ticker name. After submition you will be redirect to change fraction page.
+<form action="\addnewticker" method="POST">
+        <div class="form-group">
+            <input id="newticker" autocomplete='on' class="form-control" type="text" name="newticker" placeholder="new ticker">
+            <input id="submitnewticker" name="submitnewticker" type="submit" disabled>
+        </div>
+</form>
+
+<script>
+    document.querySelector('#newticker').onkeyup = function(){
+        if (document.querySelector('#newticker').value === '') {
+            document.querySelector('#submitnewticker').disabled = true;
+        } else {
+            document.querySelector('#submitnewticker').disabled = false;
+        }
+    }
+</script>
+
+
+
+
+{% endblock %}
