@@ -98,7 +98,7 @@ def load_portfolio(userid, database):
         cash = {}
         cash["rub"] = {"value":cashres[0]["rub"],"usdprice": exchange["rub"]*cashres[0]["rub"],"tousd": exchange["rub"],"symbol":"₽"}
         cash["usd"] = {"value": cashres[0]["usd"], "usdprice": cashres[0]["usd"],"tousd": 1,"symbol":"$"}
-        cash["euro"] = {"value": cashres[0]["usd"],"usdprice": exchange["euro"]*cashres[0]["euro"],"tousd": exchange["euro"],"symbol":"€"}
+        cash["euro"] = {"value": cashres[0]["euro"],"usdprice": exchange["euro"]*cashres[0]["euro"],"tousd": exchange["euro"],"symbol":"€"}
 
         # add to total cash in usd
         total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]

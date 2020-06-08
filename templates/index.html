@@ -15,8 +15,8 @@
         <tr>
             <th scope="col">ticker</th>
             <th scope="col">name</th>
-            <th scope="col">price</th>
             <th scope="col">number</th>
+            <th scope="col">price</th>
             <th scope="col">full price</th>
             <th scope="col">desired fraction</th>
             <th scope="col">real fraction</th>
@@ -31,26 +31,12 @@
             <tr>
                 <td>{{key}}</td>
                 <td>{{portfolio[key]['fullName']}}</td>
-                <td>{{"${:,.2f}".format(portfolio[key]['price'])}}</td>
                 <td>{{portfolio[key]['number']}}</td>
+                <td>{{"${:,.2f}".format(portfolio[key]['price'])}}</td>
                 <td>{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>
                 <td>{{portfolio[key]['fraction']}}%</td>
                 <td>{{portfolio[key]['realFraction']}}%</td>
                 <td>{{portfolio[key]['suggestion']}}</td>
-            </tr>
-        {% endfor %}
-
-
-        {% for key in cash %}
-            <tr>
-                <td>cash </td>
-                <td>{{key}}</td>
-                <td>{{cash[key]['symbol']}}{{cash[key]['value']}}</td>
-                <td></td>
-                <td>${{cash[key]['usdprice']}}</td>
-                <td></td>
-                <td>{{cash[key]['realFraction']}}%</td>
-                <td></td>
             </tr>
         {% endfor %}
 
@@ -68,8 +54,53 @@
         </tr>
     </tbody>
 </table>
-<br>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">currency</th>
+            <th scope="col">value</th>
+            <th scope="col">to USD</th>
+            <th scope="col">price in USD</th>
+            <th scope="col">real fraction</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        {% for key in cash %}
+            <tr>
+                <td>{{key}}</td>
+                <td>{{cash[key]['symbol']}}{{cash[key]['value']}}</td>
+                <td>{{cash[key]['tousd']}}</td>
+                <td>${{cash[key]['usdprice']}}</td>
+                <td>{{cash[key]['realFraction']}}%</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+<br>
+<h5>Change cash value</h5>
+<form action="\" method="POST">
+    <div class="form-group">
+        <input autocomplete='off' class="form-class" type="number" name="cashvalue">
+        <select name="currency">
+            <option value="rub">RUB</option>
+            <option value="euro">EURO</option>
+            <option value="usd">USD</option>
+        </select>
+
+        <select name="cashtype">
+            <option value="salary">Salary</option>
+            <option value="divident">Dividend</option>
+        </select>
+
+        <br>
+        <input name="changecash" type="submit" value="Save cash" class="btn btn-primary">
+    </div>
+</form>
 
 
 <br>

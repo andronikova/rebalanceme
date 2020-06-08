@@ -45,7 +45,7 @@
 SELECT * FROM cash
 SELECT * FROM users
 SELECT * FROM history
-
+SELECT * FROM cash_history
 
 DROP TABLE portfolio
 
@@ -63,7 +63,10 @@ INSERT INTO cash (userid, rub, usd, euro) VALUES (1, 10000,0,0)
 SELECT rub,usd,euro FROM cash WHERE userid == 1
 
 
-CREATE TABLE 'history' ( 'userid' INTEGER NOT NULL, 'date' DATETIME NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'price' FLOAT NOT NULL, 'number' INTEGER NOT NULL, 'fraction' INTEGER NOT NULL, 'eventtype' VARCHAR(255) NOT NULL, FOREIGN KEY(userid) REFERENCES users(id) )]]></console>
+CREATE TABLE 'history' ( 'userid' INTEGER NOT NULL, 'date' DATETIME NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'price' FLOAT NOT NULL, 'number' INTEGER NOT NULL, 'fraction' INTEGER NOT NULL, 'eventtype' VARCHAR(255) NOT NULL, FOREIGN KEY(userid) REFERENCES users(id) )
+
+
+CREATE TABLE 'cash_history' ( 'userid' INTEGER NOT NULL, 'date' DATETIME NOT NULL, 'usd' FLOAT NOT NULL, 'euro' FLOAT NOT NULL, 'rub' FLOAT NOT NULL, 'eventtype' VARCHAR(255) NOT NULL, FOREIGN KEY(userid) REFERENCES users(id) )]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">

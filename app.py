@@ -11,6 +11,7 @@ DATABASE = 'portfolio.db'
 userid = 1 #TODO - download from session
 app.secret_key = 'xyz'
 
+
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
@@ -27,8 +28,36 @@ def index_page():
 
     if request.method == "POST":
         if request.form.get("refresh") is not None:
-            print('refreshing page')
+            load_portfolio(userid, DATABASE)
+            return render_template('index.html', portfolio=session.get('portfolio'), total=session.get('total'),
+                                   cash=session.get('cash'), date=session.get('datetime'))
 
+
+        if request.form.get("cashvalue") is not None:
+            cash = int(request.form.get('cashvalue'))
+            currency = request.form.get('currency')
+            type = request.form.get('cashtype')
+
+            oldcash = session["cash"][currency]["value"]
+            newcash = oldcash + cash
+
+            # in case of decreasing of cash - check do we have such money
+            if newcash < 0:
+                return error_page("You don't have enough cash.")
+
+            # change cash db
+            with sql.connect(DATABASE) as con:
+                con.row_factory = sql.Row
+                cur = con.cursor()
+
+                tmp = "UPDATE cash SET " + currency + "=:newcash WHERE userid==:userid"
+                cur.execute(tmp, {"userid":userid, "newcash":newcash})
+
+                #TODO change history
+
+            con.close()
+
+            # reload portfolio
             load_portfolio(userid, DATABASE)
 
             return render_template('index.html', portfolio=session.get('portfolio'), total=session.get('total'),
