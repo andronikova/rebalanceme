@@ -1,52 +1,51 @@
 {% extends "layout.html" %}
 
 {% block title  %}
-        index
+        rebalance
 {% endblock %}
 
 {% block main %}
-
-<h5>Current portfolio, total value {{ "${:,.2f}".format(total) }}</h5>
-
 <table class="table">
     <thead>
         <tr>
             <th scope="col">ticker</th>
             <th scope="col">number</th>
+            <th scope="col">suggestion</th>
+            <th scope="col">price</th>
             <th scope="col">full price</th>
             <th scope="col">desired fraction</th>
             <th scope="col">real fraction</th>
         </tr>
     </thead>
-
+    <form action="\rebalance" method="POST">
     <tbody>
-        {% for i in range(length) %}
+        {% for key in portfolio %}
             <tr>
-                <td>{{portfolio[i]['ticker']}}</td>
-                <td>{{portfolio[i]['number']}}</td>
-                <td>{{ "${:,.2f}".format(portfolio[i]['fullPrice']) }}</td>
-                <td>{{portfolio[i]['fraction']}}%</td>
-                <td>{{portfolio[i]['realFraction']}}%</td>
+                <td>{{key}}</td>
                 <td>
-                    <form action="/rebalance/addnew">
-                        <div class="form-group">
-                            <input id={{portfolio[i]['ticker']}} type="submit" value="change" class="form-control"/>
-                        </div>
-                    </form>
+                    <div class="form-group">
+                        <input autocomplete='off' class="form-class" type="number" name={{key}} value={{portfolio[key]['number']}}>
+                    </div>
                 </td>
+                <td>{{portfolio[key]['suggestion']}}</td>
+                <td>
+                    <div class="form-group">
+                        <input autocomplete='off' class="form-class" type="number" name={{key}} value={{"{:,.2f}".format(portfolio[key]['price'])}}>
+                    </div>
+                </td>
+                <td id="fullPrice" + "w">{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>
+                <td>{{portfolio[key]['fraction']}}%</td>
+                <td id="realFraction">{{portfolio[key]['realFraction']}}%</td>
             </tr>
         {% endfor %}
     </tbody>
-
 </table>
-<br>
 
-    <form action="/rebalance/addnew">
-        <div class="form-group">
-            <input type="submit" value="Add new" class="form-control"/>
-        </div>
     </form>
-
+<br>
+<br>
+<br>
+<h7>prices and exchange rates are actual for {{ date }} </h7>
 
 
 {% endblock %}

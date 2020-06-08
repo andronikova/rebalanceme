@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        history
+{% endblock %}
+
+{% block main %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">event</th>
+            <th scope="col">date</th>
+            <th scope="col">ticker</th>
+            <th scope="col">price</th>
+            <th scope="col">number</th>
+            <th scope="col">desired fraction</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for row in history%}
+            <tr>
+                <td>{{row["eventtype"]}}</td>
+                <td>{{row["date"]}}</td>
+                <td>{{row["ticker"]}}</td>
+                <td>{{row["price"]}}</td>
+                <td>{{row["number"]}}</td>
+                <td>{{row["fraction"]}}</td>
+
+            </tr>
+        {% endfor %}
+
+
+    </tbody>
+</table>
+{% endblock %}

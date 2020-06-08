@@ -74,16 +74,14 @@ def load_portfolio(userid, database):
             return False
 
         # for user WITH PORTFOLIO
-        i = 0
         portfolio = {}
         total = 0 # for whole portfolio
         for row in rows:
             res = apiprice(row['ticker'])
             if res is not None:
-                portfolio[i] = {'fullName': res['name'], 'price': res['price'],'fullPrice' : res['price'] * row['number'],'ticker' : row['ticker'], 'number' : row['number'], 'fraction' : row['fraction']}
-
-                total += portfolio[i]['fullPrice']
-                i += 1
+                portfolio[row['ticker']] = {'fullName': res['name'],  'number' : row['number'], 'fraction' : row['fraction']}
+                portfolio[row['ticker']].update({'price': res['price'], 'fullPrice' : res['price'] * row['number']})
+                total += portfolio[row['ticker']]['fullPrice']
             else:
                 error_page('Could not load price')
 
@@ -105,15 +103,14 @@ def load_portfolio(userid, database):
         # add to total cash in usd
         total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
 
-        # calculate fraction of cash
+        # calculate fraction for cash
         for key in cash:
             cash[key]['realFraction'] = math.floor(100 * cash[key]["usdprice"] / total)
 
-
         # real fraction calculation
-        for j in range(i):
-            portfolio[j]["realFraction"] = math.floor(100 * portfolio[j]['fullPrice'] / total)
-            portfolio[j]["suggestion"] = rebalance_suggestion(portfolio[j]["number"],portfolio[j]["price"],portfolio[j]["fraction"],total)
+        for key in portfolio:
+            portfolio[key]["realFraction"] = math.floor(100 * portfolio[key]['fullPrice'] / total)
+            portfolio[key]["suggestion"] = rebalance_suggestion(portfolio[key]["number"],portfolio[key]["price"],portfolio[key]["fraction"],total)
 
     con.close()
     # print(portfolio)

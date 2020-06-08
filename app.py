@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3 as sql
-import math
+import math, time
 
 
 from helpers import apiprice, error_page, load_portfolio, rebalance_suggestion
@@ -14,7 +14,7 @@ app.secret_key = 'xyz'
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
-        #check session for portfolio infromation
+        #check session for portfolio information
         if session.get('portfolio') is None:
             boolres = load_portfolio(userid, DATABASE)
 
@@ -23,35 +23,24 @@ def index_page():
                 return render_template('index_newuser.html')
 
         # for user WITH PORTFOLIO
-        portfolio = session.get('portfolio')
-        cash = session.get('cash')
-        total = session.get('total')
-        date = session.get('datetime')
-
-        return render_template('index.html', portfolio=portfolio,length=len(portfolio),total=total, cash=cash,date=date)
+        return render_template('index.html', portfolio=session.get('portfolio'),total=session.get('total'), cash=session.get('cash'),date=session.get('datetime'))
 
     if request.method == "POST":
         if request.form.get("refresh") is not None:
             print('refreshing page')
 
             load_portfolio(userid, DATABASE)
-            portfolio = session.get('portfolio')
-            cash = session.get('cash')
-            total = session.get('total')
-            date = session.get('datetime')
 
-            return render_template('index.html', portfolio=portfolio, length=len(portfolio), total=total, cash=cash, date=date)
+            return render_template('index.html', portfolio=session.get('portfolio'), total=session.get('total'),
+                                   cash=session.get('cash'), date=session.get('datetime'))
 
 
-@app.route("/rebalance")
-def rebalance_page():
-    portfolio, total, cash = load_portfolio(userid, DATABASE)
+@app.route("/rebalance", methods=['GET','POST'])
+def rebalance():
+    if request.method == "GET":
+        return render_template("rebalance.html",portfolio=session.get("portfolio"),total=session.get('total'),
+                                   cash=session.get('cash'), date=session.get('datetime') )
 
-    # for new user
-    if portfolio is None:
-        return redirect("/rebalance/addnew")
-
-    return render_template("rebalance.html", portfolio=portfolio,length=len(portfolio),total=total)
 
 @app.route('/addnewticker', methods=['GET','POST'])
 def addnewticker():
@@ -85,18 +74,53 @@ def addnewticker():
 
         con.close()
 
-
-
-        # change history
-        # rewrite info in session
+        # reload  new portfolio in session
+        load_portfolio(userid, DATABASE)
 
         return redirect("/changefraction")
 
-@app.route('/changefraction', methods=['GET','POST'])
-def change_fraction():
-    if request.method == "GET":
 
-        return render_template("change_fraction.html")
+@app.route('/changefraction', methods=['GET','POST'])
+def changefraction():
+    if request.method == "GET":
+        return render_template("change_fraction.html",portfolio=session.get('portfolio'), total=session.get('total'),
+                                   cash=session.get('cash'), date=session.get('datetime'))
+
+    if request.method == "POST":
+        with sql.connect(DATABASE) as con:
+            con.row_factory = sql.Row
+            cur = con.cursor()
+
+        # saving new fraction in portfolio and history
+            for key in session["portfolio"]:
+                fraction = request.form.get(key)
+                cur.execute("UPDATE portfolio SET fraction=:fraction WHERE userid == :userid AND ticker==:ticker",
+                            {"userid": userid, "ticker": key,"fraction":fraction})
+
+                tmpdict = {"userid":userid, "date": time.strftime("%d-%m-%Y, %H:%M"), "ticker": key, "number": session["portfolio"][key]['number'],
+                           "price":session["portfolio"][key]['price'], "fraction":fraction, "eventtype":'fraction'}
+                cur.execute("INSERT INTO history (userid, date, ticker, number, price, fraction, eventtype) VALUES (:userid, :date, :ticker, :number, :price, :fraction, :eventtype)", tmpdict)
+
+        con.close()
+
+        load_portfolio(userid, DATABASE)
+        return redirect("/")
+
+@app.route('/history', methods=['GET','POST'])
+def history():
+    if request.method == "GET":
+        with sql.connect(DATABASE) as con:
+            con.row_factory = sql.Row
+            cur = con.cursor()
+
+            cur.execute("SELECT * FROM history WHERE userid == :userid", {"userid":userid})
+            history = cur.fetchall()
+
+            for row in history:
+                print(row['eventtype'])
+
+        return render_template('history.html', history=history)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -42,27 +42,28 @@
     </connection>
     <connection id="cdc61ee0-9779-4de7-81df-f2348813b5af">
       <console name="Connection 3" type="STANDARD" schema="main" session="Main"><![CDATA[SELECT * FROM portfolio
+SELECT * FROM cash
+SELECT * FROM users
+SELECT * FROM history
+
 
 DROP TABLE portfolio
 
 CREATE TABLE 'portfolio' ('userid' INTEGER NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'number' INTEGER NOT NULL, 'fraction' INTEGER NOT NULL, FOREIGN KEY(userid) REFERENCES users(id))
-
-SELECT * FROM portfolio
 INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'AAPL',2, 50);
-INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'NFLX', 3, 50);
-SELECT * FROM portfolio
-SELECT * FROM users
+DELETE FROM portfolio WHERE ticker == 'NFLX'
+UPDATE portfolio SET fraction=49 WHERE userid == 1 AND ticker=="AAPL"
+
+
 INSERT INTO users (username, hash) VALUES ('empty', 123)
 
+
 CREATE TABLE 'cash' ('userid' INTEGER NOT NULL, 'rub' MONEY NOT NULL, 'euro' MONEY NOT NULL, 'usd' MONEY NOT NULL, FOREIGN KEY(userid) REFERENCES users(id))
-
 INSERT INTO cash (userid, rub, usd, euro) VALUES (1, 10000,0,0)
+SELECT rub,usd,euro FROM cash WHERE userid == 1
 
-SELECT * FROM cash
 
-INSERT INTO cash (userid, rub, usd, euro) VALUES (2, 0,0,0)
-
-SELECT rub,usd,euro FROM cash WHERE userid == 1]]></console>
+CREATE TABLE 'history' ( 'userid' INTEGER NOT NULL, 'date' DATETIME NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'price' FLOAT NOT NULL, 'number' INTEGER NOT NULL, 'fraction' INTEGER NOT NULL, 'eventtype' VARCHAR(255) NOT NULL, FOREIGN KEY(userid) REFERENCES users(id) )]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
