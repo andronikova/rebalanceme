@@ -52,6 +52,8 @@ DROP TABLE portfolio
 CREATE TABLE 'portfolio' ('userid' INTEGER NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'number' INTEGER NOT NULL, 'fraction' INTEGER NOT NULL, FOREIGN KEY(userid) REFERENCES users(id))
 INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'AAPL',2, 50);
 DELETE FROM portfolio WHERE ticker == 'NFLX'
+DELETE FROM portfolio WHERE ticker == 'S'
+
 UPDATE portfolio SET fraction=49 WHERE userid == 1 AND ticker=="AAPL"
 
 

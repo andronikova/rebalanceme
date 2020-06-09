@@ -127,7 +127,7 @@ def load_portfolio(userid, database):
 
 def rebalance_suggestion(number, price, fraction, total):
     # calculate number for ticker based on desired fraction
-    newnumber = math.floor(total * fraction / 100 / price)
+    newnumber =round(total * fraction / 100 / price)
     res = newnumber - number
 
     return res

@@ -34,7 +34,7 @@ def index_page():
 
 
         if request.form.get("cashvalue") is not None:
-            cash = int(request.form.get('cashvalue'))
+            cash = float(request.form.get('cashvalue'))
             currency = request.form.get('currency')
             type = request.form.get('cashtype')
 
@@ -70,7 +70,7 @@ def rebalance():
         portfolio = session.get("portfolio")
 
         ids = {}
-        idtag = ['number', 'price','realFraction','fullPrice','newnumber']
+        idtag = ['number', 'price','realFraction','newnumber']
         for key in portfolio:
             ids[key] = {}
             for tag in idtag:

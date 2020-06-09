@@ -50,7 +50,9 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><a href="rebalance.html" class="btn btn-primary">Rebalance</a></td>
+            <td>
+                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'rebalance') }}';"> Rebalance</button>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -70,9 +72,9 @@
         {% for key in cash %}
             <tr>
                 <td>{{key}}</td>
-                <td>{{cash[key]['symbol']}}{{cash[key]['value']}}</td>
-                <td>{{cash[key]['tousd']}}</td>
-                <td>${{cash[key]['usdprice']}}</td>
+                <td>{{cash[key]['symbol']}}{{"{:,.2f}".format(cash[key]['value'])}}</td>
+                <td>{{"{:,.2f}".format(cash[key]['tousd'])}}</td>
+                <td>${{"{:,.2f}".format(cash[key]['usdprice'])}}</td>
                 <td>{{cash[key]['realFraction']}}%</td>
             </tr>
         {% endfor %}
@@ -85,7 +87,7 @@
 <h5>Change cash value</h5>
 <form action="\" method="POST">
     <div class="form-group">
-        <input autocomplete='off' class="form-class" type="number" name="cashvalue">
+        <input autocomplete='off' class="form-class" type="number" name="cashvalue" step="0.01">
         <select name="currency">
             <option value="rub">RUB</option>
             <option value="euro">EURO</option>
