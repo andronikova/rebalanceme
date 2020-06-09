@@ -67,8 +67,18 @@ def index_page():
 @app.route("/rebalance", methods=['GET','POST'])
 def rebalance():
     if request.method == "GET":
-        return render_template("rebalance.html",portfolio=session.get("portfolio"),total=session.get('total'),
-                                   cash=session.get('cash'), date=session.get('datetime') )
+        portfolio = session.get("portfolio")
+
+        ids = {}
+        idtag = ['number', 'price','realFraction','fullPrice','newnumber']
+        for key in portfolio:
+            ids[key] = {}
+            for tag in idtag:
+                ids[key].update({tag: tag + "_" + key})
+
+        print(ids)
+        return render_template("rebalance.html",portfolio=portfolio, total=session.get('total'),
+                                   cash=session.get('cash'), date=session.get('datetime'), ids=ids )
 
 
 @app.route('/addnewticker', methods=['GET','POST'])
