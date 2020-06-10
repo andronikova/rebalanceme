@@ -17,7 +17,7 @@ def index_page():
     if request.method == "GET":
         #check session for portfolio information
         if session.get('portfolio') is None:
-            boolres = load_portfolio(userid, DATABASE)
+            boolres = load_portfolio(userid, DATABASE, True)
 
             #new user
             if boolres == False:
@@ -28,7 +28,7 @@ def index_page():
 
     if request.method == "POST":
         if request.form.get("refresh") is not None:
-            load_portfolio(userid, DATABASE)
+            load_portfolio(userid, DATABASE, True)
             return render_template('index.html', portfolio=session.get('portfolio'), total=session.get('total'),
                                    cash=session.get('cash'), date=session.get('datetime'))
 
@@ -58,7 +58,7 @@ def index_page():
             con.close()
 
             # reload portfolio
-            load_portfolio(userid, DATABASE)
+            load_portfolio(userid, DATABASE, False)
 
             return render_template('index.html', portfolio=session.get('portfolio'), total=session.get('total'),
                                    cash=session.get('cash'), date=session.get('datetime'))
@@ -69,14 +69,13 @@ def rebalance():
     if request.method == "GET":
         portfolio = session.get("portfolio")
 
+        # create dict of id input formsload_portfolio in rebalence.html
         ids = {}
         idtag = ['number', 'price','realFraction','newnumber']
         for key in portfolio:
             ids[key] = {}
             for tag in idtag:
                 ids[key].update({tag: tag + "_" + key})
-
-        print(ids)
         return render_template("rebalance.html",portfolio=portfolio, total=session.get('total'),
                                    cash=session.get('cash'), date=session.get('datetime'), ids=ids )
 
@@ -114,7 +113,7 @@ def addnewticker():
         con.close()
 
         # reload  new portfolio in session
-        load_portfolio(userid, DATABASE)
+        load_portfolio(userid, DATABASE, False)
 
         return redirect("/changefraction")
 
@@ -142,7 +141,7 @@ def changefraction():
 
         con.close()
 
-        load_portfolio(userid, DATABASE)
+        load_portfolio(userid, DATABASE, False)
         return redirect("/")
 
 @app.route('/history', methods=['GET','POST'])

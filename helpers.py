@@ -52,13 +52,28 @@ def error_page(message):
     return render_template("error_page.html",message=message)
 
 
-def load_portfolio(userid, database):
+def load_portfolio(userid, database,loadprice):
+    # loading portfolio information from portfolio db and cash info from cash db
+    # loading ticker price using api
+    # loadprice = true - loading price, else: take price from session
 
     # clear portfolio, cash and total info in session
-    session.pop('portfolio',None)
     session.pop('cash', None)
     session.pop('total', None)
-    session.pop('datetime', None)
+
+    if loadprice == True:
+        session.pop('portfolio', None)
+        session.pop('datetime', None)
+
+    # save price and fullName in temp dict before deleting portfolio
+    else:
+        oldprice = {}
+        tmpportfolio = session.get('portfolio')
+
+        for key in tmpportfolio:
+            oldprice[key] = {'price':tmpportfolio[key]['price'], 'fullName': tmpportfolio[key]['fullName']}
+
+        session.pop('portfolio', None)
 
     # to load portfolio data from db and combine in with results of API query
     with sql.connect(database) as con:
@@ -69,21 +84,31 @@ def load_portfolio(userid, database):
         cur.execute("SELECT * FROM portfolio WHERE userid == :userid", {"userid":userid})
         rows = cur.fetchall()
 
-        # for new user
+        # check new user
         if len(rows) == 0:
             return False
 
-        # for user WITH PORTFOLIO
+        # for user WITH not empty PORTFOLIO
         portfolio = {}
         total = 0 # for whole portfolio
+
         for row in rows:
-            res = apiprice(row['ticker'])
-            if res is not None:
-                portfolio[row['ticker']] = {'fullName': res['name'],  'number' : row['number'], 'fraction' : row['fraction']}
-                portfolio[row['ticker']].update({'price': res['price'], 'fullPrice' : res['price'] * row['number']})
-                total += portfolio[row['ticker']]['fullPrice']
+            portfolio[row['ticker']] = {'number': row['number'], 'fraction': row['fraction']}
+
+            # load new price
+            if loadprice == True:
+                res = apiprice(row['ticker'])
+                if res is not None:
+                    portfolio[row['ticker']].update({'price': res['price'], 'fullPrice' : res['price'] * row['number'], 'fullName': res['name']})
+                else:
+                    error_page('Could not load price')
+
+            # use old price from session
             else:
-                error_page('Could not load price')
+                portfolio[row['ticker']].update({'price': oldprice[row['ticker']]['price'], 'fullPrice': oldprice[row['ticker']]['price'] * row['number'], 'fullName': oldprice[row['ticker']]['fullName']})
+
+            # use full price to calculate total sum
+            total += portfolio[row['ticker']]['fullPrice']
 
         # load cash info from db
         con.row_factory = sql.Row
@@ -120,14 +145,17 @@ def load_portfolio(userid, database):
     session['portfolio'] = portfolio
     session['cash'] = cash
     session['total'] = total
-    session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")
+
+    # case we reload prices
+    if session.get('datetime') is None:
+        session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")
 
     return True
 
 
 def rebalance_suggestion(number, price, fraction, total):
     # calculate number for ticker based on desired fraction
-    newnumber =round(total * fraction / 100 / price)
+    newnumber = round(total * fraction / 100 / price)
     res = newnumber - number
 
     return res
