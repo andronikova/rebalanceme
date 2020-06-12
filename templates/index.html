@@ -14,7 +14,6 @@
     <thead>
         <tr>
             <th scope="col">ticker</th>
-            <th scope="col">name</th>
             <th scope="col">number</th>
             <th scope="col">price</th>
             <th scope="col">full price</th>
@@ -30,7 +29,6 @@
         {% for key in session.get('portfolio') %}
             <tr>
                 <td>{{key}}</td>
-                <td>{{portfolio[key]['fullName']}}</td>
                 <td>{{portfolio[key]['number']}}</td>
                 <td>{{"${:,.2f}".format(portfolio[key]['price'])}}</td>
                 <td>{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>

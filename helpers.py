@@ -5,21 +5,28 @@ import time
 
 def apiprice(ticker):
     # load price from NY
-
     try:
-        API_KEY = os.environ.get('myAPI_KEY')
-        response = requests.get(f"https://cloud-sse.iexapis.com/stable/stock/{urllib.parse.quote_plus(ticker)}/quote?token={API_KEY}")
+        API_KEY = os.environ.get('myAPI_KEY_finnhub')
+        print(f"APIKEY {API_KEY}")
+        response = requests.get(f"https://finnhub.io/api/v1/quote?symbol={urllib.parse.quote_plus(ticker)}&token={API_KEY}")
         response.raise_for_status()
+
+        print(f"RESPONE ISSS {response}")
+
     except requests.RequestException:
         return None
 
     try:
         resp = response.json()
-        return{
-            "name": resp['companyName'],
-            "price": float(resp['latestPrice'])
-        }
-    except (KeyError, TypeError,ValueError):
+
+        if resp["c"] and resp["t"] != 0:
+            return{
+                "price": float(resp['c'])
+            }
+        else:
+            return None
+
+    except (KeyError, TypeError, ValueError):
         return None
 
 
@@ -71,7 +78,7 @@ def load_portfolio(userid, database,loadprice):
         tmpportfolio = session.get('portfolio')
 
         for key in tmpportfolio:
-            oldprice[key] = {'price':tmpportfolio[key]['price'], 'fullName': tmpportfolio[key]['fullName']}
+            oldprice[key] = {'price':tmpportfolio[key]['price']}
 
         session.pop('portfolio', None)
 
@@ -99,13 +106,14 @@ def load_portfolio(userid, database,loadprice):
             if loadprice == True:
                 res = apiprice(row['ticker'])
                 if res is not None:
-                    portfolio[row['ticker']].update({'price': res['price'], 'fullPrice' : res['price'] * row['number'], 'fullName': res['name']})
+                    portfolio[row['ticker']].update({'price': res['price'], 'fullPrice' : res['price'] * row['number']})
                 else:
+                    # TODO handle zero response, for example for ticker S
                     error_page('Could not load price')
 
             # use old price from session
             else:
-                portfolio[row['ticker']].update({'price': oldprice[row['ticker']]['price'], 'fullPrice': oldprice[row['ticker']]['price'] * row['number'], 'fullName': oldprice[row['ticker']]['fullName']})
+                portfolio[row['ticker']].update({'price': oldprice[row['ticker']]['price'], 'fullPrice': oldprice[row['ticker']]['price'] * row['number']})
 
             # use full price to calculate total sum
             total += portfolio[row['ticker']]['fullPrice']
@@ -155,7 +163,9 @@ def load_portfolio(userid, database,loadprice):
 
 def rebalance_suggestion(number, price, fraction, total):
     # calculate number for ticker based on desired fraction
-    newnumber = round(total * fraction / 100 / price)
-    res = newnumber - number
-
-    return res
+    if price != 0:
+        newnumber = round(total * fraction / 100 / price)
+        res = newnumber - number
+        return res
+    else:
+        return None
