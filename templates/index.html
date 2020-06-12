@@ -14,7 +14,6 @@
     <thead>
         <tr>
             <th scope="col">ticker</th>
-            <th scope="col">name</th>
             <th scope="col">number</th>
             <th scope="col">price</th>
             <th scope="col">full price</th>
@@ -30,7 +29,6 @@
         {% for key in session.get('portfolio') %}
             <tr>
                 <td>{{key}}</td>
-                <td>{{portfolio[key]['fullName']}}</td>
                 <td>{{portfolio[key]['number']}}</td>
                 <td>{{"${:,.2f}".format(portfolio[key]['price'])}}</td>
                 <td>{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>
@@ -108,7 +106,8 @@
 <br>
 <br>
 <br>
-<h7>prices and exchange rates are actual for {{ date }} </h7>
+<h7>prices and exchange rates are actual for {{ date }}.
+Note: aplha vantage free version allows 5 calls per minute and 500 calls per day</h7>
 <form action="\" method="POST">
     <div class="form-group">
         <input name="refresh" type="submit" value="refresh" class="form-group">
