@@ -23,10 +23,9 @@ def apiprice(ticker):
         return None
 
 
-def apiexchange():
+def apiexchange(base):
     try:
         API_KEY = os.environ.get('myAPI_KEY_finnhub')
-        base = 'usd'
         response = requests.get(f"https://finnhub.io/api/v1/forex/rates?base={base}&token={API_KEY}")
         response.raise_for_status()
 
@@ -35,11 +34,7 @@ def apiexchange():
 
     try:
         resp = response.json()
-        print(f"test response {resp['quote']['EUR']}")
-        return{
-            "euro": float(resp['quote']['EUR']),
-            "rub" : float(resp['quote']['RUB'])
-        }
+        return resp['quote']['USD']
 
     except (KeyError, TypeError, ValueError):
         return None
@@ -122,7 +117,11 @@ def load_portfolio(userid, database,loadprice):
 
         # load exchange info: rub to USD and EURO to USD
         if loadprice == True:
-            exchange = apiexchange()
+            exchange = {}
+            exchange["EUR"] = apiexchange('EUR')
+            exchange["RUB"] = apiexchange('RUB')
+
+            print(exchange)
             if exchange is None:
                 error_page("Could not load exchange rates")
         else:
@@ -130,9 +129,9 @@ def load_portfolio(userid, database,loadprice):
 
         # save cash and exchange info
         cash = {}
-        cash["rub"] = {"value":cashres[0]["rub"],"usdprice": exchange["rub"]*cashres[0]["rub"],"tousd": exchange["rub"],"symbol":"₽"}
+        cash["rub"] = {"value":cashres[0]["rub"],"usdprice": exchange["RUB"]*cashres[0]["rub"],"tousd": exchange["RUB"],"symbol":"₽"}
         cash["usd"] = {"value": cashres[0]["usd"], "usdprice": cashres[0]["usd"],"tousd": 1,"symbol":"$"}
-        cash["euro"] = {"value": cashres[0]["euro"],"usdprice": exchange["euro"]*cashres[0]["euro"],"tousd": exchange["euro"],"symbol":"€"}
+        cash["euro"] = {"value": cashres[0]["euro"],"usdprice": exchange["EUR"]*cashres[0]["euro"],"tousd": exchange["EUR"],"symbol":"€"}
 
         # add to total cash in usd
         total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
