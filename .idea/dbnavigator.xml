@@ -41,7 +41,7 @@
       <console name="Connection 2" type="STANDARD" schema="main" session="Main" />
     </connection>
     <connection id="cdc61ee0-9779-4de7-81df-f2348813b5af">
-      <console name="Connection 3" type="STANDARD" schema="main" session="Main">SELECT * FROM portfolio
+      <console name="Connection 3" type="STANDARD" schema="main" session="Main"><![CDATA[SELECT * FROM portfolio
 SELECT * FROM cash
 SELECT * FROM users
 SELECT * FROM history
@@ -52,9 +52,9 @@ DROP TABLE portfolio
 CREATE TABLE 'portfolio' ('userid' INTEGER NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'number' INTEGER NOT NULL, 'fraction' INTEGER NOT NULL, FOREIGN KEY(userid) REFERENCES users(id))
 INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'AAPL',2, 50);
 DELETE FROM portfolio WHERE ticker == 'NFLX'
-DELETE FROM portfolio WHERE ticker == 'S'
+DELETE FROM portfolio WHERE ticker == 'VBR'
 
-UPDATE portfolio SET fraction=49 WHERE userid == 1 AND ticker==&quot;AAPL&quot;
+UPDATE portfolio SET fraction=49 WHERE userid == 1 AND ticker=="AAPL"
 
 
 INSERT INTO users (username, hash) VALUES ('empty', 123)
@@ -68,7 +68,7 @@ SELECT rub,usd,euro FROM cash WHERE userid == 1
 CREATE TABLE 'history' ( 'userid' INTEGER NOT NULL, 'date' DATETIME NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'price' FLOAT NOT NULL, 'number' INTEGER NOT NULL, 'fraction' INTEGER NOT NULL, 'eventtype' VARCHAR(255) NOT NULL, FOREIGN KEY(userid) REFERENCES users(id) )
 
 
-CREATE TABLE 'cash_history' ( 'userid' INTEGER NOT NULL, 'date' DATETIME NOT NULL, 'usd' FLOAT NOT NULL, 'euro' FLOAT NOT NULL, 'rub' FLOAT NOT NULL, 'eventtype' VARCHAR(255) NOT NULL, FOREIGN KEY(userid) REFERENCES users(id) )</console>
+CREATE TABLE 'cash_history' ( 'userid' INTEGER NOT NULL, 'date' DATETIME NOT NULL, 'usd' FLOAT NOT NULL, 'euro' FLOAT NOT NULL, 'rub' FLOAT NOT NULL, 'eventtype' VARCHAR(255) NOT NULL, FOREIGN KEY(userid) REFERENCES users(id) )]]></console>
       <console name="Connection portfolio" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>

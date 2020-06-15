@@ -7,53 +7,42 @@ def apiprice(ticker):
     # load price from NY
     try:
         API_KEY = os.environ.get('myAPI_KEY_finnhub')
-        print(f"APIKEY {API_KEY}")
         response = requests.get(f"https://finnhub.io/api/v1/quote?symbol={urllib.parse.quote_plus(ticker)}&token={API_KEY}")
         response.raise_for_status()
-
-        print(f"RESPONE ISSS {response}")
 
     except requests.RequestException:
         return None
 
     try:
         resp = response.json()
-
-        if resp["c"] and resp["t"] != 0:
-            return{
-                "price": float(resp['c'])
-            }
-        else:
-            return None
+        return{
+            "price": float(resp['c'])
+        }
 
     except (KeyError, TypeError, ValueError):
         return None
 
 
 def apiexchange():
-    # simulation of api query
-    resp = {"rub":0.01,"euro":2}
-    return resp
+    try:
+        API_KEY = os.environ.get('myAPI_KEY_finnhub')
+        base = 'usd'
+        response = requests.get(f"https://finnhub.io/api/v1/forex/rates?base={base}&token={API_KEY}")
+        response.raise_for_status()
 
-    # try:
-    #     API_KEY = os.environ.get('myAPI_KEY')
-    #     response = requests.get(f"https://cloud.iexapis.com/stable/fx/convert?symbols=USDJPY,USDCAD&amount=100&token={API_KEY}")
-    #
-    #     response.raise_for_status()
-    #
-    #     return response
-    # except requests.RequestException:
-    #     return None
+    except requests.RequestException:
+        return None
 
-    # try:
-    #     resp = response.json()
-    #     return {
-    #         "name": resp['companyName'],
-    #         "price": float(resp['latestPrice'])
-    #     }
-    # except (KeyError, TypeError, ValueError):
-    #     return None
+    try:
+        resp = response.json()
+        print(f"test response {resp['quote']['EUR']}")
+        return{
+            "euro": float(resp['quote']['EUR']),
+            "rub" : float(resp['quote']['RUB'])
+        }
 
+    except (KeyError, TypeError, ValueError):
+        return None
 
 def error_page(message):
     return render_template("error_page.html",message=message)
@@ -65,15 +54,15 @@ def load_portfolio(userid, database,loadprice):
     # loadprice = true - loading price, else: take price from session
 
     # clear portfolio, cash and total info in session
-    session.pop('cash', None)
     session.pop('total', None)
 
     if loadprice == True:
         session.pop('portfolio', None)
         session.pop('datetime', None)
+        session.pop('cash', None)
 
-    # save price and fullName in temp dict before deleting portfolio
     else:
+        # save price and fullName in temp dict before deleting portfolio in session
         oldprice = {}
         tmpportfolio = session.get('portfolio')
 
@@ -81,6 +70,14 @@ def load_portfolio(userid, database,loadprice):
             oldprice[key] = {'price':tmpportfolio[key]['price']}
 
         session.pop('portfolio', None)
+
+        # save old exchange prices befire clear cash info in session
+        oldexchange = {}
+        oldexchange['rub'] = session.get('cash')['rub']["tousd"]
+        oldexchange['euro'] = session.get('cash')['euro']["tousd"]
+
+        session.pop('cash', None)
+
 
     # to load portfolio data from db and combine in with results of API query
     with sql.connect(database) as con:
@@ -108,7 +105,6 @@ def load_portfolio(userid, database,loadprice):
                 if res is not None:
                     portfolio[row['ticker']].update({'price': res['price'], 'fullPrice' : res['price'] * row['number']})
                 else:
-                    # TODO handle zero response, for example for ticker S
                     error_page('Could not load price')
 
             # use old price from session
@@ -125,7 +121,12 @@ def load_portfolio(userid, database,loadprice):
         cashres = cur.fetchall()
 
         # load exchange info: rub to USD and EURO to USD
-        exchange = apiexchange()
+        if loadprice == True:
+            exchange = apiexchange()
+            if exchange is None:
+                error_page("Could not load exchange rates")
+        else:
+            exchange = oldexchange
 
         # save cash and exchange info
         cash = {}

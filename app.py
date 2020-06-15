@@ -28,6 +28,7 @@ def index_page():
 
     if request.method == "POST":
         if request.form.get("refresh") is not None:
+            print("refreshing page")
             load_portfolio(userid, DATABASE, True)
             return render_template('index.html', portfolio=session.get('portfolio'), total=session.get('total'),
                                    cash=session.get('cash'), date=session.get('datetime'))
@@ -113,7 +114,7 @@ def addnewticker():
         con.close()
 
         # reload  new portfolio in session
-        load_portfolio(userid, DATABASE, False)
+        load_portfolio(userid, DATABASE, True)
 
         return redirect("/changefraction")
 
