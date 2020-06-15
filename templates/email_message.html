@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Message</title>
+</head>
+<body>
+
+<a href="https://finnhub.io/">Porfolio</a> <br>
+
+<h5>Total portfolio value:  {{ "${:,.2f}".format(session.get('total')) }}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ticker</th>
+            <th scope="col">number</th>
+            <th scope="col">price</th>
+            <th scope="col">full price</th>
+            <th scope="col">desired fraction</th>
+            <th scope="col">real fraction</th>
+            <th scope="col">Rebalance suggestion</th>
+        </tr>
+    </thead>
+
+
+    <tbody>
+
+        {% for key in session.get('portfolio') %}
+            <tr>
+                <td>{{key}}</td>
+                <td>{{portfolio[key]['number']}}</td>
+                <td>{{"${:,.2f}".format(portfolio[key]['price'])}}</td>
+                <td>{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>
+                <td>{{portfolio[key]['fraction']}}%</td>
+                <td>{{portfolio[key]['realFraction']}}%</td>
+                <td>{{portfolio[key]['suggestion']}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    <br>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">currency</th>
+            <th scope="col">value</th>
+            <th scope="col">to USD</th>
+            <th scope="col">price in USD</th>
+            <th scope="col">real fraction</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        {% for key in cash %}
+            <tr>
+                <td>{{key}}</td>
+                <td>{{cash[key]['symbol']}}{{"{:,.2f}".format(cash[key]['value'])}}</td>
+                <td>{{"{:,.2f}".format(cash[key]['tousd'])}}</td>
+                <td>${{"{:,.2f}".format(cash[key]['usdprice'])}}</td>
+                <td>{{cash[key]['realFraction']}}%</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<h7>prices and exchange rates are actual for {{ date }}.</h7>
+
+</body>
+</html>

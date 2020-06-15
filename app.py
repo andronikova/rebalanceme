@@ -1,16 +1,23 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3 as sql
 import math, time
+from flask_mail import Mail, Message
 
+from helpers import apiprice, error_page, load_portfolio
 
-from helpers import apiprice, error_page, load_portfolio, rebalance_suggestion
+mail = Mail()
 
 app = Flask(__name__)
 
 DATABASE = 'portfolio.db'
 userid = 1 #TODO - download from session
-app.secret_key = 'xyz'
-
+app.config['SECRET_KEY'] = 'flmvt65mnnw50_jjjbdsd09n38bnyj'
+app.config['MAIL_SERVER'] = 'smtp.yandex.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'andronikova.daria@ya.ru'  # введите свой адрес электронной почты здесь
+app.config['MAIL_DEFAULT_SENDER'] = 'andronikova.daria@ya.ru'  # и здесь
+app.config['MAIL_PASSWORD'] = 'assa1221'  # введите пароль
 
 @app.route('/', methods=['GET','POST'])
 def index_page():
@@ -61,8 +68,7 @@ def index_page():
             # reload portfolio
             load_portfolio(userid, DATABASE, False)
 
-            return render_template('index.html', portfolio=session.get('portfolio'), total=session.get('total'),
-                                   cash=session.get('cash'), date=session.get('datetime'))
+            return redirect("/")
 
 
 @app.route("/rebalance", methods=['GET','POST'])
@@ -159,6 +165,28 @@ def history():
                 print(row['eventtype'])
 
         return render_template('history.html', history=history)
+
+
+@app.route('/settings', methods=['GET','POST'])
+def settings():
+    if request.method == "GET":
+
+        return render_template('settings.html')
+
+    if request.method == "POST":
+        if request.form.get("send") is not None:
+            sending_email()
+            return redirect("/settings")
+
+
+def sending_email():
+    mail.init_app(app)
+    msg = Message("Test3", recipients=['andronikova.daria@gmail.com'])
+    msg.body = "You have received a new feedback from."
+    msg.html = render_template('email_message.html', portfolio=session.get('portfolio'),total=session.get('total'), cash=session.get('cash'),date=session.get('datetime'))
+    mail.send(msg)
+
+    return None
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ import sqlite3 as sql
 from flask import Flask, render_template, request, redirect, session
 import time
 
+
 def apiprice(ticker):
     # load price from NY
     try:
@@ -118,8 +119,8 @@ def load_portfolio(userid, database,loadprice):
         # load exchange info: rub to USD and EURO to USD
         if loadprice == True:
             exchange = {}
-            exchange["EUR"] = apiexchange('EUR')
-            exchange["RUB"] = apiexchange('RUB')
+            exchange["euro"] = apiexchange('EUR')
+            exchange["rub"] = apiexchange('RUB')
 
             print(exchange)
             if exchange is None:
@@ -129,9 +130,9 @@ def load_portfolio(userid, database,loadprice):
 
         # save cash and exchange info
         cash = {}
-        cash["rub"] = {"value":cashres[0]["rub"],"usdprice": exchange["RUB"]*cashres[0]["rub"],"tousd": exchange["RUB"],"symbol":"₽"}
+        cash["rub"] = {"value":cashres[0]["rub"],"usdprice": exchange["rub"]*cashres[0]["rub"],"tousd": exchange["rub"],"symbol":"₽"}
         cash["usd"] = {"value": cashres[0]["usd"], "usdprice": cashres[0]["usd"],"tousd": 1,"symbol":"$"}
-        cash["euro"] = {"value": cashres[0]["euro"],"usdprice": exchange["EUR"]*cashres[0]["euro"],"tousd": exchange["EUR"],"symbol":"€"}
+        cash["euro"] = {"value": cashres[0]["euro"],"usdprice": exchange["euro"]*cashres[0]["euro"],"tousd": exchange["euro"],"symbol":"€"}
 
         # add to total cash in usd
         total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
@@ -169,3 +170,4 @@ def rebalance_suggestion(number, price, fraction, total):
         return res
     else:
         return None
+
