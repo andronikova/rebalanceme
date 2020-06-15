@@ -29,9 +29,9 @@ def index_page():
     if request.method == "POST":
         if request.form.get("refresh") is not None:
             print("refreshing page")
+            print(request.form.get("refresh"))
             load_portfolio(userid, DATABASE, True)
-            return render_template('index.html', portfolio=session.get('portfolio'), total=session.get('total'),
-                                   cash=session.get('cash'), date=session.get('datetime'))
+            return redirect("/")
 
 
         if request.form.get("cashvalue") is not None:
