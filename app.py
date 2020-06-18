@@ -2,10 +2,15 @@ from flask import Flask, render_template, request, redirect, session
 import sqlite3 as sql
 import math, time
 from flask_mail import Mail, Message
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
+
+# from apscheduler.scheduler import Scheduler
+# from flask_apscheduler import APScheduler
 
 from helpers import apiprice, error_page, load_portfolio
 
-mail = Mail()
+from send_email import sending_email
 
 app = Flask(__name__)
 
@@ -18,6 +23,26 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'andronikova.daria@ya.ru'  # введите свой адрес электронной почты здесь
 app.config['MAIL_DEFAULT_SENDER'] = 'andronikova.daria@ya.ru'  # и здесь
 app.config['MAIL_PASSWORD'] = 'assa1221'  # введите пароль
+
+# with app.app_context():
+#     sched = BackgroundScheduler(daemon=True)
+#     sched.add_job(sending_email, 'interval', seconds=10)
+#     sched.start()
+
+
+@app.before_first_request
+def initialize():
+    scheduler = BackgroundScheduler(daemon=True)
+    with app.app_context():
+        scheduler.add_job(sending_email(app), 'interval', seconds=5, id='job_id')
+        scheduler.start()
+
+    atexit.register(lambda: scheduler.shutdown())
+
+
+def printing():
+    print("ITS WORKING")
+
 
 @app.route('/', methods=['GET','POST'])
 def index_page():
@@ -179,14 +204,10 @@ def settings():
             return redirect("/settings")
 
 
-def sending_email():
-    mail.init_app(app)
-    msg = Message("Test3", recipients=['andronikova.daria@gmail.com'])
-    msg.body = "You have received a new feedback from."
-    msg.html = render_template('email_message.html', portfolio=session.get('portfolio'),total=session.get('total'), cash=session.get('cash'),date=session.get('datetime'))
-    mail.send(msg)
 
-    return None
+
+
+
 
 
 if __name__ == "__main__":
