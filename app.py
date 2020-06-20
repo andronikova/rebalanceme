@@ -2,15 +2,14 @@ from flask import Flask, render_template, request, redirect, session
 import sqlite3 as sql
 import math, time
 from flask_mail import Mail, Message
-from apscheduler.schedulers.background import BackgroundScheduler
-import atexit
+
 
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
 from helpers import apiprice, error_page, load_portfolio
 
-from send_email import sending_email
+from send_email import sending_email, scheduling
 
 app = Flask(__name__)
 
@@ -32,12 +31,8 @@ app.config['MAIL_PASSWORD'] = 'assa1221'  # введите пароль
 
 @app.before_first_request
 def initialize():
-    scheduler = BackgroundScheduler(daemon=True)
-    with app.app_context():
-        scheduler.add_job(sending_email(app), 'interval', seconds=5, id='job_id')
-        scheduler.start()
+    scheduling(app)
 
-    atexit.register(lambda: scheduler.shutdown())
 
 
 def printing():
