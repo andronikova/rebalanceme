@@ -9,7 +9,7 @@ from flask_mail import Mail, Message
 
 from helpers import apiprice, error_page, load_portfolio
 
-from send_email import sending_email, scheduling
+from send_email import scheduling
 
 app = Flask(__name__)
 
@@ -23,21 +23,10 @@ app.config['MAIL_USERNAME'] = 'andronikova.daria@ya.ru'  # введите сво
 app.config['MAIL_DEFAULT_SENDER'] = 'andronikova.daria@ya.ru'  # и здесь
 app.config['MAIL_PASSWORD'] = 'assa1221'  # введите пароль
 
-# with app.app_context():
-#     sched = BackgroundScheduler(daemon=True)
-#     sched.add_job(sending_email, 'interval', seconds=10)
-#     sched.start()
 
 
-@app.before_first_request
-def initialize():
+with app.app_context():
     scheduling(app)
-
-
-
-def printing():
-    print("ITS WORKING")
-
 
 @app.route('/', methods=['GET','POST'])
 def index_page():

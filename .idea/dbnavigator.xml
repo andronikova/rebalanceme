@@ -46,11 +46,13 @@ SELECT * FROM cash_history
 DROP TABLE portfolio
 
 CREATE TABLE 'portfolio' ('userid' INTEGER NOT NULL, 'ticker' VARCHAR(255) NOT NULL, 'number' INTEGER NOT NULL, 'fraction' INTEGER NOT NULL, FOREIGN KEY(userid) REFERENCES users(id))
-INSERT INTO portfolio (userid,ticker, number,fraction) VALUES (1,'AAPL',2, 50);
-DELETE FROM portfolio WHERE ticker == 'NFLX'
-DELETE FROM portfolio WHERE ticker == 'VBR'
+INSERT INTO portfolio (userid,ticker, number, fraction) VALUES (1,'SPDW', 5, 16);
+DELETE FROM portfolio WHERE ticker == 'VWO'
+DELETE FROM portfolio WHERE ticker == 'SPDW'
 
 UPDATE portfolio SET fraction=49 WHERE userid == 1 AND ticker=="AAPL"
+
+UPDATE portfolio SET number = 9 WHERE userid == 1 AND ticker=="VBR"
 
 
 INSERT INTO users (username, hash) VALUES ('empty', 123)
@@ -386,7 +388,7 @@ CREATE TABLE 'cash_history' ( 'userid' INTEGER NOT NULL, 'date' DATETIME NOT NUL
           <port value="1234" />
           <database value="database" />
           <files>
-            <file path="C:\DARIA\py\portfolio\portfolio.db" schema="main" />
+            <file path="C:\DARIA\py\rebalanceme\portfolio.db" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />

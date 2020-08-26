@@ -99,6 +99,7 @@ def load_portfolio(userid, database,loadprice):
             if loadprice == True:
                 res = apiprice(row['ticker'])
                 if res is not None:
+                    print('saving new prices')
                     portfolio[row['ticker']].update({'price': res['price'], 'fullPrice' : res['price'] * row['number']})
                 else:
                     error_page('Could not load price')
@@ -109,6 +110,8 @@ def load_portfolio(userid, database,loadprice):
 
             # use full price to calculate total sum
             total += portfolio[row['ticker']]['fullPrice']
+
+        print(f"total before cash {total}")
 
         # load cash info from db
         con.row_factory = sql.Row
