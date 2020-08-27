@@ -23,10 +23,23 @@ app.config['MAIL_USERNAME'] = 'andronikova.daria@ya.ru'  # введите сво
 app.config['MAIL_DEFAULT_SENDER'] = 'andronikova.daria@ya.ru'  # и здесь
 app.config['MAIL_PASSWORD'] = 'assa1221'  # введите пароль
 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or \
+                                        "postgresql://postgres:1111111@localhost:5432/rebalanceme"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 with app.app_context():
     scheduling(app)
+
+# load databases
+from models import db, portfolio, cash, users
+
+# database settings and creation of tables
+with app.app_context():
+    db.init_app(app)
+    migrate = Migrate(app,db)
+    db.create_all()
+    db.session.commit()
 
 @app.route('/', methods=['GET','POST'])
 def index_page():
