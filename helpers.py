@@ -44,7 +44,7 @@ def error_page(message):
     return render_template("error_page.html",message=message)
 
 
-def load_portfolio(userid, database,loadprice):
+def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     # loading portfolio information from portfolio db and cash info from cash db
     # loading ticker price using api
     # loadprice = true - loading price, else: take price from session
@@ -58,7 +58,7 @@ def load_portfolio(userid, database,loadprice):
         session.pop('cash', None)
 
     else:
-        # save price and fullName in temp dict before deleting portfolio in session
+        # save prices in temp dict before deleting portfolio in session
         oldprice = {}
         tmpportfolio = session.get('portfolio')
 
@@ -67,7 +67,7 @@ def load_portfolio(userid, database,loadprice):
 
         session.pop('portfolio', None)
 
-        # save old exchange prices befire clear cash info in session
+        # save old exchange prices before clear cash info in session
         oldexchange = {}
         oldexchange['rub'] = session.get('cash')['rub']["tousd"]
         oldexchange['euro'] = session.get('cash')['euro']["tousd"]
@@ -76,81 +76,101 @@ def load_portfolio(userid, database,loadprice):
 
 
     # to load portfolio data from db and combine in with results of API query
-    with sql.connect(database) as con:
-        # to have result of .execute as dictionary
-        con.row_factory = sql.Row
-        cur = con.cursor()
+    datas = portfolio_db.query.filter_by(userid=userid).all()
 
-        cur.execute("SELECT * FROM portfolio WHERE userid == :userid", {"userid":userid})
-        rows = cur.fetchall()
+    # check new user
+    if datas is None:
+        return False
 
-        # check new user
-        if len(rows) == 0:
-            return False
+    # if user exists in database
+    portfolio = {}
+    total = 0 # for whole portfolio
 
-        # for user WITH not empty PORTFOLIO
-        portfolio = {}
-        total = 0 # for whole portfolio
+    for row in datas:
+        portfolio[row.ticker] = {
+            'number': row.number,
+            'fraction': row.fraction
+        }
 
-        for row in rows:
-            portfolio[row['ticker']] = {'number': row['number'], 'fraction': row['fraction']}
-
-            # load new price
-            if loadprice == True:
-                res = apiprice(row['ticker'])
-                if res is not None:
-                    print('saving new prices')
-                    portfolio[row['ticker']].update({'price': res['price'], 'fullPrice' : res['price'] * row['number']})
-                else:
-                    error_page('Could not load price')
-
-            # use old price from session
-            else:
-                portfolio[row['ticker']].update({'price': oldprice[row['ticker']]['price'], 'fullPrice': oldprice[row['ticker']]['price'] * row['number']})
-
-            # use full price to calculate total sum
-            total += portfolio[row['ticker']]['fullPrice']
-
-        print(f"total before cash {total}")
-
-        # load cash info from db
-        con.row_factory = sql.Row
-        cur = con.cursor()
-        cur.execute("SELECT rub, usd, euro FROM cash WHERE userid == :userid", {"userid": userid})
-        cashres = cur.fetchall()
-
-        # load exchange info: rub to USD and EURO to USD
+        # load new price
         if loadprice == True:
-            exchange = {}
-            exchange["euro"] = apiexchange('EUR')
-            exchange["rub"] = apiexchange('RUB')
+            res = apiprice(row.ticker)
+            if res is not None:
+                print('saving new prices')
+                portfolio[row.ticker].update(
+                    {
+                    'price': res['price'],
+                    'fullPrice' : res['price'] * row.number
+                    })
+            else:
+                error_page('Could not load price')
 
-            print(exchange)
-            if exchange is None:
-                error_page("Could not load exchange rates")
+        # use old price from session
         else:
-            exchange = oldexchange
+            portfolio[row.ticker].update({
+                'price': oldprice[row.ticker]['price'],
+                'fullPrice': oldprice[row.ticker]['price'] * row.number
+            })
 
-        # save cash and exchange info
-        cash = {}
-        cash["rub"] = {"value":cashres[0]["rub"],"usdprice": exchange["rub"]*cashres[0]["rub"],"tousd": exchange["rub"],"symbol":"₽"}
-        cash["usd"] = {"value": cashres[0]["usd"], "usdprice": cashres[0]["usd"],"tousd": 1,"symbol":"$"}
-        cash["euro"] = {"value": cashres[0]["euro"],"usdprice": exchange["euro"]*cashres[0]["euro"],"tousd": exchange["euro"],"symbol":"€"}
+        # use full price to calculate total sum
+        total += portfolio[row.ticker]['fullPrice']
 
-        # add to total cash in usd
-        total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
+    print(f"total before cash {total}")
 
-        # calculate fraction for cash
-        for key in cash:
-            cash[key]['realFraction'] = math.floor(100 * cash[key]["usdprice"] / total)
+    # PREPARE CASH INFO
+    # load exchange info: rub to USD and EURO to USD
+    if loadprice == True:
+        exchange = {
+            "euro": apiexchange('EUR'),
+            "rub" : apiexchange('RUB')
+        }
 
-        # real fraction calculation
-        for key in portfolio:
-            portfolio[key]["realFraction"] = math.floor(100 * portfolio[key]['fullPrice'] / total)
-            portfolio[key]["suggestion"] = rebalance_suggestion(portfolio[key]["number"],portfolio[key]["price"],portfolio[key]["fraction"],total)
+        print(exchange)
 
-    con.close()
-    # print(portfolio)
+        if exchange is None:
+            error_page("Could not load exchange rates")
+
+    else:
+        exchange = oldexchange
+
+    # load cash info from db
+    cash_datas = cash_db.query.filter_by(userid=userid).all()
+    cashres = cash_datas[0]
+
+    # save cash and exchange info
+    cash = {}
+    cash["rub"] = {
+        "value":cashres.rub,
+        "usdprice": exchange["rub"]*cashres.rub,
+        "tousd": exchange["rub"],
+        "symbol":"₽"
+    }
+    cash["usd"] = {
+        "value": cashres.usd,
+        "usdprice": cashres.usd,
+        "tousd": 1,
+        "symbol":"$"
+    }
+    cash["euro"] = {
+        "value": cashres.euro,
+        "usdprice": exchange["euro"]*cashres.euro,
+        "tousd": exchange["euro"],
+        "symbol":"€"
+    }
+
+    # CALCULATE TOTAL SUM AND FRACTION
+    # add to total sum cash in usd
+    total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
+
+    # calculate fraction for cash
+    for key in cash:
+        cash[key]['realFraction'] = math.floor(100 * cash[key]["usdprice"] / total)
+
+    # real fraction calculation
+    for key in portfolio:
+        portfolio[key]["realFraction"] = math.floor(100 * portfolio[key]['fullPrice'] / total)
+        portfolio[key]["suggestion"] = rebalance_suggestion(portfolio[key]["number"],portfolio[key]["price"],portfolio[key]["fraction"],total)
+
 
     # save results in session
     # TODO clear session after 12 hours
