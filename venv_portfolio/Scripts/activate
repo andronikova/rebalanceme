@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\DARIA\py\portfolio\venv_portfolio"
+VIRTUAL_ENV="C:\DARIA\py\rebalanceme\venv_portfolio"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -1,17 +1,16 @@
 from flask import Flask, render_template, request, redirect, session
-import sqlite3 as sql
 import math, time
 from flask_mail import Mail, Message
 import os
 
-from flask_migrate import Migrate
+
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
 from helpers import apiprice, error_page, load_portfolio
 
 from send_email import scheduling
-
+from flask_migrate import Migrate
 app = Flask(__name__)
 
 
