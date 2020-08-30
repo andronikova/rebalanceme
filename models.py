@@ -11,7 +11,7 @@ class portfolio_db(db.Model):
     fraction = db.Column(db.Integer())
 
     def __repr__(self):
-        return '<portfolio {}>'.format(self.ticker)
+        return '<portfolio_db {}>'.format(self.ticker)
 
 
 class cash_db(db.Model):
@@ -21,7 +21,7 @@ class cash_db(db.Model):
     usd = db.Column(db.Integer())
 
     def __repr__(self):
-        return '<cash {}>'.format(self.userid)
+        return '<cash_db {}>'.format(self.userid)
 
 # class history(db.Model):
 #     userid = db.Column(db.Integer())

@@ -135,28 +135,32 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
 
     # load cash info from db
     cash_datas = cash_db.query.filter_by(userid=userid).all()
-    cashres = cash_datas[0]
 
-    # save cash and exchange info
-    cash = {}
-    cash["rub"] = {
-        "value":cashres.rub,
-        "usdprice": exchange["rub"]*cashres.rub,
-        "tousd": exchange["rub"],
-        "symbol":"₽"
-    }
-    cash["usd"] = {
-        "value": cashres.usd,
-        "usdprice": cashres.usd,
-        "tousd": 1,
-        "symbol":"$"
-    }
-    cash["euro"] = {
-        "value": cashres.euro,
-        "usdprice": exchange["euro"]*cashres.euro,
-        "tousd": exchange["euro"],
-        "symbol":"€"
-    }
+    if cash_datas is None:
+        cash = {}
+    else:
+        cashres = cash_datas[0]
+
+        # save cash and exchange info
+        cash = {}
+        cash["rub"] = {
+            "value":cashres.rub,
+            "usdprice": exchange["rub"]*cashres.rub,
+            "tousd": exchange["rub"],
+            "symbol":"₽"
+        }
+        cash["usd"] = {
+            "value": cashres.usd,
+            "usdprice": cashres.usd,
+            "tousd": 1,
+            "symbol":"$"
+        }
+        cash["euro"] = {
+            "value": cashres.euro,
+            "usdprice": exchange["euro"]*cashres.euro,
+            "tousd": exchange["euro"],
+            "symbol":"€"
+        }
 
     # CALCULATE TOTAL SUM AND FRACTION
     # add to total sum cash in usd
