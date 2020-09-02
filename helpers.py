@@ -1,5 +1,4 @@
 import os, urllib.parse, requests, math
-import sqlite3 as sql
 from flask import Flask, render_template, request, redirect, session
 import time
 
