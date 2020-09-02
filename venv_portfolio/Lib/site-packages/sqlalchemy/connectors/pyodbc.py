@@ -14,8 +14,7 @@ from .. import util
 class PyODBCConnector(Connector):
     driver = "pyodbc"
 
-    # this is no longer False for pyodbc in general
-    supports_sane_rowcount_returning = True
+    supports_sane_rowcount_returning = False
     supports_sane_multi_rowcount = False
 
     supports_unicode_statements = True
@@ -56,7 +55,7 @@ class PyODBCConnector(Connector):
 
             def check_quote(token):
                 if ";" in str(token):
-                    token = "{%s}" % token.replace("}", "}}")
+                    token = "'%s'" % token
                 return token
 
             keys = dict((k, check_quote(v)) for k, v in keys.items())
@@ -75,8 +74,7 @@ class PyODBCConnector(Connector):
 
                 connectors = []
                 driver = keys.pop("driver", self.pyodbc_driver_name)
-                if driver is None and keys:
-                    # note if keys is empty, this is a totally blank URL
+                if driver is None:
                     util.warn(
                         "No driver name specified; "
                         "this is expected by PyODBC when using "
