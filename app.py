@@ -34,6 +34,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # load databases
 from models import db, portfolio_db, cash_db
 
+#
 # database settings and creation of tables
 with app.app_context():
     db.init_app(app)
