@@ -136,7 +136,7 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     cash_datas = cash_db.query.filter_by(userid=userid).all()
 
     if cash_datas is None:
-        cash = {}
+        return False
     else:
         for row in cash_datas:
             cashres = row
