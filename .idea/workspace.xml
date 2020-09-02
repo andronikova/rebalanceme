@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09a832da-bc27-4266-ae82-32c9efa2a225" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/versions/1b0b2411d23b_.py" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/versions/1b0b2411d23b_.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,14 +14,14 @@
     <favorites_list name="portfolio" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.63779527">
+    <splitter split-orientation="horizontal" split-proportion="0.5031496">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="539">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/app.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="172">
-                  <caret line="54" column="53" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="53" />
+                <state relative-caret-position="622">
+                  <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
                   <folding>
                     <element signature="e#0#68#0" expanded="true" />
                   </folding>
@@ -29,11 +29,20 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/templates/index_newuser.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="180">
+                  <caret line="10" column="41" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="41" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/helpers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="190">
-                  <caret line="141" column="28" selection-start-line="141" selection-start-column="18" selection-end-line="141" selection-end-column="28" />
+                <state relative-caret-position="-674">
+                  <caret line="144" column="17" lean-forward="true" selection-start-line="144" selection-start-column="17" selection-end-line="144" selection-end-column="17" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
                   </folding>
@@ -102,8 +111,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="239">
-                  <caret line="23" column="24" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
+                <state relative-caret-position="306">
+                  <caret line="17" column="52" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="52" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
                   </folding>
@@ -214,6 +223,11 @@
             <path>
               <item name="rebalanceme" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+            <path>
+              <item name="rebalanceme" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -383,9 +397,9 @@
     <frame x="55" y="-1087" width="1488" height="878" extended-state="6" />
     <layout>
       <window_info x="515" y="-933" width="672" height="554" id="DB Browser" order="0" sideWeight="0.40394974" side_tool="true" weight="0.164714" />
-      <window_info id="Structure" order="1" sideWeight="0.32016632" side_tool="true" visible="true" weight="0.124741554" />
+      <window_info id="Structure" order="1" sideWeight="0.3224568" side_tool="true" weight="0.124741554" />
       <window_info id="Favorites" order="2" sideWeight="0.40894568" side_tool="true" weight="0.1870456" />
-      <window_info content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="3" sideWeight="0.67983365" visible="true" weight="0.124741554" />
+      <window_info content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="3" sideWeight="0.67754316" weight="0.124741554" />
       <window_info anchor="bottom" id="DB Execution Console" order="0" weight="0.42992425" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.32795697" />
@@ -395,7 +409,7 @@
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.3252688" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3293011" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.37855297" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.3268734" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.3276515" />
       <window_info anchor="bottom" id="GitHub Pull Requests" order="12" weight="0.3293011" />
@@ -463,13 +477,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="13" column="24" selection-start-line="13" selection-end-line="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index_newuser.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
@@ -581,16 +588,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="23" column="24" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/layout.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="846">
@@ -608,20 +605,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/helpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-674">
+          <caret line="144" column="17" lean-forward="true" selection-start-line="144" selection-start-column="17" selection-end-line="144" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/index_newuser.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="41" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="54" column="53" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="53" />
+        <state relative-caret-position="622">
+          <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
           <folding>
             <element signature="e#0#68#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpers.py">
+    <entry file="file://$PROJECT_DIR$/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="141" column="28" selection-start-line="141" selection-start-column="18" selection-end-line="141" selection-end-column="28" />
+        <state relative-caret-position="306">
+          <caret line="17" column="52" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="52" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
