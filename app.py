@@ -39,8 +39,7 @@ from models import db, portfolio_db, cash_db
 with app.app_context():
     db.init_app(app)
     migrate = Migrate(app,db)
-    db.create_all()
-    db.session.commit()
+
 
 # DATABASE = 'portfolio.db'
 
@@ -216,3 +215,5 @@ def settings():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    db.create_all()
+    db.session.commit()
