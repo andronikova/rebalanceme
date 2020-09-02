@@ -163,18 +163,18 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
             "symbol":"€"
         }
 
-    # CALCULATE TOTAL SUM AND FRACTION
-    # add to total sum cash in usd
-    total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
+        # CALCULATE TOTAL SUM AND FRACTION
+        # add to total sum cash in usd
+        total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
 
-    # calculate fraction for cash
-    for key in cash:
-        cash[key]['realFraction'] = math.floor(100 * cash[key]["usdprice"] / total)
+        # calculate fraction for cash
+        for key in cash:
+            cash[key]['realFraction'] = math.floor(100 * cash[key]["usdprice"] / total)
 
-    # real fraction calculation
-    for key in portfolio:
-        portfolio[key]["realFraction"] = math.floor(100 * portfolio[key]['fullPrice'] / total)
-        portfolio[key]["suggestion"] = rebalance_suggestion(portfolio[key]["number"],portfolio[key]["price"],portfolio[key]["fraction"],total)
+        # real fraction calculation
+        for key in portfolio:
+            portfolio[key]["realFraction"] = math.floor(100 * portfolio[key]['fullPrice'] / total)
+            portfolio[key]["suggestion"] = rebalance_suggestion(portfolio[key]["number"],portfolio[key]["price"],portfolio[key]["fraction"],total)
 
 
     # save results in session
