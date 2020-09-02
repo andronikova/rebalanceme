@@ -41,8 +41,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/helpers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="198">
-                  <caret line="140" column="13" selection-start-line="140" selection-start-column="13" selection-end-line="140" selection-end-column="13" />
+                <state relative-caret-position="54">
+                  <caret line="177" selection-start-line="165" selection-start-column="8" selection-end-line="177" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
                   </folding>
@@ -364,7 +364,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="-1087" width="1488" height="878" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info x="515" y="-933" width="672" height="554" id="DB Browser" order="0" sideWeight="0.40394974" side_tool="true" weight="0.164714" />
       <window_info id="Structure" order="1" sideWeight="0.3224568" side_tool="true" weight="0.124741554" />
@@ -379,7 +378,7 @@
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.3252688" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3293011" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.30232558" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.29198965" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.3276515" />
       <window_info anchor="bottom" id="GitHub Pull Requests" order="12" weight="0.3293011" />
@@ -612,8 +611,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helpers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="140" column="13" selection-start-line="140" selection-start-column="13" selection-end-line="140" selection-end-column="13" />
+        <state relative-caret-position="54">
+          <caret line="177" selection-start-line="165" selection-start-column="8" selection-end-line="177" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
