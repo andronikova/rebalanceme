@@ -138,28 +138,29 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     if cash_datas is None:
         cash = {}
     else:
-        cashres = cash_datas[0]
+        for row in cash_datas:
+            cashres = row
 
-        # save cash and exchange info
-        cash = {}
-        cash["rub"] = {
-            "value":cashres.rub,
-            "usdprice": exchange["rub"]*cashres.rub,
-            "tousd": exchange["rub"],
-            "symbol":"₽"
-        }
-        cash["usd"] = {
-            "value": cashres.usd,
-            "usdprice": cashres.usd,
-            "tousd": 1,
-            "symbol":"$"
-        }
-        cash["euro"] = {
-            "value": cashres.euro,
-            "usdprice": exchange["euro"]*cashres.euro,
-            "tousd": exchange["euro"],
-            "symbol":"€"
-        }
+            # save cash and exchange info
+            cash = {}
+            cash["rub"] = {
+                "value":cashres.rub,
+                "usdprice": exchange["rub"]*cashres.rub,
+                "tousd": exchange["rub"],
+                "symbol":"₽"
+            }
+            cash["usd"] = {
+                "value": cashres.usd,
+                "usdprice": cashres.usd,
+                "tousd": 1,
+                "symbol":"$"
+            }
+            cash["euro"] = {
+                "value": cashres.euro,
+                "usdprice": exchange["euro"]*cashres.euro,
+                "tousd": exchange["euro"],
+                "symbol":"€"
+            }
 
     # CALCULATE TOTAL SUM AND FRACTION
     # add to total sum cash in usd
