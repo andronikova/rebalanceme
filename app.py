@@ -14,7 +14,7 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 
 
-userid = 1 #TODO - download from session
+userid = 2 #TODO - download from session
 app.config['SECRET_KEY'] = 'flmvt65mnnw50_jjjbdsd09n38bnyj'
 app.config['MAIL_SERVER'] = 'smtp.yandex.com'
 app.config['MAIL_PORT'] = 587

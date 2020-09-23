@@ -78,7 +78,7 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     datas = portfolio_db.query.filter_by(userid=userid).all()
 
     # check new user
-    if datas is None:
+    if len(datas) == 0:
         return False
 
     # if user exists in database
@@ -135,7 +135,7 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     # load cash info from db
     cash_datas = cash_db.query.filter_by(userid=userid).all()
 
-    if cash_datas is None:
+    if len(cash_datas) == 0:
         return False
 
     cash = {}
