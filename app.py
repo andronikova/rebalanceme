@@ -14,7 +14,7 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 
 
-userid = 2 #TODO - download from session
+userid = 1 #TODO - download from session
 app.config['SECRET_KEY'] = 'flmvt65mnnw50_jjjbdsd09n38bnyj'
 app.config['MAIL_SERVER'] = 'smtp.yandex.com'
 app.config['MAIL_PORT'] = 587
@@ -115,42 +115,51 @@ def rebalance():
 @app.route('/addnewticker', methods=['GET','POST'])
 def addnewticker():
     if request.method == "GET":
-        # return render_template("addnewticker.html")
-        return redirect("/")
-#
-#     if request.method == "POST":
-#         # check new ticker and load ticker price
-#         ticker = request.form.get("newticker")
-#
-#         ticker_info = apiprice(ticker)
-#         if  ticker_info is None:
-#             print("apology")
-#             return error_page("Ticker name is not correct!")
-#
-#         # change portfolio
+        return render_template("addnewticker.html")
+
+    if request.method == "POST":
+        # check new ticker and load ticker price
+        ticker = request.form.get("newticker")
+
+        ticker_info = apiprice(ticker)
+
+        if  ticker_info['price'] == 0:
+            print("apology")
+            return error_page("Error! Could not load price for such ticker. Probably, ticker name is not correct!")
+
+        # check that this ticker is not in portfolio
+        datas = portfolio_db.query.filter_by(userid=userid).all()
+
+        if len(datas) != 0:
+            for row in datas:
+                if row.ticker == ticker:
+                    return error_page("You already have  such ticker!")
+
+        # change portfolio
+        # new_row = portfolio_db(ticker=ticker, number=0, fraction= 0)
+        # db.session.add(new_row)
+        # db.session.commit()
 #         with sql.connect(DATABASE) as con:
 #             con.row_factory = sql.Row
 #             cur = con.cursor()
 #
-#             # check that this ticker is not in portfolio
+#
 #             cur.execute("SELECT number FROM portfolio WHERE userid == :userid AND ticker == :ticker", {"userid":userid, "ticker":ticker})
 #             row = cur.fetchall()
 #
-#             if len(row) != 0:
-#                 return error_page("You already have  such ticker!")
-#
+
 #
 #             tmpdict = {"ticker":ticker, "number":0, "fraction":0, "userid":userid}
 #             cur.execute("INSERT INTO portfolio (ticker,number,fraction,userid) VALUES (:ticker,:number,:fraction,:userid)", tmpdict)
 #
 #         con.close()
 #
-#         # reload  new portfolio in session
-#         load_portfolio(userid, DATABASE, True)
-#
-#         return redirect("/changefraction")
-#
-#
+        # reload  new portfolio in session
+        # load_portfolio(userid, portfolio_db, cash_db, True)
+
+    return redirect("/changefraction")
+
+
 @app.route('/changefraction', methods=['GET','POST'])
 def changefraction():
     if request.method == "GET":
