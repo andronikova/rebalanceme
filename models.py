@@ -5,7 +5,8 @@ db = SQLAlchemy()
 
 
 class portfolio_db(db.Model):
-    userid = db.Column(db.Integer(),primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
+    userid = db.Column(db.Integer())
     ticker = db.Column(db.String(64))
     number = db.Column(db.Integer())
     fraction = db.Column(db.Integer())

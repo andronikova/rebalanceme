@@ -136,9 +136,11 @@ def addnewticker():
                     return error_page("You already have  such ticker!")
 
         # change portfolio
-        # new_row = portfolio_db(ticker=ticker, number=0, fraction= 0)
-        # db.session.add(new_row)
-        # db.session.commit()
+        new_row = portfolio_db(userid=userid,ticker=ticker, number=0, fraction= 0)
+
+        db.session.add(new_row)
+        db.session.commit()
+
 #         with sql.connect(DATABASE) as con:
 #             con.row_factory = sql.Row
 #             cur = con.cursor()
@@ -155,7 +157,7 @@ def addnewticker():
 #         con.close()
 #
         # reload  new portfolio in session
-        # load_portfolio(userid, portfolio_db, cash_db, True)
+        load_portfolio(userid, portfolio_db, cash_db, True)
 
     return redirect("/changefraction")
 
