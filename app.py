@@ -63,36 +63,27 @@ def index_page():
 
             load_portfolio(userid, portfolio_db, cash_db, True)
             return redirect("/")
-    #
-    #
-    #     if request.form.get("cashvalue") is not None:
-    #         cash = float(request.form.get('cashvalue'))
-    #         currency = request.form.get('currency')
-    #         type = request.form.get('cashtype')
-    #
-    #         oldcash = session["cash"][currency]["value"]
-    #         newcash = oldcash + cash
-    #
-    #         # in case of decreasing of cash - check do we have such money
-    #         if newcash < 0:
-    #             return error_page("You don't have enough cash.")
-    #
-    #         # change cash db
-    #         with sql.connect(DATABASE) as con:
-    #             con.row_factory = sql.Row
-    #             cur = con.cursor()
-    #
-    #             tmp = "UPDATE cash SET " + currency + "=:newcash WHERE userid==:userid"
-    #             cur.execute(tmp, {"userid":userid, "newcash":newcash})
-    #
-    #             #TODO change history
-    #
-    #         con.close()
-    #
-    #         # reload portfolio
-    #         load_portfolio(userid, DATABASE, False)
-    #
-    #         return redirect("/")
+
+
+        if request.form.get("cashvalue") is not None:
+            cash = float(request.form.get('cashvalue'))
+            currency = request.form.get('currency')
+
+            oldcash = session["cash"][currency]["value"]
+            newcash = oldcash + cash
+
+            # in case of decreasing of cash - check do we have such money
+            if newcash < 0:
+                return error_page("You don't have enough cash.")
+
+            # change cash db
+            datas = cash_db.query.filter_by(userid=userid).update({currency:newcash})
+            db.session.commit()
+
+            # reload portfolio
+            load_portfolio(userid, portfolio_db, cash_db, False)
+
+            return redirect("/")
 
 
 @app.route("/rebalance", methods=['GET','POST'])

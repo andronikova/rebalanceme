@@ -194,6 +194,7 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     # case we reload prices
     if session.get('datetime') is None:
         session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")
+        #TODO make heroku set right time zone
 
     return True
 
