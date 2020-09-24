@@ -175,11 +175,11 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
 
         # calculate fraction for cash
         for key in cash:
-            cash[key]['realFraction'] = math.floor(100 * cash[key]["usdprice"] / total)
+            cash[key]['realFraction'] = real_fraction_calc(cash[key]["usdprice"], total)
 
         # real fraction calculation
         for key in portfolio:
-            portfolio[key]["realFraction"] = math.floor(100 * portfolio[key]['fullPrice'] / total)
+            portfolio[key]["realFraction"] = real_fraction_calc(portfolio[key]['fullPrice'], total)
             portfolio[key]["suggestion"] = rebalance_suggestion(portfolio[key]["number"],portfolio[key]["price"],portfolio[key]["fraction"],total)
 
     print("Your portfolio saved in session is")
@@ -207,3 +207,9 @@ def rebalance_suggestion(number, price, fraction, total):
     else:
         return None
 
+
+def real_fraction_calc(part, total):
+    if total != 0:
+        math.floor(100 * part / total)
+    else:
+        return None
