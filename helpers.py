@@ -183,6 +183,9 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     session['cash'] = cash
     session['total'] = total
 
+    print("Your portfolio saved in session is")
+    print(portfolio)
+
     # case we reload prices
     if session.get('datetime') is None:
         session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")

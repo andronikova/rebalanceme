@@ -60,7 +60,9 @@ def index_page():
     if request.method == "POST":
         if request.form.get("refresh") is not None:
             print("refreshing page")
-
+            saving
+            new
+            prices
             load_portfolio(userid, portfolio_db, cash_db, True)
             return redirect("/")
     #
