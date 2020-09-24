@@ -123,6 +123,8 @@ def addnewticker():
 
         ticker_info = apiprice(ticker)
 
+
+        #TODO check that heroku can load api price
         if  ticker_info['price'] == 0:
             print("apology")
             return error_page("Error! Could not load price for such ticker. Probably, ticker name is not correct!")
@@ -158,6 +160,8 @@ def addnewticker():
 #
         # reload  new portfolio in session
         load_portfolio(userid, portfolio_db, cash_db, True)
+        print("new portfolio is loaded")
+        print(session.get('portfolio'))
 
     return redirect("/changefraction")
 
