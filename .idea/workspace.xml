@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09a832da-bc27-4266-ae82-32c9efa2a225" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,20 +15,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="539">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/addnewticker.html">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="7" column="31" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/index_newuser.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
+            <state relative-caret-position="197">
+              <caret line="227" column="27" selection-start-line="226" selection-start-column="8" selection-end-line="227" selection-end-column="27" />
+              <folding>
+                <element signature="e#0#68#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -37,22 +30,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-234">
+            <state relative-caret-position="198">
               <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="164" column="8" selection-start-line="164" selection-start-column="8" selection-end-line="164" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#68#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -346,7 +327,7 @@
     <editor active="true" />
     <layout>
       <window_info x="515" y="-933" width="672" height="554" id="DB Browser" order="0" sideWeight="0.40394974" side_tool="true" weight="0.164714" />
-      <window_info active="true" id="Structure" order="1" sideWeight="0.32872927" side_tool="true" visible="true" weight="0.12438302" />
+      <window_info id="Structure" order="1" sideWeight="0.32872927" side_tool="true" visible="true" weight="0.12438302" />
       <window_info id="Favorites" order="2" sideWeight="0.40894568" side_tool="true" weight="0.1870456" />
       <window_info content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="3" sideWeight="0.6712707" weight="0.12438302" />
       <window_info anchor="bottom" id="DB Execution Console" order="0" weight="0.42992425" />
@@ -358,7 +339,7 @@
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.3252688" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3276515" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.34280303" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.33901516" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.3276515" />
       <window_info anchor="bottom" id="GitHub Pull Requests" order="12" weight="0.3293011" />
@@ -559,23 +540,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index_newuser.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-234">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-144">
@@ -593,10 +557,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/index_newuser.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="164" column="8" selection-start-line="164" selection-start-column="8" selection-end-line="164" selection-end-column="8" />
+        <state relative-caret-position="197">
+          <caret line="227" column="27" selection-start-line="226" selection-start-column="8" selection-end-line="227" selection-end-column="27" />
           <folding>
             <element signature="e#0#68#0" expanded="true" />
           </folding>

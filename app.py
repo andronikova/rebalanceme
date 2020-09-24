@@ -15,7 +15,9 @@ app = Flask(__name__)
 
 
 userid = 1 #TODO - download from session
-app.config['SECRET_KEY'] = 'flmvt65mnnw50_jjjbdsd09n38bnyj'
+
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or \
+                           "fg45hjkrgrJJKJLDSV890000jkjk"
 app.config['MAIL_SERVER'] = 'smtp.yandex.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -40,8 +42,6 @@ with app.app_context():
     db.init_app(app)
     migrate = Migrate(app,db)
 
-
-# DATABASE = 'portfolio.db'
 
 @app.route('/', methods=['GET','POST'])
 def index_page():
@@ -221,14 +221,8 @@ def settings():
 #             sending_email()
 #             return redirect("/settings")
 
-
-
-
-
-
-
-
 if __name__ == "__main__":
     app.run(debug=True)
-    db.create_all()
-    db.session.commit()
+    with app.app_context():
+        db.create_all()
+        db.session.commit()
