@@ -77,6 +77,9 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     # to load portfolio data from db and combine in with results of API query
     datas = portfolio_db.query.filter_by(userid=userid).all()
 
+    print("Exctracted from portfolio_db data is")
+    print(datas)
+
     # check new user
     if len(datas) == 0:
         return False
