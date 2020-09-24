@@ -166,6 +166,9 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
             "symbol":"€"
         }
 
+        print("cash info saved in dictionary")
+        print(cash)
+
         # CALCULATE TOTAL SUM AND FRACTION
         # add to total sum cash in usd
         total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
