@@ -176,15 +176,14 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
             portfolio[key]["realFraction"] = math.floor(100 * portfolio[key]['fullPrice'] / total)
             portfolio[key]["suggestion"] = rebalance_suggestion(portfolio[key]["number"],portfolio[key]["price"],portfolio[key]["fraction"],total)
 
+    print("Your portfolio saved in session is")
+    print(portfolio)
 
     # save results in session
     # TODO clear session after 12 hours
     session['portfolio'] = portfolio
     session['cash'] = cash
     session['total'] = total
-
-    print("Your portfolio saved in session is")
-    print(portfolio)
 
     # case we reload prices
     if session.get('datetime') is None:
