@@ -98,7 +98,6 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
         if loadprice == True:
             res = apiprice(row.ticker)
             if res is not None:
-                print('saving new prices')
                 portfolio[row.ticker].update(
                     {
                     'price': res['price'],
@@ -145,11 +144,9 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
         return False
 
     cash = {}
-    for row in cash_datas:
-        cashres = row
-
+    for cashres in cash_datas:
+        print(cashres.rub)
         # save cash and exchange info
-        cash = {}
         cash["rub"] = {
             "value":cashres.rub,
             "usdprice": exchange["rub"]*cashres.rub,
