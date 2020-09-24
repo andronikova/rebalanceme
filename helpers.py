@@ -137,6 +137,9 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
 
     # load cash info from db
     cash_datas = cash_db.query.filter_by(userid=userid).all()
+    print("Exctracted from cash_db data is")
+    print(cash_datas)
+
 
     if len(cash_datas) == 0:
         return False

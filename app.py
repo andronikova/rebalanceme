@@ -223,6 +223,12 @@ def settings():
 #             sending_email()
 #             return redirect("/settings")
 
+@app.route('/newuser', methods=['GET','POST'])
+def newuser():
+    #TODO  create new row in cash_db with zero money
+    return redirect("/")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
     with app.app_context():
