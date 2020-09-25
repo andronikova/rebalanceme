@@ -77,7 +77,7 @@ def index_page():
                 return error_page("You don't have enough cash.")
 
             # change cash db
-            datas = cash_db.query.filter_by(userid=userid).update({currency:newcash})
+            cash_db.query.filter_by(userid=userid).update({currency:newcash})
             db.session.commit()
 
             # reload portfolio
@@ -114,8 +114,6 @@ def addnewticker():
 
         ticker_info = apiprice(ticker)
 
-
-        #TODO check that heroku can load api price
         if  ticker_info['price'] == 0:
             print("apology")
             return error_page("Error! Could not load price for such ticker. Probably, ticker name is not correct!")
@@ -134,21 +132,6 @@ def addnewticker():
         db.session.add(new_row)
         db.session.commit()
 
-#         with sql.connect(DATABASE) as con:
-#             con.row_factory = sql.Row
-#             cur = con.cursor()
-#
-#
-#             cur.execute("SELECT number FROM portfolio WHERE userid == :userid AND ticker == :ticker", {"userid":userid, "ticker":ticker})
-#             row = cur.fetchall()
-#
-
-#
-#             tmpdict = {"ticker":ticker, "number":0, "fraction":0, "userid":userid}
-#             cur.execute("INSERT INTO portfolio (ticker,number,fraction,userid) VALUES (:ticker,:number,:fraction,:userid)", tmpdict)
-#
-#         con.close()
-#
         # reload  new portfolio in session
         load_portfolio(userid, portfolio_db, cash_db, True)
         print("new portfolio is loaded")
@@ -160,29 +143,19 @@ def addnewticker():
 @app.route('/changefraction', methods=['GET','POST'])
 def changefraction():
     if request.method == "GET":
-        return redirect("/")
-        # return render_template("change_fraction.html",portfolio=session.get('portfolio'), total=session.get('total'),
-        #                            cash=session.get('cash'), date=session.get('datetime'))
+        return render_template("change_fraction.html",portfolio=session.get('portfolio'), total=session.get('total'),
+                                   cash=session.get('cash'), date=session.get('datetime'))
 
-#     if request.method == "POST":
-#         with sql.connect(DATABASE) as con:
-#             con.row_factory = sql.Row
-#             cur = con.cursor()
-#
-#         # saving new fraction in portfolio and history
-#             for key in session["portfolio"]:
-#                 fraction = request.form.get(key)
-#                 cur.execute("UPDATE portfolio SET fraction=:fraction WHERE userid == :userid AND ticker==:ticker",
-#                             {"userid": userid, "ticker": key,"fraction":fraction})
-#
-#                 tmpdict = {"userid":userid, "date": time.strftime("%d-%m-%Y, %H:%M"), "ticker": key, "number": session["portfolio"][key]['number'],
-#                            "price":session["portfolio"][key]['price'], "fraction":fraction, "eventtype":'fraction'}
-#                 cur.execute("INSERT INTO history (userid, date, ticker, number, price, fraction, eventtype) VALUES (:userid, :date, :ticker, :number, :price, :fraction, :eventtype)", tmpdict)
-#
-#         con.close()
-#
-#         load_portfolio(userid, DATABASE, False)
-#         return redirect("/")
+    if request.method == "POST":
+        # saving new fraction in portfolio and history
+        for key in session["portfolio"]:
+            newfraction = request.form.get(key)
+
+            portfolio_db.query.filter_by(userid=userid,ticker=key).update({'fraction':newfraction})
+            db.session.commit()
+
+        load_portfolio(userid, portfolio_db,cash_db, False)
+        return redirect("/")
 #
 @app.route('/history', methods=['GET','POST'])
 def history():
