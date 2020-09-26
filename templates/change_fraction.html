@@ -27,7 +27,7 @@
                 <td>
                     <form action="\changefraction" method="POST">
                         <div class="form-group">
-                            <input autocomplete='off' class="form-class" type="number" name={{key}} value={{portfolio[key]['fraction']}}>
+                            <input autocomplete='off' class="form-class" type="number" name={{key}} value={{portfolio[key]['fraction']}} min="0" max="100">
                         </div>
                 </td>
                 <td>{{portfolio[key]['realFraction']}}%</td>

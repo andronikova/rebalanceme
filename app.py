@@ -89,20 +89,35 @@ def index_page():
 @app.route("/rebalance", methods=['GET','POST'])
 def rebalance():
     if request.method == "GET":
+        # return redirect("/")
+        portfolio = session.get("portfolio")
+
+        # create dict of id input formsload_portfolio in rebalence.html
+        ids = {}
+        idtag = ['price','realFraction','newnumber','oldnumber']
+        for key in portfolio:
+            ids[key] = {}
+            for tag in idtag:
+                ids[key].update({tag: tag + "_" + key})
+
+        # calculate all cash in usd
+        cash = session.get('cash')
+        total_cash = cash['rub']['usdprice'] + cash['euro']['usdprice'] +  cash['usd']['usdprice']
+
+        total = session.get('total')
+        total_ticker = total - total_cash
+
+        return render_template("rebalance.html",portfolio=portfolio, total=total,
+                                   total_cash=total_cash, total_ticker=total_ticker,
+                                    date=session.get('datetime'), ids=ids )
+    if request.method == "POST":
+        # load new number and price
+        # change cash
+        # change number in portfolio_db
+        # if newnumber = 0 -> delete
+        # reload portfolio in session
         return redirect("/")
-#         portfolio = session.get("portfolio")
-#
-#         # create dict of id input formsload_portfolio in rebalence.html
-#         ids = {}
-#         idtag = ['number', 'price','realFraction','newnumber']
-#         for key in portfolio:
-#             ids[key] = {}
-#             for tag in idtag:
-#                 ids[key].update({tag: tag + "_" + key})
-#         return render_template("rebalance.html",portfolio=portfolio, total=session.get('total'),
-#                                    cash=session.get('cash'), date=session.get('datetime'), ids=ids )
-#
-#
+
 @app.route('/addnewticker', methods=['GET','POST'])
 def addnewticker():
     if request.method == "GET":

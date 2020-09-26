@@ -34,7 +34,14 @@
                 <td>{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>
                 <td>{{portfolio[key]['fraction']}}%</td>
                 <td>{{portfolio[key]['realFraction']}}%</td>
-                <td>{{portfolio[key]['suggestion']}}</td>
+                <td>
+                    {% if  portfolio[key]['suggestion'] > 0 %}
+                        <div style="color:red"> +{{portfolio[key]['suggestion']}}</div>
+                    {% else %}
+                        <div style="color:blue"> {{portfolio[key]['suggestion']}}</div>
+                    {% endif %}
+                </td>
+
             </tr>
         {% endfor %}
 

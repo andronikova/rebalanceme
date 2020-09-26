@@ -6,14 +6,16 @@
 
 {% block main %}
 
-<h5 id="total">Total is {{"{:,.2f}".format(total)}}</h5>
+<h5 id="total">Total is ${{"{:,.2f}".format(total)}} </h5>
+<h6 id="total_add"> including ${{"{:,.2f}".format(total_ticker)}} in tickers  and ${{"{:,.2f}".format(total_cash)}} in cash</h6>
 <table class="table">
     <thead>
         <tr>
             <th scope="col">ticker</th>
-            <th scope="col">change number</th>
-            <th scope="col">new number</th>
             <th scope="col">old number</th>
+            <th scope="col">suggestion</th>
+            <th scope="col">new number</th>
+
             <th scope="col">price</th>
             <th scope="col">desired fraction</th>
             <th scope="col">real fraction</th>
@@ -24,29 +26,34 @@
         {% for key in portfolio %}
             <tr>
                 <td name="key">{{key}}</td>
+
+                <!--old number-->
+                <td name={{ids[key]['oldnumber']}} value={{portfolio[key]['number']}}>
+                    {{portfolio[key]['number']}}
+                </td>
+
+                <td>
+                    {% if  portfolio[key]['suggestion'] > 0 %}
+                    <div style="color:red"> +{{portfolio[key]['suggestion']}}</div>
+                    {% else %}
+                    <div style="color:blue"> {{portfolio[key]['suggestion']}}</div>
+                    {% endif %}
+                </td>
+
+                <!--new number-->
                 <td>
                     <form>
                         <div class="form-group">
-                            <input autocomplete='off' name={{ids[key]['number']}}  class="form-class" type="number" value={{portfolio[key]['suggestion']}}>
+                            <input autocomplete='off' name={{ids[key]['newnumber']}}  class="form-class" type="number" value={{portfolio[key]['number']}} min="0" max="9999">
                         </div>
                     </form>
                 </td>
 
-                <!--newnumber - recalculated-->
-                <td id={{ids[key]['newnumber']}}>
-                    {{portfolio[key]['number']}}
-                </td>
-
-                <!--old number-->
-                <td id={{ids[key]['number']}}>
-                    {{portfolio[key]['number']}}
-                </td>
-
                 <td>
                     <form>
-                            <div class="form-group">
-                                <input autocomplete='off' name={{ids[key]['price']}} class="form-class" type="number"  value={{"{:,.2f}".format(portfolio[key]['price'])}}>
-                            </div>
+                        <div class="form-group">
+                            <input autocomplete='off' name={{ids[key]['price']}} class="form-class" type="number"  value={{"{:,.2f}".format(portfolio[key]['price'])}} min="0" max="9999999">
+                        </div>
                     </form>
                 </td>
                 <td>{{portfolio[key]['fraction']}}%</td>
@@ -55,78 +62,71 @@
         {% endfor %}
     </tbody>
 </table>
+
+<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'rebalance') }}';"> Refresh </button>
+
+<input id="check" type="button" value="Check" class="btn btn-primary"  />
+
+<br>
+<br>
+<form action="\rebalance" method="POST">
+     <input type='submit' id = "submit" value="Save" class="btn btn-info" disabled/>
+</form>
+
+
 <script>
 
-    function calc(event)
-    {
-        let name = event.target.name;
-
-        if ( name.search("price") != -1){
-            ticker = name.slice(name.search("_")+1);
-        }
-        else if (name.search("number") != -1){
-            ticker = name.slice(name.search("_")+1);
-        }
-
-        let changenumber = 1 * document.getElementsByName("number_" + ticker)[0].value;
-        let oldnumber = 1 * document.getElementById("number_" + ticker).innerHTML  ;
-
-        let newnumber = changenumber + oldnumber;
-        if (newnumber >= 0){
-                document.querySelector('#newnumber_' + ticker).innerHTML =  newnumber     ;
-        }
-        else {
-                document.querySelector('#newnumber_' + ticker).innerHTML =  'negative !!!'     ;
-        }
-
-        total_calc();
-
-    }
-
-    function total_calc(){
-        var total = {{total}};
-
+    document.getElementById("check").addEventListener("click", function(){
         var keys = document.getElementsByName("key");
 
+        var total_ticker = 0;
+
+        var cash = {{total_cash}};
+
+<!--calculation of new total and new cash-->
         for (var i = 0; i < keys.length; i++){
             key = keys[i].innerHTML;
-            let changenumber = document.getElementsByName("number_" + key)[0].value;
+            let oldnumber = 1 * document.getElementsByName("oldnumber_" + key)[0].innerHTML;
+
+            let newnumber = document.getElementsByName("newnumber_" + key)[0].value;
             let price = document.getElementsByName("price_" + key)[0].value;
 
-            total = total - changenumber * price;
+            let change = oldnumber - newnumber;
+            cash = cash + change * price;
+            total_ticker = total_ticker + newnumber * price;
         }
 
-        document.querySelector("#total").innerHTML = "Total is " + total.toFixed(2);
+<!--show new total and cash values-->
+        var total = total_ticker + cash;
+        document.querySelector("#total").innerHTML = "Total is $" + total.toFixed(2);
+        document.querySelector("#total_add").innerHTML =  "including $" + total_ticker.toFixed(2)  + " in tickers  and $" + cash.toFixed(2) + " in cash";
 
-        real_fraction_calc(total);
-    }
 
-    function real_fraction_calc(total){
-        var keys = document.getElementsByName("key");
-
+<!--calculation of new fraction for every ticker-->
         for (var i = 0; i < keys.length; i++){
             key = keys[i].innerHTML;
+            let newnumber = document.getElementsByName("newnumber_" + key)[0].value;
             let price = document.getElementsByName("price_" + key)[0].value;
-            let newnumber = document.getElementById("newnumber_" + key).innerHTML;
 
-            let newfraction = price * newnumber * 100 / total;
-            document.querySelector('#realFraction_' + key).innerHTML = newfraction.toFixed(2) + "%";
+            let newfraction = 100 * newnumber * price / total;
+            document.querySelector('#realFraction_' + key).innerHTML = newfraction.toFixed(0) + "%";
 
         }
-    }
 
-    var div = document.querySelectorAll("div > input")
-    for (var i = 0; i < div.length; i++)
-    {
-        div[i].addEventListener('keyup', calc,false);
-        div[i].addEventListener('click', calc,false);
+
+
+<!--check is cash is positive after all-->
+        if (cash < 0){
+            document.querySelector('#submit').disabled = true;
+        }
+        else{
+            document.querySelector('#submit').disabled = false;
+        }
+
     }
+    )
 
 </script>
-
-<form action="\rebalance" method="POST">
-     <input type='submit' id = "submit" value="Save" class="btn btn-info"/>
-</form>
 
 
 <br>

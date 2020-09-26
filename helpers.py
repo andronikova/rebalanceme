@@ -77,8 +77,7 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     # to load portfolio data from db and combine in with results of API query
     datas = portfolio_db.query.filter_by(userid=userid).all()
 
-    print("Exctracted from portfolio_db data is")
-    print(datas)
+    print(f"Extracted from portfolio_db data is {datas}")
 
     # check new user
     if len(datas) == 0:
@@ -136,8 +135,7 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
 
     # load cash info from db
     cash_datas = cash_db.query.filter_by(userid=userid).all()
-    print("Exctracted from cash_db data is")
-    print(cash_datas)
+    print(f"Extracted from cash_db data is {cash_datas}")
 
 
     if len(cash_datas) == 0:
@@ -145,7 +143,6 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
 
     cash = {}
     for cashres in cash_datas:
-        print(cashres.rub)
         # save cash and exchange info
         cash["rub"] = {
             "value":cashres.rub,
@@ -166,9 +163,6 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
             "symbol":"€"
         }
 
-        print("cash info saved in dictionary")
-        print(cash)
-
         # CALCULATE TOTAL SUM AND FRACTION
         # add to total sum cash in usd
         total = total + cash["rub"]["usdprice"] + cash["euro"]["usdprice"] + cash["usd"]["usdprice"]
@@ -182,8 +176,9 @@ def load_portfolio(userid, portfolio_db,cash_db,loadprice):
             portfolio[key]["realFraction"] = real_fraction_calc(portfolio[key]['fullPrice'], total)
             portfolio[key]["suggestion"] = rebalance_suggestion(portfolio[key]["number"],portfolio[key]["price"],portfolio[key]["fraction"],total)
 
-    print("Your portfolio saved in session is")
-    print(portfolio)
+    print(f"\nPortfolio saved in session is\n {portfolio}")
+    print(f"\nCash saved in session is\n {cash}")
+    print(f"\nTotal saved in session is\n {total}")
 
     # save results in session
     # TODO clear session after 12 hours
@@ -211,6 +206,8 @@ def rebalance_suggestion(number, price, fraction, total):
 
 def real_fraction_calc(part, total):
     if total != 0:
-        math.floor(100 * part / total)
+        res = math.floor(100 * part / total)
+        return res
     else:
+        print("total is zero")
         return None
