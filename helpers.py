@@ -44,33 +44,63 @@ def error_page(message):
 
 def load_portfolio_info(userid,portfolio_db,cash_db,loadprice):
 
-    if loadprice == False:
-        # save tickers price
-        tickers_price = {}
-
+    # load currency exchange data
+    if loadprice == True:
+       exchange = load_exchange_info()
+    else:
+        exchange = session.get('exchange')
 
     # load ticker info: number, price, fullPrice, currency
     portfolio_ticker = load_ticker_info(userid, portfolio_db, loadprice)
 
     # load class info : desired fraction, active ticker, real fraction, reb. suggestion
 
-    # load cash info: rub, euro, usd, rub in usd, rub in euro, total_euro, total_usd
-    portfolio_cash = load_cash_info(userid, cash_db, loadprice)
+    # load cash info: rub, euro, usd, rub in usd, rub in euro, usd in euro, euro in usd
+    portfolio_cash = load_cash_info(userid, cash_db, exchange)
 
-    # calculate total
+    # calculate total values
+    # total cash in usd
+    # total cash in euro
+    # total in usd
+    # total in euro
+
     # calculate real fraction for class
     # calculate rebalance suggestion
 
-    # clear session
-    session.pop('portfolio_ticker', None)
-    session.pop('portfolio_cash', None)
-    session.pop('total', None)
-    # session.pop('classes', None)
+    # # clear session
+    # session.pop('portfolio_ticker', None)
+    # session.pop('portfolio_cash', None)
+    # session.pop('total', None)
+    # session.pop('exchange', None)
+    # # session.pop('classes', None)
+    #
+    # # save everything in session
+    # # TODO clear session after 12 hours
+    # session['portfolio_ticker'] = portfolio_ticker
+    # session['portfolio_cash'] = portfolio_cash
+    # session['total'] = total
+    # session['exchange'] = exchange
+    #
+    # # case we reload prices
+    # if loadprice is True:
+    #     session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")
+    #     #TODO make heroku set right time zone
 
-    # save everything in session
+    return True
 
+def load_exchange_info():
+    exchange = dict.fromkeys(['USD', 'EUR', 'RUB'])
 
-    return None
+    for key in exchange:
+        exchange[key] = {key: 1}
+
+        for key2 in exchange:
+            if key != key2:
+                exchange[key].update({ key2: apiexchange(key, key2) })
+
+    print(f"\nexchange info is loaded and saved in dict\n {exchange}")
+
+    return exchange
 
 def load_ticker_info(userid, ticker_db, loadprice):
 # function to fill in portfolio_ticker: number, price, full_price, currency
@@ -132,7 +162,8 @@ def load_ticker_info(userid, ticker_db, loadprice):
     print(f"\nticker info is loaded and saved in dictionary\n {portfolio_ticker}")
     return portfolio_ticker
 
-def load_cash_info(userid, cash_db, loadprice):
+
+def load_cash_info(userid, cash_db, exchange):
 # load cash info: rub, euro, usd, rub in usd, rub in euro, total_euro, total_usd
     datas = cash_db.query.filter_by(userid=userid).all()
     print(f"Extracted from cash_db data is {datas}")
@@ -152,20 +183,9 @@ def load_cash_info(userid, cash_db, loadprice):
         portfolio_cash[key] = {key:datas[0].__dict__[key]}
 
         # recalculate to another currency
-        # load from session
-        if loadprice == False:
-            for key2 in portfolio_cash:
-                if key != key2:
-                    portfolio_cash[key].update({key2: old_cash_info[key][key2]})
-
-        # new api request
-        if loadprice == True:
-            for key2 in portfolio_cash:
-                if key != key2:
-                    value = portfolio_cash[key][key]
-                    exchange = apiexchange(key, key2)
-
-                    portfolio_cash[key].update({key2: value * exchange})
+        for key2 in portfolio_cash:
+            if key != key2:
+                portfolio_cash[key].update({key2: portfolio_cash[key][key] * exchange[key][key2]})
 
     print(f"\ncash info is loaded and saved in dict\n {portfolio_cash}")
 

@@ -7,7 +7,7 @@ import os
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
-from helpers import apiprice, error_page, load_portfolio,load_ticker_info, load_cash_info
+from helpers import apiprice, error_page, load_portfolio,load_portfolio_info
 
 from send_email import scheduling
 from flask_migrate import Migrate
@@ -46,8 +46,7 @@ with app.app_context():
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
-        load_ticker_info(userid, ticker_db, False)
-        load_cash_info(userid, cash_db, True)
+        load_portfolio_info(userid, ticker_db, cash_db, True)
 
         return redirect("/addnewticker")
         #check session for portfolio information
