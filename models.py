@@ -15,6 +15,18 @@ class portfolio_db(db.Model):
         return '<portfolio_db {}>'.format(self.ticker)
 
 
+class ticker_db(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    userid = db.Column(db.Integer())
+    ticker = db.Column(db.String(64))
+    number = db.Column(db.Integer())
+    currency = db.Column(db.String(64))
+
+    def __repr__(self):
+        return '<ticker_db {}>'.format(self.ticker)
+
+
+
 class cash_db(db.Model):
     userid = db.Column(db.Integer(),primary_key=True)
     rub = db.Column(db.Integer())

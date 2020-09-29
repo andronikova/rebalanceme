@@ -7,7 +7,7 @@ import os
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
-from helpers import apiprice, error_page, load_portfolio
+from helpers import apiprice, error_page, load_portfolio,load_ticker_info
 
 from send_email import scheduling
 from flask_migrate import Migrate
@@ -34,7 +34,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #     scheduling(app)
 
 # load databases
-from models import db, portfolio_db, cash_db
+from models import db, portfolio_db, cash_db, ticker_db
 
 #
 # database settings and creation of tables
@@ -46,6 +46,8 @@ with app.app_context():
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
+        load_ticker_info(userid, ticker_db, False)
+
         #check session for portfolio information
         if session.get('portfolio') is None:
             boolres = load_portfolio(userid, portfolio_db, cash_db, True)

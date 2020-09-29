@@ -42,6 +42,104 @@ def apiexchange(base):
 def error_page(message):
     return render_template("error_page.html",message=message)
 
+def load_portfolio_info(userid,portfolio_db,cash_db,loadprice):
+
+    if loadprice == False:
+        # save tickers price
+        tickers_price = {}
+        for key in session.get('portfolio_ticker'):
+            tickers_price[key] = {'price': key['price']}
+
+        # save old exchange prices before clear cash info in session
+        exchanges = {}
+        exchanges['rub'] = {'tousd': session.get('portfolio_cash')['rub']["tousd"]}
+        exchanges['rub'] = {'toeuro': session.get('portfolio_cash')['rub']["toeuro"]}
+        exchanges['euro'] = {'tousd': session.get('portfolio_cash')['euro']["tousd"]}
+        exchanges['usd'] = {'toeuro': session.get('portfolio_cash')['usd']["toeuro"]}
+
+    # load ticker info: number, price, fullPrice, currency
+    portfolio_ticker = load_ticker_info(userid, portfolio_db, loadprice)
+
+    # load class info : desired fraction, active ticker, real fraction, reb. suggestion
+
+    # load cash info: rub, euro, usd, rub in usd, rub in euro, total_euro, total_usd
+    portfolio_cash = load_cash_info(userid, cash_db, loadprice)
+
+    # calculate total
+    # calculate real fraction for class
+    # calculate rebalance suggestion
+
+    # clear session
+    session.pop('portfolio_ticker', None)
+    session.pop('portfolio_cash', None)
+    session.pop('total', None)
+    # session.pop('classes', None)
+
+    # save everything in session
+
+
+    return None
+
+def load_ticker_info(userid, ticker_db, loadprice):
+    # function to fill in portfolio_ticker: number, price, full_price, currency
+
+    # load data from db tickers
+    datas = ticker_db.query.filter_by(userid=userid).all()
+    print(f"Extracted from ticker_db data is {datas}")
+
+    # check new user
+    if len(datas) == 0:
+        return False
+
+    portfolio_ticker = {}
+    # load from db tickers: number, currency
+    for row in datas:
+        portfolio_ticker[row.ticker] = {
+            'number': row.number,
+            'currency': row.currency
+        }
+
+    # load new prices from api request
+    if loadprice == True:
+        for row in datas:
+            res = apiprice(row.ticker)
+            # TODO: check error messages
+
+            if res is not None:
+                portfolio_ticker[row.ticker].update(
+                    {
+                        'price': res['price'],
+                        'fullPrice': res['price'] * row.number
+                    })
+            else:
+                portfolio_ticker[row.ticker].update(
+                    {
+                        'price': None,
+                        'fullPrice': None
+                    })
+                error_page('Could not load price')
+
+    # load old prices from session for every tck, check the existence of such tck in session
+    if loadprice == False:
+        old_ticker_info = session.get('portfolio')
+
+        for row in datas:
+            if row.ticker in old_ticker_info:
+                portfolio_ticker[row.ticker].update(
+                {
+                    'price': old_ticker_info[row.ticker]['price'],
+                    'fullPrice': old_ticker_info[row.ticker]['price'] * row.number
+                })
+            else:
+                # if there is no such ticker old version of portfolio
+                portfolio_ticker[row.ticker].update({
+                        'price': None,
+                        'fullPrice': None
+                    })
+
+    print(f"ticker info is loaded and saved in dictionary, \n {portfolio_ticker}")
+    return portfolio_ticker
+
 
 def load_portfolio(userid, portfolio_db,cash_db,loadprice):
     # loading portfolio information from portfolio db and cash info from cash db
