@@ -23,7 +23,7 @@ def apiprice(ticker):
         return None
 
 
-def apiexchange(base):
+def apiexchange(base, exchange_currency):
     try:
         API_KEY = os.environ.get('myAPI_KEY_finnhub')
         response = requests.get(f"https://finnhub.io/api/v1/forex/rates?base={base}&token={API_KEY}")
@@ -34,7 +34,7 @@ def apiexchange(base):
 
     try:
         resp = response.json()
-        return resp['quote']['USD']
+        return resp['quote'][exchange_currency]
 
     except (KeyError, TypeError, ValueError):
         return None
@@ -47,15 +47,7 @@ def load_portfolio_info(userid,portfolio_db,cash_db,loadprice):
     if loadprice == False:
         # save tickers price
         tickers_price = {}
-        for key in session.get('portfolio_ticker'):
-            tickers_price[key] = {'price': key['price']}
 
-        # save old exchange prices before clear cash info in session
-        exchanges = {}
-        exchanges['rub'] = {'tousd': session.get('portfolio_cash')['rub']["tousd"]}
-        exchanges['rub'] = {'toeuro': session.get('portfolio_cash')['rub']["toeuro"]}
-        exchanges['euro'] = {'tousd': session.get('portfolio_cash')['euro']["tousd"]}
-        exchanges['usd'] = {'toeuro': session.get('portfolio_cash')['usd']["toeuro"]}
 
     # load ticker info: number, price, fullPrice, currency
     portfolio_ticker = load_ticker_info(userid, portfolio_db, loadprice)
@@ -81,11 +73,11 @@ def load_portfolio_info(userid,portfolio_db,cash_db,loadprice):
     return None
 
 def load_ticker_info(userid, ticker_db, loadprice):
-    # function to fill in portfolio_ticker: number, price, full_price, currency
+# function to fill in portfolio_ticker: number, price, full_price, currency
 
     # load data from db tickers
     datas = ticker_db.query.filter_by(userid=userid).all()
-    print(f"Extracted from ticker_db data is {datas}")
+    print(f"\nExtracted from ticker_db data is {datas}")
 
     # check new user
     if len(datas) == 0:
@@ -137,8 +129,47 @@ def load_ticker_info(userid, ticker_db, loadprice):
                         'fullPrice': None
                     })
 
-    print(f"ticker info is loaded and saved in dictionary, \n {portfolio_ticker}")
+    print(f"\nticker info is loaded and saved in dictionary\n {portfolio_ticker}")
     return portfolio_ticker
+
+def load_cash_info(userid, cash_db, loadprice):
+# load cash info: rub, euro, usd, rub in usd, rub in euro, total_euro, total_usd
+    datas = cash_db.query.filter_by(userid=userid).all()
+    print(f"Extracted from cash_db data is {datas}")
+
+    # check new user
+    if len(datas) == 0:
+        return False
+
+    # old dict from session
+    old_cash_info = session.get('portfolio_ticker')
+
+    # new dict
+    portfolio_cash = dict.fromkeys(['USD','EUR','RUB'])
+
+    for key in portfolio_cash:
+        # write in dict value for the currency
+        portfolio_cash[key] = {key:datas[0].__dict__[key]}
+
+        # recalculate to another currency
+        # load from session
+        if loadprice == False:
+            for key2 in portfolio_cash:
+                if key != key2:
+                    portfolio_cash[key].update({key2: old_cash_info[key][key2]})
+
+        # new api request
+        if loadprice == True:
+            for key2 in portfolio_cash:
+                if key != key2:
+                    value = portfolio_cash[key][key]
+                    exchange = apiexchange(key, key2)
+
+                    portfolio_cash[key].update({key2: value * exchange})
+
+    print(f"\ncash info is loaded and saved in dict\n {portfolio_cash}")
+
+    return portfolio_cash
 
 
 def load_portfolio(userid, portfolio_db,cash_db,loadprice):

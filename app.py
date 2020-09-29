@@ -7,7 +7,7 @@ import os
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
-from helpers import apiprice, error_page, load_portfolio,load_ticker_info
+from helpers import apiprice, error_page, load_portfolio,load_ticker_info, load_cash_info
 
 from send_email import scheduling
 from flask_migrate import Migrate
@@ -47,45 +47,47 @@ with app.app_context():
 def index_page():
     if request.method == "GET":
         load_ticker_info(userid, ticker_db, False)
+        load_cash_info(userid, cash_db, True)
 
+        return redirect("/addnewticker")
         #check session for portfolio information
-        if session.get('portfolio') is None:
-            boolres = load_portfolio(userid, portfolio_db, cash_db, True)
-
-            #new user
-            if boolres == False:
-                return render_template('index_newuser.html')
-
-        # for user WITH PORTFOLIO
-        return render_template('index.html', portfolio=session.get('portfolio'),total=session.get('total'), cash=session.get('cash'),date=session.get('datetime'))
-
-    if request.method == "POST":
-        if request.form.get("refresh") is not None:
-            print("refreshing page")
-
-            load_portfolio(userid, portfolio_db, cash_db, True)
-            return redirect("/")
-
-
-        if request.form.get("cashvalue") is not None:
-            cash = float(request.form.get('cashvalue'))
-            currency = request.form.get('currency')
-
-            oldcash = session["cash"][currency]["value"]
-            newcash = oldcash + cash
-
-            # in case of decreasing of cash - check do we have such money
-            if newcash < 0:
-                return error_page("You don't have enough cash.")
-
-            # change cash db
-            cash_db.query.filter_by(userid=userid).update({currency:newcash})
-            db.session.commit()
-
-            # reload portfolio
-            load_portfolio(userid, portfolio_db, cash_db, False)
-
-            return redirect("/")
+    #     if session.get('portfolio') is None:
+    #         boolres = load_portfolio(userid, portfolio_db, cash_db, True)
+    #
+    #         #new user
+    #         if boolres == False:
+    #             return render_template('index_newuser.html')
+    #
+    #     # for user WITH PORTFOLIO
+    #     return render_template('index.html', portfolio=session.get('portfolio'),total=session.get('total'), cash=session.get('cash'),date=session.get('datetime'))
+    #
+    # if request.method == "POST":
+    #     if request.form.get("refresh") is not None:
+    #         print("refreshing page")
+    #
+    #         load_portfolio(userid, portfolio_db, cash_db, True)
+    #         return redirect("/")
+    #
+    #
+    #     if request.form.get("cashvalue") is not None:
+    #         cash = float(request.form.get('cashvalue'))
+    #         currency = request.form.get('currency')
+    #
+    #         oldcash = session["cash"][currency]["value"]
+    #         newcash = oldcash + cash
+    #
+    #         # in case of decreasing of cash - check do we have such money
+    #         if newcash < 0:
+    #             return error_page("You don't have enough cash.")
+    #
+    #         # change cash db
+    #         cash_db.query.filter_by(userid=userid).update({currency:newcash})
+    #         db.session.commit()
+    #
+    #         # reload portfolio
+    #         load_portfolio(userid, portfolio_db, cash_db, False)
+    #
+    #         return redirect("/")
 
 
 @app.route("/rebalance", methods=['GET','POST'])

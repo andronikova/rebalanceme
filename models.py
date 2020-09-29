@@ -26,12 +26,11 @@ class ticker_db(db.Model):
         return '<ticker_db {}>'.format(self.ticker)
 
 
-
 class cash_db(db.Model):
     userid = db.Column(db.Integer(),primary_key=True)
-    rub = db.Column(db.Integer())
-    euro = db.Column(db.Integer())
-    usd = db.Column(db.Integer())
+    RUB = db.Column(db.Integer())
+    EUR = db.Column(db.Integer())
+    USD = db.Column(db.Integer())
 
     def __repr__(self):
         return '<cash_db {}>'.format(self.userid)
