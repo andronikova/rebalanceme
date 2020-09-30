@@ -7,7 +7,7 @@ import os
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
-from helpers import apiprice, error_page, load_portfolio,load_portfolio_info
+from helpers import apiprice, error_page, load_portfolio_info
 
 from send_email import scheduling
 from flask_migrate import Migrate
