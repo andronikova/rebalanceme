@@ -34,7 +34,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #     scheduling(app)
 
 # load databases
-from models import db, portfolio_db, cash_db, ticker_db
+from models import db, portfolio_db, cash_db, ticker_db, class_db
 
 #
 # database settings and creation of tables
@@ -46,7 +46,7 @@ with app.app_context():
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
-        load_portfolio_info(userid, ticker_db, cash_db, True)
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
 
         return redirect("/addnewticker")
         #check session for portfolio information

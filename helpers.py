@@ -42,35 +42,35 @@ def apiexchange(base, exchange_currency):
 def error_page(message):
     return render_template("error_page.html",message=message)
 
-def load_portfolio_info(userid,portfolio_db,cash_db,loadprice):
-
+def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
+# load all necessary data from databases, calculate suggestions, save everything in session
     # load currency exchange data
     if loadprice == True:
        exchange = load_exchange_info()
     else:
+        # use old exchange info
         exchange = session.get('exchange')
 
-    # load ticker info: number, price, fullPrice, currency
+    # load ticker info: number, price, fullPrice, currency, classname
     portfolio_ticker = load_ticker_info(userid, portfolio_db, loadprice)
     print(f"\nticker info is loaded and saved in dictionary\n {portfolio_ticker}")
 
-    # load class info : desired fraction, active ticker, real fraction, reb. suggestion
 
     # load cash info: rub, euro, usd, rub in usd, rub in euro, usd in euro, euro in usd
     portfolio_cash = load_cash_info(userid, cash_db, exchange)
     print(f"\ncash info is loaded and saved in dict\n {portfolio_cash}")
 
-    # calculate total values
-    # total cash in usd and euro
+    # calculate total cash in usd and euro
     total_cash = calc_total_cash(portfolio_cash)
     print(f"\ntotal cash is\n{total_cash}")
 
-    # total in usd and euro (sum of all tickers and cash)
+    # calculate total (sum of all tickers and cash) in usd and euro
     total = calc_total(portfolio_ticker, total_cash, exchange)
     print(f"\ntotal is\n{total}")
 
-    # calculate real fraction for class
-    # calculate rebalance suggestion
+    # load class info : desired fraction, real fraction, active ticker, rebalance suggestion
+    portfolio_class = load_class_info(userid, class_db, portfolio_ticker, exchange, total)
+    print(f"\nclasses info is loaded and saved in dict\n {portfolio_class}")
 
     # # clear session
     # session.pop('portfolio_ticker', None)
@@ -103,12 +103,13 @@ def load_exchange_info():
             if key != key2:
                 exchange[key].update({ key2: apiexchange(key, key2) })
 
-    print(f"\nexchange info is loaded and saved in dict\n {exchange}")
+    print(f"\nexchange info is loaded via api request and saved in dict\n {exchange}")
 
     return exchange
 
+
 def load_ticker_info(userid, ticker_db, loadprice):
-# function to fill in portfolio_ticker: number, price, full_price, currency
+# function to fill in portfolio_ticker: number, price, full_price, currency, classname
 
     # load data from db tickers
     datas = ticker_db.query.filter_by(userid=userid).all()
@@ -123,7 +124,8 @@ def load_ticker_info(userid, ticker_db, loadprice):
     for row in datas:
         portfolio_ticker[row.ticker] = {
             'number': row.number,
-            'currency': row.currency
+            'currency': row.currency,
+            'classname': row.classname
         }
 
     # load new prices from api request
@@ -176,9 +178,6 @@ def load_cash_info(userid, cash_db, exchange):
     if len(datas) == 0:
         return False
 
-    # old dict from session
-    old_cash_info = session.get('portfolio_ticker')
-
     # new dict
     portfolio_cash = dict.fromkeys(['USD','EUR','RUB'])
 
@@ -193,6 +192,47 @@ def load_cash_info(userid, cash_db, exchange):
 
     return portfolio_cash
 
+
+def load_class_info(userid, class_db, portfolio_ticker, exchange, total):
+    # load data from class_db
+    datas = class_db.query.filter_by(userid=userid).all()
+    print(f"Extracted from class_db data is {datas}")
+
+    # check new user
+    if len(datas) == 0:
+        return False
+
+    portfolio_class = {}
+
+    # for every class
+    for row in datas:
+        portfolio_class[row.classname] = {
+            'fraction' : row.fraction,
+            'diapason' : row.diapason,
+            'activeticker' : row.activeticker,
+            'USD' : 0
+        }
+
+        # calculate total sum for every class
+        for key in portfolio_ticker:
+            if portfolio_ticker[key]['classname'] == row.classname:
+                koeff = exchange[portfolio_ticker[key]['currency']]['USD']
+                portfolio_class[row.classname]['USD'] += koeff * portfolio_ticker[key]['fullPrice']
+
+        koeff = exchange['USD']['EUR']
+        portfolio_class[row.classname].update({ 'EUR' : koeff * portfolio_class[row.classname]['USD'] })
+
+        # calculate real fraction for class
+        if total['USD'] != 0:
+            real_fraction = 100 * portfolio_class[row.classname]['USD'] / total['USD']
+        else:
+            real_fraction = None
+
+        portfolio_class[row.classname].update({'realfraction' : round(real_fraction) })
+
+    return portfolio_class
+
+
 def calc_total_cash(portfolio_cash):
     total_cash = {'USD': 0, 'EUR' : 0}
 
@@ -204,21 +244,18 @@ def calc_total_cash(portfolio_cash):
 
 
 def calc_total(portfolio_ticker, total_cash, exchange):
-    total = {'USD':0, 'EUR': 0}
+    total = {'USD':0}
 
-    for key_tot in total:
-        # calculate sum of all tickers
-        for tck in portfolio_ticker:
-            if portfolio_ticker[tck]['currency'] == key_tot:
-                # case then ticker in the same currency as key_tot
-                total[key_tot] = total[key_tot] + portfolio_ticker[tck]['fullPrice']
-            else:
-                # transfer from tck currency to key_tot koeff
-                exchange_koeff = exchange[portfolio_ticker[tck]['currency']][key_tot]
-                total[key_tot] = total[key_tot] + exchange_koeff * portfolio_ticker[tck]['fullPrice']
+    # calculate sum of all tickers in USD
+    for tck in portfolio_ticker:
+        koeff = exchange[ portfolio_ticker[tck]['currency'] ]['USD']
+        total['USD'] += koeff * portfolio_ticker[tck]['fullPrice']
 
-        # add cash
-        total[key_tot] = total[key_tot] + total_cash[key_tot]
+    # add cash
+    total['USD'] += total_cash['USD']
+
+    # transfer this sum in EUR
+    total.update({'EUR': exchange['USD']['EUR'] * total['USD']})
 
     return total
 
