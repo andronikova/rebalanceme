@@ -21,9 +21,21 @@ class ticker_db(db.Model):
     ticker = db.Column(db.String(64))
     number = db.Column(db.Integer())
     currency = db.Column(db.String(64))
+    classname = db.Column(db.String(64))
 
     def __repr__(self):
         return '<ticker_db {}>'.format(self.ticker)
+
+class class_db(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    userid = db.Column(db.Integer())
+    classname = db.Column(db.String(64))
+    fraction = db.Column(db.Integer())
+    diapason = db.Column(db.Integer())
+    activeticker = db.Column(db.String(64))
+
+    def __repr__(self):
+        return '<class_db {}>'.format(self.classname)
 
 
 class cash_db(db.Model):
