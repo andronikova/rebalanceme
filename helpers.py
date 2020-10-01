@@ -55,7 +55,6 @@ def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
     portfolio_ticker = load_ticker_info(userid, portfolio_db, loadprice)
     print(f"\nticker info is loaded and saved in dictionary\n {portfolio_ticker}")
 
-
     # load cash info: rub, euro, usd, rub in usd, rub in euro, usd in euro, euro in usd
     portfolio_cash = load_cash_info(userid, cash_db, exchange)
     print(f"\ncash info is loaded and saved in dict\n {portfolio_cash}")
@@ -68,9 +67,13 @@ def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
     total = calc_total(portfolio_ticker, total_cash, exchange)
     print(f"\ntotal is\n{total}")
 
-    # load class info : desired fraction, real fraction, active ticker, rebalance suggestion
+    # load class info : desired fraction, real fraction, active ticker
     portfolio_class = load_class_info(userid, class_db, portfolio_ticker, exchange, total)
     print(f"\nclasses info is loaded and saved in dict\n {portfolio_class}")
+
+    # calculate rebalance suggestion
+    suggestion = calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange)
+    print(f"\n rebalance suggestions are \n{suggestion}")
 
     # # clear session
     # session.pop('portfolio_ticker', None)
@@ -92,6 +95,7 @@ def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
     #     #TODO make heroku set right time zone
 
     return True
+
 
 def load_exchange_info():
     exchange = dict.fromkeys(['USD', 'EUR', 'RUB'])
@@ -203,7 +207,6 @@ def load_class_info(userid, class_db, portfolio_ticker, exchange, total):
         return False
 
     portfolio_class = {}
-
     # for every class
     for row in datas:
         portfolio_class[row.classname] = {
@@ -213,7 +216,7 @@ def load_class_info(userid, class_db, portfolio_ticker, exchange, total):
             'USD' : 0
         }
 
-        # calculate total sum for every class
+        # calculate total sum of ticks in every class
         for key in portfolio_ticker:
             if portfolio_ticker[key]['classname'] == row.classname:
                 koeff = exchange[portfolio_ticker[key]['currency']]['USD']
@@ -228,9 +231,38 @@ def load_class_info(userid, class_db, portfolio_ticker, exchange, total):
         else:
             real_fraction = None
 
-        portfolio_class[row.classname].update({'realfraction' : round(real_fraction) })
+        # update dictionary
+        portfolio_class[row.classname].update({ 'realfraction' : round(real_fraction) })
 
     return portfolio_class
+
+
+def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange):
+    suggestion = {}
+
+    for classname in portfolio_class:
+        # calculate deviation
+        real_deviation = portfolio_class[classname]['fraction'] - portfolio_class[classname]['realfraction']
+        acceptable_deviation = portfolio_class[classname]['fraction'] * portfolio_class[classname]['diapason'] / 100
+
+        print(f"\nreal deviation for {classname} is {real_deviation}, while acceptable deviation is {acceptable_deviation}")
+
+        suggestion[classname] = {'number': 0, 'USD': 0, 'EUR': 0}
+
+        #load price for active ticker
+        ticker_currency = portfolio_ticker[portfolio_class[classname]['activeticker']]['currency']
+        ticker_price = portfolio_ticker[portfolio_class[classname]['activeticker']]['price']
+
+        # compare with diapason
+        if acceptable_deviation < abs(real_deviation):
+            if ticker_price != 0:
+                suggestion[classname]['number'] = math.floor(real_deviation * total[ticker_currency] / ticker_price /100)
+                suggestion[classname]['USD'] = suggestion[classname]['number'] * exchange[ticker_currency]['USD'] * ticker_price
+                suggestion[classname]['EUR'] = suggestion[classname]['USD'] * exchange['USD']['EUR']
+            else:
+                suggestion[classname] = {'number': None, 'USD': None, 'EUR': None}
+
+    return suggestion
 
 
 def calc_total_cash(portfolio_cash):
@@ -410,15 +442,6 @@ def calc_total(portfolio_ticker, total_cash, exchange):
 #
 #     return True
 
-
-def rebalance_suggestion(number, price, fraction, total):
-    # calculate number for ticker based on desired fraction
-    if price != 0:
-        newnumber = round(total * fraction / 100 / price)
-        res = newnumber - number
-        return res
-    else:
-        return None
 
 
 def real_fraction_calc(part, total):
