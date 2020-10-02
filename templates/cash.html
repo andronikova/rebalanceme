@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        index
+{% endblock %}
+
+
+<table class="table">
+    <tbody>
+            <tr>
+                <td>cash</td>
+                <td>{{ portfolio_cash["USD"]["USD"] }} $</td>
+                <td>{{ portfolio_cash["EUR"]["EUR"] }} €</td>
+                <td>{{ portfolio_cash["RUB"]["RUB"] }} ₽</td>
+            </tr>
+    </tbody>
+</table>
+
+
+
+<br>
+<h5>Change cash value</h5>
+<form action="\" method="POST">
+    <div class="form-group">
+        <input autocomplete='off' class="form-class" type="number" name="cashvalue" step="0.01">
+        <select name="currency">
+            <option value="rub">RUB</option>
+            <option value="euro">EURO</option>
+            <option value="usd">USD</option>
+        </select>
+
+        <input name="changecash" type="submit" value="Save cash" class="btn btn-primary">
+    </div>
+</form>
+
+
+{% block main %}

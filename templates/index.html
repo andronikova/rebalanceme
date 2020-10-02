@@ -5,45 +5,70 @@
 {% endblock %}
 
 {% block main %}
-<h5>Total portfolio value:
-{{ "${:,.2f}".format(session.get('total')) }}
-
-</h5>
+<table class="table table-hover">
+    <tbody>
+        <tr class="table-active">
+            <td><h4>Total portfolio value:</h4></td>
+            <td><h4> {{ "{:,.2f}".format(total['USD'])}}$</h4> </td>
+            <td> <h4>{{"{:,.2f}".format(total['EUR']) }}€ </h4></td>
+        </tr>
+        <tr>
+            <td>in cash:</td>
+            <td>{{ "{:,.2f}".format(total_cash['USD']) }} $</td>
+            <td> {{ "{:,.2f}".format(total_cash['EUR']) }} € </td>
+        </tr>
+        <tr>
+            <td>   in tickers:</td>
+            <td>{{ "{:,.2f}".format(total['USD'] - total_cash['USD'])}} $ </td>
+            <td> {{ "{:,.2f}".format(total['EUR'] - total_cash['EUR'])}} €</td>
+        </tr>
+    </tbody>
+</table>
 
 <table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ticker</th>
-            <th scope="col">number</th>
-            <th scope="col">price</th>
-            <th scope="col">full price</th>
-            <th scope="col">desired fraction</th>
-            <th scope="col">real fraction</th>
-            <th scope="col">Rebalance suggestion</th>
-        </tr>
-    </thead>
-
-
     <tbody>
+    {% for classname in portfolio_class%}
+        <tr class="table-active">
+            <td> {{classname}} </td>
+            <td> {{portfolio_class[classname]['fraction']}} % </td>
+            <td> {{portfolio_class[classname]['realfraction']}} % </td>
+            <td>
 
-        {% for key in session.get('portfolio') %}
-            <tr>
-                <td>{{key}}</td>
-                <td>{{portfolio[key]['number']}}</td>
-                <td>{{"${:,.2f}".format(portfolio[key]['price'])}}</td>
-                <td>{{ "${:,.2f}".format(portfolio[key]['fullPrice']) }}</td>
-                <td>{{portfolio[key]['fraction']}}%</td>
-                <td>{{portfolio[key]['realFraction']}}%</td>
-                <td>
-                    {% if  portfolio[key]['suggestion'] > 0 %}
-                        <div style="color:red"> +{{portfolio[key]['suggestion']}}</div>
-                    {% else %}
-                        <div style="color:blue"> {{portfolio[key]['suggestion']}}</div>
-                    {% endif %}
-                </td>
+                {% if suggestion[classname]['number'] > 0 %}
+                    <div style="color:green">
+                        +{{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
+                    </div>
+                {% else %}
+                    <div style="color:red">
+                        {{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
+                    </div>
+                {% endif %}
 
-            </tr>
+            </td>
+            <td>
+                {% if suggestion[classname]['EUR'] > 0 %}
+                    <div style="color:green">
+                        +{{ "{:,.2f}".format(suggestion[classname]['EUR'])}} €
+                    </div>
+                {% else %}
+                    <div style="color:red">
+                        {{ "{:,.2f}".format(suggestion[classname]['EUR'])}} €
+                    </div>
+                {% endif %}
+
+            </td>
+        </tr>
+
+        {% for key in portfolio_ticker %}
+            {% if portfolio_ticker[key]['classname'] == classname%}
+                <tr>
+                    <td>{{key}}</td>
+                    <td>{{ "{:,.2f}".format(portfolio_ticker[key]['fullPrice']) }} {{ symbol[portfolio_ticker[key]['currency']] }}</td>
+                    <td>{{portfolio_ticker[key]['number']}} * {{"{:,.2f}".format(portfolio_ticker[key]['price'])}}{{ symbol[portfolio_ticker[key]['currency']] }}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
+    {% endfor %}
 
         <tr>
             <td>
@@ -51,9 +76,7 @@
             </td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+
             <td>
                 <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'rebalance') }}';"> Rebalance</button>
             </td>
@@ -62,45 +85,16 @@
 </table>
 
 <table class="table">
-    <thead>
-        <tr>
-            <th scope="col">currency</th>
-            <th scope="col">value</th>
-            <th scope="col">to USD</th>
-            <th scope="col">price in USD</th>
-            <th scope="col">real fraction</th>
-        </tr>
-
-    </thead>
     <tbody>
-        {% for key in cash %}
             <tr>
-                <td>{{key}}</td>
-                <td>{{cash[key]['symbol']}}{{"{:,.2f}".format(cash[key]['value'])}}</td>
-                <td>{{"{:,.2f}".format(cash[key]['tousd'])}}</td>
-                <td>${{"{:,.2f}".format(cash[key]['usdprice'])}}</td>
-                <td>{{cash[key]['realFraction']}}%</td>
+                <td>cash</td>
+                <td>{{ portfolio_cash["USD"]["USD"] }} $</td>
+                <td>{{ portfolio_cash["EUR"]["EUR"] }} €</td>
+                <td>{{ portfolio_cash["RUB"]["RUB"] }} ₽</td>
             </tr>
-        {% endfor %}
     </tbody>
 </table>
 
-
-
-<br>
-<h5>Change cash value</h5>
-<form action="\" method="POST">
-    <div class="form-group">
-        <input autocomplete='off' class="form-class" type="number" name="cashvalue" step="0.01">
-        <select name="currency">
-            <option value="rub">RUB</option>
-            <option value="euro">EURO</option>
-            <option value="usd">USD</option>
-        </select>
-
-        <input name="changecash" type="submit" value="Save cash" class="btn btn-primary">
-    </div>
-</form>
 
 
 <br>

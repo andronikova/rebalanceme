@@ -2,6 +2,7 @@ nav .navbar-brand
 {
     /* size for brand */
     font-size: xx-large;
+    font-family: "Times New Roman", Times, serif;
 }
 
 /* colors for brand */

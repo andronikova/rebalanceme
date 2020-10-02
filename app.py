@@ -3,7 +3,6 @@ import math, time
 from flask_mail import Mail, Message
 import os
 
-
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
@@ -46,20 +45,28 @@ with app.app_context():
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
-
-        return redirect("/addnewticker")
         #check session for portfolio information
-    #     if session.get('portfolio') is None:
-    #         boolres = load_portfolio(userid, portfolio_db, cash_db, True)
-    #
-    #         #new user
-    #         if boolres == False:
-    #             return render_template('index_newuser.html')
-    #
-    #     # for user WITH PORTFOLIO
-    #     return render_template('index.html', portfolio=session.get('portfolio'),total=session.get('total'), cash=session.get('cash'),date=session.get('datetime'))
-    #
+        if session.get('portfolio_ticker') is None:
+            boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
+
+            #new user
+            if boolres == False:
+                return render_template('index_newuser.html')
+
+        symbols = {"USD": '$', "EUR": '€'}
+
+        # for user WITH PORTFOLIO
+        return render_template('index.html',
+                               portfolio_ticker=session.get('portfolio_ticker'),
+                               portfolio_cash=session.get('portfolio_cash'),
+                               portfolio_class=session.get('portfolio_class'),
+                               total=session.get('total'),
+                               total_cash=session.get('total_cash'),
+                               suggestion=session.get('suggestion'),
+                               date=session.get('datetime'),
+                               symbol=symbols
+                               )
+
     # if request.method == "POST":
     #     if request.form.get("refresh") is not None:
     #         print("refreshing page")
@@ -207,6 +214,12 @@ def settings():
 def newuser():
     #TODO  create new row in cash_db with zero money
     return redirect("/")
+
+
+@app.route('/cash', methods=['GET','POST'])
+def cash():
+
+    return render_template('cash.html', cash=session.get('portfolio.cash'))
 
 
 if __name__ == "__main__":

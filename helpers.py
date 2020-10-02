@@ -43,7 +43,7 @@ def error_page(message):
     return render_template("error_page.html",message=message)
 
 def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
-# load all necessary data from databases, calculate suggestions, save everything in session
+    # load all necessary data from databases, calculate suggestions, save everything in session
     # load currency exchange data
     if loadprice == True:
        exchange = load_exchange_info()
@@ -75,24 +75,29 @@ def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
     suggestion = calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange)
     print(f"\n rebalance suggestions are \n{suggestion}")
 
-    # # clear session
-    # session.pop('portfolio_ticker', None)
-    # session.pop('portfolio_cash', None)
-    # session.pop('total', None)
-    # session.pop('exchange', None)
-    # # session.pop('classes', None)
-    #
-    # # save everything in session
-    # # TODO clear session after 12 hours
-    # session['portfolio_ticker'] = portfolio_ticker
-    # session['portfolio_cash'] = portfolio_cash
-    # session['total'] = total
-    # session['exchange'] = exchange
-    #
-    # # case we reload prices
-    # if loadprice is True:
-    #     session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")
-    #     #TODO make heroku set right time zone
+    # clear session
+    session.pop('portfolio_ticker', None)
+    session.pop('portfolio_cash', None)
+    session.pop('portfolio_class', None)
+    session.pop('total', None)
+    session.pop('total_cash', None)
+    session.pop('exchange', None)
+    session.pop('suggestion', None)
+
+    # save everything in session
+    # TODO clear session after 12 hours
+    session['portfolio_ticker'] = portfolio_ticker
+    session['portfolio_cash'] = portfolio_cash
+    session['portfolio_class'] = portfolio_class
+    session['total'] = total
+    session['total_cash'] = total_cash
+    session['exchange'] = exchange
+    session['suggestion'] = suggestion
+
+    # case we reload prices
+    if loadprice is True:
+        session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")
+        #TODO make heroku set right time zone
 
     return True
 
