@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
 {% block title  %}
-        index
+        cash
 {% endblock %}
 
-
+{% block main %}
 <table class="table">
     <tbody>
             <tr>
@@ -15,7 +15,6 @@
             </tr>
     </tbody>
 </table>
-
 
 
 <br>
@@ -33,5 +32,33 @@
     </div>
 </form>
 
+<br>
+<h5>Exchange matrix </h5>
 
-{% block main %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">    </th>
+            {% for key in exchange %}
+                <th scope="col">{{key}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for key1 in exchange %}
+            <tr>
+            <th scope="col">{{key1}}</th>
+                {% for key2 in exchange %}
+                    <th>{{"{:,.3f}".format(exchange[key1][key2]) }}</th>
+
+                {% endfor %}
+            </tr>
+    {% endfor %}
+
+
+    </tbody>
+</table>
+
+
+{% endblock %}

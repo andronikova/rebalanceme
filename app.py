@@ -67,12 +67,12 @@ def index_page():
                                symbol=symbols
                                )
 
-    # if request.method == "POST":
-    #     if request.form.get("refresh") is not None:
-    #         print("refreshing page")
-    #
-    #         load_portfolio(userid, portfolio_db, cash_db, True)
-    #         return redirect("/")
+    if request.method == "POST":
+        if request.form.get("refresh") is not None:
+            print("refreshing page")
+
+            load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
+            return redirect("/")
     #
     #
     #     if request.form.get("cashvalue") is not None:
@@ -219,7 +219,9 @@ def newuser():
 @app.route('/cash', methods=['GET','POST'])
 def cash():
 
-    return render_template('cash.html', cash=session.get('portfolio.cash'))
+    return render_template('cash.html', portfolio_cash=session.get('portfolio_cash'),
+                           exchange=session.get('exchange')
+                           )
 
 
 if __name__ == "__main__":
