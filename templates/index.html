@@ -5,27 +5,49 @@
 {% endblock %}
 
 {% block main %}
-<table class="table table-hover">
+
+<!--<div id="writehere"> 000 </div>-->
+
+<table class="table table-sm">
     <tbody>
         <tr class="table-active">
+            <td>
+                <select class="custom-select" id="currency_select">
+                  <option selected value="EUR">EUR</option>
+                  <option value="USD">USD</option>
+                </select>
+            </td>
             <td><h4>Total portfolio value:</h4></td>
-            <td><h4> {{ "{:,.2f}".format(total['USD'])}}$</h4> </td>
-            <td> <h4>{{"{:,.2f}".format(total['EUR']) }}€ </h4></td>
-        </tr>
-        <tr>
-            <td>in cash:</td>
-            <td>{{ "{:,.2f}".format(total_cash['USD']) }} $</td>
-            <td> {{ "{:,.2f}".format(total_cash['EUR']) }} € </td>
-        </tr>
-        <tr>
-            <td>   in tickers:</td>
-            <td>{{ "{:,.2f}".format(total['USD'] - total_cash['USD'])}} $ </td>
-            <td> {{ "{:,.2f}".format(total['EUR'] - total_cash['EUR'])}} €</td>
+            <td><h4> {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}</h4> </td>
+            <td>
+                <table class="table table-sm">
+                    <tr class="table-active">
+                        <td>in cash:</td>
+                        <td>{{ "{:,.2f}".format(total_cash[main_currency]) }} {{symbol[main_currency]}}  </td>
+                    </tr>
+                    <tr class="table-active">
+                        <td> in tickers </td>
+                        <td>{{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbol[main_currency]}}</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </tbody>
 </table>
 
+
+
+
 <table class="table">
+    <thead>
+    <tr>
+        <td><button id="toggle">▾</button>       class   </td>
+        <td>desired fraction</td>
+        <td>real fraction</td>
+        <td>rebalance suggestion</td>
+        <td>rebalance value</td>
+    </tr>
+
     <tbody>
     {% for classname in portfolio_class%}
         <tr class="table-active">
@@ -35,36 +57,28 @@
             <td>
 
                 {% if suggestion[classname]['number'] > 0 %}
-                    <div style="color:green">
+                    <h4 style="color:green">
                         +{{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
-                    </div>
+                    </h4>
                 {% else %}
-                    <div style="color:red">
+                    <h4 style="color:red">
                         {{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
-                    </div>
+                    </h4>
                 {% endif %}
 
             </td>
             <td>
-                {% if suggestion[classname]['EUR'] > 0 %}
-                    <div style="color:green">
-                        +{{ "{:,.2f}".format(suggestion[classname]['EUR'])}} €
-                    </div>
-                {% else %}
-                    <div style="color:red">
-                        {{ "{:,.2f}".format(suggestion[classname]['EUR'])}} €
-                    </div>
-                {% endif %}
-
+                {{ "{:,.2f}".format(suggestion[classname]['EUR'])}} €
             </td>
         </tr>
 
         {% for key in portfolio_ticker %}
             {% if portfolio_ticker[key]['classname'] == classname%}
-                <tr>
-                    <td>{{key}}</td>
-                    <td>{{ "{:,.2f}".format(portfolio_ticker[key]['fullPrice']) }} {{ symbol[portfolio_ticker[key]['currency']] }}</td>
-                    <td>{{portfolio_ticker[key]['number']}} * {{"{:,.2f}".format(portfolio_ticker[key]['price'])}}{{ symbol[portfolio_ticker[key]['currency']] }}</td>
+                <tr >
+                    <td>  </td>
+                    <td><div style="display:none;" class="togg">{{key}}</div></td>
+                    <td><div style="display:none;" class="togg">{{ "{:,.2f}".format(portfolio_ticker[key]['fullPrice']) }} {{ symbol[portfolio_ticker[key]['currency']] }}</div></td>
+                    <td><div style="display:none;" class="togg">{{portfolio_ticker[key]['number']}} * {{"{:,.2f}".format(portfolio_ticker[key]['price'])}}{{ symbol[portfolio_ticker[key]['currency']] }}</div></td>
                 </tr>
             {% endif %}
         {% endfor %}
@@ -85,16 +99,36 @@
 </table>
 
 
+
 <br>
 <br>
 <br>
 <h7>prices and exchange rates are actual for {{ date }}.</h7>
 <form action="\" method="POST">
-    <div class="form-group">
-        <input type="submit" name = "refresh" class="form-group" value="refresh">
-        </div>
+    <p class="form-group">
+        <input type="submit" name = "refresh" class="form-group" value="⭯">
+        press to refresh
+    </p>
 </form>
 
+
+<script>
+
+    document.getElementById("currency_select").addEventListener("click", function(){
+        var e = document.getElementById("currency_select");
+        var main_currency = e.options[e.selectedIndex].value;
+
+        document.querySelector('#writehere').innerHTML = main_currency;
+    } )
+
+
+    $(document).ready(function(){
+      $("#toggle").click(function(){
+        $(".togg").toggle();
+      });
+
+    });
+</script>
 
 
 {% endblock %}

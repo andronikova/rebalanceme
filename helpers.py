@@ -42,8 +42,11 @@ def apiexchange(base, exchange_currency):
 def error_page(message):
     return render_template("error_page.html",message=message)
 
-def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
+def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
     # load all necessary data from databases, calculate suggestions, save everything in session
+    # check user existance
+        # return error_page("Such user doesn't exist")
+
     # load currency exchange data
     if loadprice == True:
        exchange = load_exchange_info()
@@ -52,7 +55,10 @@ def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
         exchange = session.get('exchange')
 
     # load ticker info: number, price, fullPrice, currency, classname
-    portfolio_ticker = load_ticker_info(userid, portfolio_db, loadprice)
+    portfolio_ticker = load_ticker_info(userid, ticker_db, loadprice)
+    if portfolio_ticker == False:
+        return False
+
     print(f"\nticker info is loaded and saved in dictionary\n {portfolio_ticker}")
 
     # load cash info: rub, euro, usd, rub in usd, rub in euro, usd in euro, euro in usd
@@ -60,7 +66,7 @@ def load_portfolio_info(userid,portfolio_db,cash_db, class_db, loadprice):
     print(f"\ncash info is loaded and saved in dict\n {portfolio_cash}")
 
     # calculate total cash in usd and euro
-    total_cash = calc_total_cash(portfolio_cash)
+    total_cash = calc_total_cash(portfolio_cash, exchange)
     print(f"\ntotal cash is\n{total_cash}")
 
     # calculate total (sum of all tickers and cash) in usd and euro
@@ -124,8 +130,10 @@ def load_ticker_info(userid, ticker_db, loadprice):
     datas = ticker_db.query.filter_by(userid=userid).all()
     print(f"\nExtracted from ticker_db data is {datas}")
 
+    print(len(datas))
     # check new user
     if len(datas) == 0:
+        print('return false')
         return False
 
     portfolio_ticker = {}
@@ -159,7 +167,7 @@ def load_ticker_info(userid, ticker_db, loadprice):
 
     # load old prices from session for every tck, check the existence of such tck in session
     if loadprice == False:
-        old_ticker_info = session.get('portfolio')
+        old_ticker_info = session.get('portfolio_ticker')
 
         for row in datas:
             if row.ticker in old_ticker_info:
@@ -192,12 +200,7 @@ def load_cash_info(userid, cash_db, exchange):
 
     for key in portfolio_cash:
         # write in dict value for the currency
-        portfolio_cash[key] = {key:datas[0].__dict__[key]}
-
-        # recalculate to another currency
-        for key2 in portfolio_cash:
-            if key != key2:
-                portfolio_cash[key].update({key2: portfolio_cash[key][key] * exchange[key][key2]})
+        portfolio_cash[key] = datas[0].__dict__[key]
 
     return portfolio_cash
 
@@ -270,12 +273,12 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
     return suggestion
 
 
-def calc_total_cash(portfolio_cash):
+def calc_total_cash(portfolio_cash, exchange):
     total_cash = {'USD': 0, 'EUR' : 0}
 
     for key_tot in total_cash:
         for key in portfolio_cash:
-            total_cash[key_tot] = total_cash[key_tot] + portfolio_cash[key][key_tot]
+            total_cash[key_tot] = total_cash[key_tot] + portfolio_cash[key] * exchange[key][key_tot]
 
     return total_cash
 
@@ -286,6 +289,7 @@ def calc_total(portfolio_ticker, total_cash, exchange):
     # calculate sum of all tickers in USD
     for tck in portfolio_ticker:
         koeff = exchange[ portfolio_ticker[tck]['currency'] ]['USD']
+        print(f"portfolio_ticker[tck]['fullPrice'] is {portfolio_ticker[tck]['fullPrice']}")
         total['USD'] += koeff * portfolio_ticker[tck]['fullPrice']
 
     # add cash
