@@ -259,6 +259,7 @@ def change_class_info():
 
         print(ids)
         return render_template('classes_change.html', portfolio_class=portfolio_class,
+                               portfolio_ticker=session.get('portfolio_ticker'),
                                ids = ids
                                )
 
@@ -267,13 +268,27 @@ def change_class_info():
             portfolio_class = session.get("portfolio_class")
 
             for classname in portfolio_class:
-                # load new values from website
+                # load new fraction from website
                 tag = 'fraction_' + classname
                 new_fraction = request.form.get(tag)
-                print(f"new fraction for {tag} is {new_fraction}")
+                # print(f"new fraction for {tag} is {new_fraction}")
+
+                #load new diapason from website
+                tag = 'diapason_' + classname
+                new_diapason = request.form.get(tag)
+                # print(f"new fraction for {tag} is {new_diapason}")
+
+                # load new active ticker
+                tag = 'activeticker_' + classname
+                new_activeticker = request.form.get(tag)
+                # print(f"new active ticker for {tag} is {new_activeticker}")
 
                 # save new values in db
-                class_db.query.filter_by(userid=userid,classname=classname).update({'fraction': new_fraction})
+                class_db.query.filter_by(userid=userid,classname=classname).update({
+                    'fraction': new_fraction,
+                    'diapason' : new_diapason,
+                    'activeticker' : new_activeticker
+                })
                 db.session.commit()
 
         # reload portfolio

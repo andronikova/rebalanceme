@@ -289,7 +289,6 @@ def calc_total(portfolio_ticker, total_cash, exchange):
     # calculate sum of all tickers in USD
     for tck in portfolio_ticker:
         koeff = exchange[ portfolio_ticker[tck]['currency'] ]['USD']
-        print(f"portfolio_ticker[tck]['fullPrice'] is {portfolio_ticker[tck]['fullPrice']}")
         total['USD'] += koeff * portfolio_ticker[tck]['fullPrice']
 
     # add cash
