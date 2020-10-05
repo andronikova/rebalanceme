@@ -165,7 +165,8 @@ def changefraction():
 
         load_portfolio(userid, portfolio_db,cash_db, False)
         return redirect("/")
-#
+
+
 @app.route('/history', methods=['GET','POST'])
 def history():
     if request.method == "GET":
@@ -231,6 +232,53 @@ def cash():
             load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
 
             return redirect('/cash')
+
+
+@app.route('/classes', methods=['GET','POST'])
+def classes():
+    if request.method == "GET":
+        return render_template('classes.html', portfolio_class=session.get('portfolio_class'))
+
+    if request.method == "POST":
+        if request.form.get("changeclassinfo") is not None:
+            return redirect('/change_class_info')
+
+
+@app.route('/change_class_info', methods=['GET','POST'])
+def change_class_info():
+    if request.method == "GET":
+        portfolio_class = session.get('portfolio_class')
+
+        # create dict of id : classname +_realfraction /fraction_diap / active ticker
+        ids = {}
+        idtag = ['fraction','diapason','activeticker']
+        for key in portfolio_class:
+            ids[key] = {}
+            for tag in idtag:
+                ids[key].update({tag: tag + "_" + key})
+
+        print(ids)
+        return render_template('classes_change.html', portfolio_class=portfolio_class,
+                               ids = ids
+                               )
+
+    if request.method == "POST":
+        if request.form.get("submit") is not None:
+            portfolio_class = session.get("portfolio_class")
+
+            for classname in portfolio_class:
+                # load new values from website
+                tag = 'fraction_' + classname
+                new_fraction = request.form.get(tag)
+                print(f"new fraction for {tag} is {new_fraction}")
+
+                # save new values in db
+                class_db.query.filter_by(userid=userid,classname=classname).update({'fraction': new_fraction})
+                db.session.commit()
+
+        # reload portfolio
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+        return redirect("/classes")
 
 
 if __name__ == "__main__":
