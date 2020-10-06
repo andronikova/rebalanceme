@@ -112,78 +112,7 @@ def rebalance():
         # reload portfolio in session
         return redirect("/")
 
-@app.route('/addnewticker', methods=['GET','POST'])
-def addnewticker():
-    if request.method == "GET":
-        return render_template("addnewticker.html")
 
-    if request.method == "POST":
-        # check new ticker and load ticker price
-        ticker = request.form.get("newticker")
-
-        ticker_info = apiprice(ticker)
-
-        if  ticker_info['price'] == 0:
-            print("apology")
-            return error_page("Error! Could not load price for such ticker. Probably, ticker name is not correct!")
-
-        # check that this ticker is not in portfolio
-        datas = portfolio_db.query.filter_by(userid=userid).all()
-
-        if len(datas) != 0:
-            for row in datas:
-                if row.ticker == ticker:
-                    return error_page("You already have  such ticker!")
-
-        # change portfolio
-        new_row = portfolio_db(userid=userid,ticker=ticker, number=0, fraction= 0)
-
-        db.session.add(new_row)
-        db.session.commit()
-
-        # reload  new portfolio in session
-        load_portfolio(userid, portfolio_db, cash_db, True)
-        print("new portfolio is loaded")
-        print(session.get('portfolio'))
-
-    return redirect("/changefraction")
-
-
-@app.route('/changefraction', methods=['GET','POST'])
-def changefraction():
-    if request.method == "GET":
-        return render_template("change_fraction.html",portfolio=session.get('portfolio'), total=session.get('total'),
-                                   cash=session.get('cash'), date=session.get('datetime'))
-
-    if request.method == "POST":
-        # saving new fraction in portfolio and history
-        for key in session["portfolio"]:
-            newfraction = request.form.get(key)
-
-            portfolio_db.query.filter_by(userid=userid,ticker=key).update({'fraction':newfraction})
-            db.session.commit()
-
-        load_portfolio(userid, portfolio_db,cash_db, False)
-        return redirect("/")
-
-
-@app.route('/history', methods=['GET','POST'])
-def history():
-    if request.method == "GET":
-        return redirect("/")
-#         with sql.connect(DATABASE) as con:
-#             con.row_factory = sql.Row
-#             cur = con.cursor()
-#
-#             cur.execute("SELECT * FROM history WHERE userid == :userid", {"userid":userid})
-#             history = cur.fetchall()
-#
-#             for row in history:
-#                 print(row['eventtype'])
-#
-#         return render_template('history.html', history=history)
-#
-#
 @app.route('/settings', methods=['GET','POST'])
 def settings():
     if request.method == "GET":
@@ -234,14 +163,12 @@ def cash():
             return redirect('/cash')
 
 
-@app.route('/classes', methods=['GET','POST'])
-def classes():
+@app.route('/class_and_tickers', methods=['GET','POST'])
+def class_and_tickers():
     if request.method == "GET":
-        return render_template('classes.html', portfolio_class=session.get('portfolio_class'))
-
-    if request.method == "POST":
-        if request.form.get("changeclassinfo") is not None:
-            return redirect('/change_class_info')
+        return render_template('class_and_tickers.html',
+                               portfolio_class=session.get('portfolio_class'),
+                               portfolio_ticker=session.get('portfolio_ticker'))
 
 
 @app.route('/change_class_info', methods=['GET','POST'])
@@ -293,7 +220,128 @@ def change_class_info():
 
         # reload portfolio
         load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
-        return redirect("/classes")
+        return redirect("/class_and_tickers")
+
+@app.route('/change_ticker_info', methods=['GET','POST'])
+def change_ticker_info():
+    if request.method == "GET":
+        # create dict of id : ticker + '_' + currency|class
+        ids = {}
+        idtag = ['currency', 'classname']
+        for tck in session.get('portfolio_ticker'):
+            ids[tck] = {}
+            for tag in idtag:
+                ids[tck].update({tag: tag + "_" + tck})
+
+        return render_template('tickers_change.html',
+                               portfolio_ticker=session.get('portfolio_ticker'),
+                               portfolio_class=session.get('portfolio_class'),
+                               ids=ids
+                               )
+
+    if request.method == "POST":
+        portfolio_ticker = session.get("portfolio_ticker")
+
+        for tck in portfolio_ticker:
+            # load new currency and class from website
+            tag = 'currency_' + tck
+            new_currency = request.form.get(tag)
+
+            tag = 'classname_' + tck
+            new_class = request.form.get(tag)
+            old_class = portfolio_ticker[tck]['classname']
+
+            # if class was changed, check if it was active ticker
+            if new_class != old_class:
+                portfolio_class = session.get('portfolio_class')
+                if portfolio_class[old_class]['activeticker']==tck:
+                    # put None in active ticker cell for this class
+                    class_db.query.filter_by(userid=userid, classname=old_class).update({
+                            'activeticker': 'None'})
+                    db.session.commit()
+
+            # save new values in db
+            ticker_db.query.filter_by(userid=userid, ticker=tck).update({
+                'currency': new_currency,
+                'classname': new_class
+            })
+            db.session.commit()
+
+        # reload portfolio
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+
+        return redirect('/class_and_tickers')
+
+
+@app.route('/add_ticker', methods=['GET','POST'])
+def add_ticker():
+    if request.method == "GET":
+        return render_template('add_ticker.html',
+                               portfolio_ticker=session.get('portfolio_ticker'),
+                               portfolio_class=session.get('portfolio_class')
+                               )
+
+    if request.method == "POST":
+        # check new ticker and load ticker price
+        ticker = request.form.get("newticker")
+
+        ticker_info = apiprice(ticker)
+
+        if  ticker_info['price'] == 0:
+            print("apology")
+            return error_page("Error! Could not load price for such ticker. Probably, ticker name is not correct!")
+
+        # load other info about this ticker
+        classname = request.form.get("classname")
+        currency = request.form.get('currency')
+
+        # check that this ticker is not in portfolio
+        datas = ticker_db.query.filter_by(userid=userid,ticker=ticker).all()
+        print(f"check the db for such ticker {datas}")
+
+        if len(datas) != 0:
+            return error_page("You already have  such ticker!")
+
+        # change portfolio
+        new_row = ticker_db(userid=userid,ticker=ticker, number=0,classname=classname,currency=currency )
+
+        db.session.add(new_row)
+        db.session.commit()
+
+        # reload  new portfolio in session
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
+
+    return redirect("/class_and_tickers")
+
+
+@app.route('/delete_ticker', methods=['GET','POST'])
+def delete_ticker():
+    if request.method == "GET":
+        return render_template('delete_ticker.html',
+                               portfolio_ticker=session.get('portfolio_ticker'))
+
+    if request.method == "POST":
+        # load ticker name
+        ticker = request.form.get("ticker")
+
+        # check if it is active ticker for some class
+        portfolio_class = session.get('portfolio_class')
+
+        for classname in portfolio_class:
+            if portfolio_class[classname]['activeticker']==ticker:
+                # put None in active ticker cell for this class
+                class_db.query.filter_by(userid=userid, classname=classname).update({
+                    'activeticker': 'None'})
+                db.session.commit()
+
+        # delete this ticker from db
+        ticker_db.query.filter_by(userid=userid,ticker=ticker).delete(synchronize_session='evaluate')
+        db.session.commit()
+
+        # reload info in session
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+
+        return redirect('/class_and_tickers')
 
 
 if __name__ == "__main__":

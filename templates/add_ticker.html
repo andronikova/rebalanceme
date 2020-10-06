@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        add ticker
+{% endblock %}
+
+{% block main %}
+<form action="\add_ticker" method="POST">
+        <div class="form-group">
+            <input name="newticker" id="newticker" autocomplete='on' class="form-control" type="text" placeholder="new ticker">
+            <select name='currency'>
+                <option selected value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="RUB">RUB</option>
+            </select>
+
+            <select name='classname'>
+            {% for classname in portfolio_class %}
+                <option>{{classname}}</option>
+            {% endfor %}
+            </select>
+
+
+            <input id="submitnewticker" name="submitnewticker" type="submit" disabled>
+        </div>
+</form>
+
+<p>Help: to change number of ticker go to rebalance page</p>
+<p>Help: to use new class, add this class previously</p>
+
+<script>
+    document.querySelector('#newticker').onkeyup = function(){
+        if (document.querySelector('#newticker').value === '') {
+            document.querySelector('#submitnewticker').disabled = true;
+        } else {
+            document.querySelector('#submitnewticker').disabled = false;
+        }
+    }
+</script>
+{% endblock %}

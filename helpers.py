@@ -257,9 +257,14 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
 
         suggestion[classname] = {'number': 0, 'USD': 0, 'EUR': 0}
 
+        print(f" portfolio_class[classname]['activeticker'] is {portfolio_class[classname]['activeticker']}")
         #load price for active ticker
-        ticker_currency = portfolio_ticker[portfolio_class[classname]['activeticker']]['currency']
-        ticker_price = portfolio_ticker[portfolio_class[classname]['activeticker']]['price']
+        if portfolio_class[classname]['activeticker'] != 'None':
+            ticker_currency = portfolio_ticker[portfolio_class[classname]['activeticker']]['currency']
+            ticker_price = portfolio_ticker[portfolio_class[classname]['activeticker']]['price']
+        else:
+            ticker_currency = 'USD'
+            ticker_price = 0
 
         # compare with diapason
         if acceptable_deviation < abs(real_deviation):
@@ -268,7 +273,7 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
                 suggestion[classname]['USD'] = suggestion[classname]['number'] * exchange[ticker_currency]['USD'] * ticker_price
                 suggestion[classname]['EUR'] = suggestion[classname]['USD'] * exchange['USD']['EUR']
             else:
-                suggestion[classname] = {'number': None, 'USD': None, 'EUR': None}
+                suggestion[classname] = {'number': None, 'USD': 0, 'EUR': 0}
 
     return suggestion
 

@@ -5,8 +5,6 @@
 {% endblock %}
 
 {% block main %}
-<h3>New ticker</h3>
-<h3>New class</h3>
 
 <h3>Change classes info</h3>
 
@@ -38,6 +36,7 @@
 
                 <td>
                     <select name={{ids[classname]['activeticker']}} >
+                        <option>None</option>
                         {% for tck in portfolio_ticker %}
                             {% if portfolio_ticker[tck]['classname'] == classname%}
                                 {% if tck == portfolio_class[classname]['activeticker']%}
@@ -47,6 +46,7 @@
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
+
                     </select>
                 </td>
             </tr>

@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        classes
+{% endblock %}
+
+{% block main %}
+<h3>Tickers info (saved in db)
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_ticker_info') }}';">Change ticker info</button>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_ticker') }}';">Add ticker</button>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'delete_ticker') }}';">Delete ticker</button>
+</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>ticker name</td>
+            <td>number</td>
+            <td>currency</td>
+            <td>class name</td>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for key in portfolio_ticker %}
+        <tr class="table-active">
+            <td>{{key}}</td>
+            <td>{{portfolio_ticker[key]['number']}}</td>
+            <td>{{portfolio_ticker[key]['currency']}}</td>
+            <td>{{portfolio_ticker[key]['classname']}}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+<h3>New class</h3>
+
+<h3>Classes info
+<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_class_info') }}';">Change</button>
+</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>class</td>
+            <td>desired fraction</td>
+            <td>fraction diapason</td>
+            <td>active ticker</td>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for classname in portfolio_class%}
+            <tr class="table-active">
+                <td> {{classname}} </td>
+                <td> {{portfolio_class[classname]['fraction']}} % </td>
+
+
+                <td> {{portfolio_class[classname]['diapason']}} % </td>
+                <td> {{portfolio_class[classname]['activeticker']}}  </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

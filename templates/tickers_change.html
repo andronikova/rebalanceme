@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        change ticker info
+{% endblock %}
+
+{% block main %}
+
+<h3>Change tickers info</h3>
+
+<form action="\change_ticker_info" method="POST">
+    <table class="table">
+        <thead>
+            <tr>
+                <td>ticker name</td>
+                <td>number</td>
+                <td>currency</td>
+                <td>class name</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for tck in portfolio_ticker %}
+                <tr class="table-active">
+                    <td>{{tck}}</td>
+                    <td>{{portfolio_ticker[tck]['number']}}</td>
+                    <td>
+                        <select name={{ids[tck]['currency']}}>
+                            <option selected value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="RUB">RUB</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select name={{ids[tck]['classname']}}>
+                            {% for classname in portfolio_class %}
+                                {% if classname == portfolio_ticker[tck]['classname'] %}
+                                    <option selected>{{classname}}</option>
+                                {% else %}
+                                    <option>{{classname}}</option>
+                                {% endif %}
+
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <input id="submit" name="submit" type="submit" value="Save changes" class="btn btn-info">
+
+</form>
+
+
+
+{% endblock %}
