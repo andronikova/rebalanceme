@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        delete class
+{% endblock %}
+
+{% block main %}
+
+<form action="\delete_class" method="POST">
+    <div class="form-group">
+        <select name='classname' id="classname">
+            <option selected>None</option>
+            {% for classname in portfolio_class %}
+                <option>{{classname}}</option>
+            {% endfor %}
+        </select>
+
+        <input id="delete" name="delete" type="submit" disabled value="Delete">
+    </div>
+
+</form>
+
+<script>
+    document.querySelector('#classname').onclick = function(){
+        if (document.querySelector('#classname').value === 'None') {
+            document.querySelector('#delete').disabled = true;
+        } else {
+            document.querySelector('#delete').disabled = false;
+        }
+    }
+</script>
+
+
+{% endblock %}

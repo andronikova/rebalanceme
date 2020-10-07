@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 import math, time
 from flask_mail import Mail, Message
 import os
@@ -84,7 +84,7 @@ def index_page():
 def rebalance():
     if request.method == "GET":
         # return redirect("/")
-        portfolio = session.get("portfolio")
+        portfolio = session.get("portfolio_ticker")
 
         # create dict of id input formsload_portfolio in rebalence.html
         ids = {}
@@ -252,7 +252,7 @@ def change_ticker_info():
             old_class = portfolio_ticker[tck]['classname']
 
             # if class was changed, check if it was active ticker
-            if new_class != old_class:
+            if new_class != old_class and old_class != 'None':
                 portfolio_class = session.get('portfolio_class')
                 if portfolio_class[old_class]['activeticker']==tck:
                     # put None in active ticker cell for this class
@@ -302,8 +302,12 @@ def add_ticker():
         if len(datas) != 0:
             return error_page("You already have  such ticker!")
 
+        # load last id from ticker_db and put new id by hand (to avoid IntegrityError duplicate key violates unique-constraint)
+        max_id = ticker_db.query.order_by(ticker_db.id.desc()).first().id
+
         # change portfolio
-        new_row = ticker_db(userid=userid,ticker=ticker, number=0,classname=classname,currency=currency )
+        new_row = ticker_db(id=max_id+1, userid=userid,
+                            ticker=ticker, number=0,classname=classname,currency=currency )
 
         db.session.add(new_row)
         db.session.commit()
@@ -342,6 +346,80 @@ def delete_ticker():
         load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
 
         return redirect('/class_and_tickers')
+
+@app.route('/delete_class', methods=['GET','POST'])
+def delete_class():
+    if request.method == "GET":
+
+        return render_template('delete_class.html', portfolio_class=session.get('portfolio_class'))
+
+    if request.method == "POST":
+        classname = request.form.get("classname")
+
+        # change classname to None for all tickers in this class
+        portfolio_ticker = session.get('portfolio_ticker')
+        not_string = ""
+        for ticker in portfolio_ticker:
+            if portfolio_ticker[ticker]['classname'] == classname:
+                not_string += " " + ticker
+                ticker_db.query.filter_by(userid=userid, ticker=ticker).update({
+                    'classname': 'None'})
+                db.session.commit()
+
+        # delete this class from db
+        class_db.query.filter_by(userid=userid,classname=classname).delete(synchronize_session='evaluate')
+        db.session.commit()
+
+        # reload info in session
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+
+        if len(not_string) >= 1:
+            flash('Class deletion leads to None class in tickers:' + not_string)
+        return redirect('/class_and_tickers')
+
+
+@app.route('/add_class', methods=['GET','POST'])
+def add_class():
+    if request.method == "GET":
+        return render_template('add_class.html', portfolio_ticker=session.get('portfolio_ticker') )
+
+    if request.method == "POST":
+        classname = request.form.get("classname")
+        fraction = request.form.get("diapason")
+        diapason = request.form.get("diapason")
+        activeticker = request.form.get("activeticker")
+
+        # check: is it new name for class
+        for name in session.get('portfolio_class'):
+            if name == classname:
+                return error_page('Such class exists! Choose another name.')
+
+        #check, that name consists of letters only
+        if classname.isalpha() == False:
+            return error_page('Class name should consist of letters only!')
+
+        # check that name consist of english letter only
+        eng_alphabet=("abcdefghijklmnopqrstuvwxyz")
+        for one_char in classname:
+            if one_char not in eng_alphabet:
+                return error_page('Use only latin letters!')
+
+        # load last id from class_db and put new id by hand (to avoid IntegrityError duplicate key violates unique-constraint)
+        max_id = class_db.query.order_by(class_db.id.desc()).first().id
+
+        # change portfolio
+        new_row = class_db(id=max_id+1, userid=userid, classname=classname,
+                           fraction=fraction, diapason=diapason,
+                           activeticker=activeticker)
+
+        db.session.add(new_row)
+        db.session.commit()
+
+        # reload  new portfolio in session
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+
+        return redirect("/class_and_tickers")
+
 
 
 if __name__ == "__main__":

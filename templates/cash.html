@@ -5,10 +5,22 @@
 {% endblock %}
 
 {% block main %}
+<table class="table">
+    <tbody>
+            <tr class="table-active">
+                <td><h3>cash</h3></td>
+                <td><h5>{{ portfolio_cash["USD"] }} $ </h5></td>
+                <td><h5>{{ portfolio_cash["EUR"] }} €</h5></td>
+                <td><h5>{{ portfolio_cash["RUB"] }} ₽</h5></td>
+            </tr>
+    </tbody>
+</table>
 
-<h5>Change cash value</h5>
+
+
 <form action="\cash" method="POST" style="display:inline">
     <div class="form-group">
+        <h5>Change cash value</h5>
         <input autocomplete='off' class="form-class" type="number" name="cashvalue" step="0.01" min="-9999999" max="9999999">
         <select name="currency">
             <option value="RUB">RUB</option>
@@ -19,18 +31,6 @@
         <input name="changecash" type="submit" value="Save cash" class="btn btn-primary">
     </div>
 </form>
-
-
-<table class="table">
-    <tbody>
-            <tr class="table-active">
-                <td>cash</td>
-                <td>{{ portfolio_cash["USD"] }} $</td>
-                <td>{{ portfolio_cash["EUR"] }} €</td>
-                <td>{{ portfolio_cash["RUB"] }} ₽</td>
-            </tr>
-    </tbody>
-</table>
 
 
 <br>
@@ -50,10 +50,9 @@
     {% for key1 in exchange %}
             <tr>
             <th scope="col">{{key1}}</th>
-                {% for key2 in exchange %}
-                    <th>{{"{:,.3f}".format(exchange[key1][key2]) }}</th>
-
-                {% endfor %}
+            {% for key2 in exchange %}
+                <th>{{"{:,.3f}".format(exchange[key1][key2]) }}</th>
+            {% endfor %}
             </tr>
     {% endfor %}
 

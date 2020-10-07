@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        add class
+{% endblock %}
+
+{% block main %}
+<h3>Add new class</h3>
+<form action="\add_class" method="POST">
+    <div class="form-group">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>class name</td>
+                    <td>desired fraction, %</td>
+                    <td>diapason for fraction, %</td>
+                    <td>active ticker</td>
+                    <td> </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input name="classname" id="classname" autocomplete='off' class="form-control" type="text" placeholder="new class name">
+                    </td>
+                    <td>
+                        <input name="fraction" autocomplete='off' class="form-control" type="number" value="0" min="0" max="100">
+                    </td>
+                    <td>
+                        <input name="diapason" autocomplete='off' class="form-control" type="number" value="10" min="0" max="100">
+                    </td>
+                    <td>
+                        <select name='activeticker'>
+                            <option selected>None</option>
+                                {% for ticker in portfolio_ticker %}
+                                    <option>{{ticker}}</option>
+                                {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input id="submit" name="submit" type="submit" disabled>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+
+
+<script>
+    document.querySelector('#classname').onkeyup = function(){
+        if (document.querySelector('#classname').value === '') {
+            document.querySelector('#submit').disabled = true;
+        } else {
+            document.querySelector('#submit').disabled = false;
+        }
+    }
+</script>
+{% endblock %}

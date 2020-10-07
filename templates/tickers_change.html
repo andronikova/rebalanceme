@@ -34,13 +34,16 @@
 
                     <td>
                         <select name={{ids[tck]['classname']}}>
+                            {% if portfolio_ticker[tck]['classname'] == 'None' %}
+                                <option selected>None</option>
+                            {% endif %}
+
                             {% for classname in portfolio_class %}
                                 {% if classname == portfolio_ticker[tck]['classname'] %}
                                     <option selected>{{classname}}</option>
                                 {% else %}
                                     <option>{{classname}}</option>
                                 {% endif %}
-
                             {% endfor %}
                         </select>
                     </td>
