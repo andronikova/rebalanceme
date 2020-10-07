@@ -387,7 +387,6 @@ def add_class():
         classname = request.form.get("classname")
         fraction = request.form.get("diapason")
         diapason = request.form.get("diapason")
-        activeticker = request.form.get("activeticker")
 
         # check: is it new name for class
         for name in session.get('portfolio_class'):
@@ -410,7 +409,7 @@ def add_class():
         # change portfolio
         new_row = class_db(id=max_id+1, userid=userid, classname=classname,
                            fraction=fraction, diapason=diapason,
-                           activeticker=activeticker)
+                           activeticker="None")
 
         db.session.add(new_row)
         db.session.commit()

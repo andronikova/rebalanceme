@@ -11,10 +11,17 @@
         <table class="table">
             <thead>
                 <tr>
-                    <td>class name</td>
+                    <td>
+                        class name
+                        <a href="#" data-toggle="tooltip" title="Please, use only latin letters.">⍰</a>
+
+                    </td>
                     <td>desired fraction, %</td>
                     <td>diapason for fraction, %</td>
-                    <td>active ticker</td>
+                    <td>
+                        active ticker
+                        <a href="#" data-toggle="tooltip" title="Set active ticker for this class in 'change class info'">⍰</a>
+                    </td>
                     <td> </td>
                 </tr>
             </thead>
@@ -29,14 +36,7 @@
                     <td>
                         <input name="diapason" autocomplete='off' class="form-control" type="number" value="10" min="0" max="100">
                     </td>
-                    <td>
-                        <select name='activeticker'>
-                            <option selected>None</option>
-                                {% for ticker in portfolio_ticker %}
-                                    <option>{{ticker}}</option>
-                                {% endfor %}
-                        </select>
-                    </td>
+                    <td> None </td>
                     <td>
                         <input id="submit" name="submit" type="submit" disabled>
                     </td>
@@ -55,5 +55,11 @@
             document.querySelector('#submit').disabled = false;
         }
     }
+
+
+    <!--for toolitp-->
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
 {% endblock %}

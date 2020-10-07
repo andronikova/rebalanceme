@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09a832da-bc27-4266-ae82-32c9efa2a225" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/add_class.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/delete_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cash.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/change_fraction.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/class_and_tickers.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/class_and_tickers.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tickers_change.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tickers_change.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/add_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/add_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/add_ticker.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/add_ticker.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/classes_change.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/classes_change.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,14 +32,41 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="91" column="28" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="28" />
+            <state relative-caret-position="183">
+              <caret line="411" column="45" selection-start-line="411" selection-start-column="45" selection-end-line="411" selection-end-column="45" />
               <folding>
                 <element signature="e#0#68#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/classes_change.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="18" column="19" lean-forward="true" selection-start-line="18" selection-end-line="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/add_ticker.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/styles.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="277">
+              <caret line="49" selection-start-line="49" selection-end-line="49" />
             </state>
           </provider>
         </entry>
@@ -72,8 +96,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/add_class.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="51" column="46" selection-start-line="51" selection-start-column="46" selection-end-line="51" selection-end-column="46" />
+            <state relative-caret-position="378">
+              <caret line="31" column="63" selection-start-line="31" selection-start-column="63" selection-end-line="31" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -154,22 +178,22 @@
         <option value="$PROJECT_DIR$/templates/rebalance_backup.html" />
         <option value="$PROJECT_DIR$/templates/rebalance.html" />
         <option value="$PROJECT_DIR$/models.py" />
-        <option value="$PROJECT_DIR$/static/styles.css" />
         <option value="$PROJECT_DIR$/templates/index_newuser.html" />
         <option value="$PROJECT_DIR$/templates/classes.html" />
         <option value="$PROJECT_DIR$/templates/change_fraction.html" />
         <option value="$PROJECT_DIR$/templates/delete_ticker.html" />
-        <option value="$PROJECT_DIR$/templates/add_ticker.html" />
-        <option value="$PROJECT_DIR$/templates/classes_change.html" />
         <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/helpers.py" />
-        <option value="$PROJECT_DIR$/templates/add_class.html" />
         <option value="$PROJECT_DIR$/templates/delete_class.html" />
         <option value="$PROJECT_DIR$/templates/layout.html" />
         <option value="$PROJECT_DIR$/templates/class_and_tickers.html" />
         <option value="$PROJECT_DIR$/templates/cash.html" />
         <option value="$PROJECT_DIR$/templates/tickers_change.html" />
         <option value="$PROJECT_DIR$/app.py" />
+        <option value="$PROJECT_DIR$/templates/add_class.html" />
+        <option value="$PROJECT_DIR$/static/styles.css" />
+        <option value="$PROJECT_DIR$/templates/classes_change.html" />
+        <option value="$PROJECT_DIR$/templates/add_ticker.html" />
       </list>
     </option>
   </component>
@@ -392,9 +416,9 @@
     <editor active="true" />
     <layout>
       <window_info x="515" y="-933" width="672" height="554" id="DB Browser" order="0" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
-      <window_info active="true" x="24" y="409" width="241" height="248" id="Structure" order="1" sideWeight="0.31904763" side_tool="true" visible="true" weight="0.13302326" />
+      <window_info x="24" y="409" width="241" height="248" id="Structure" order="1" sideWeight="0.31875" side_tool="true" visible="true" weight="0.13302326" />
       <window_info id="Favorites" order="2" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
-      <window_info content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="3" sideWeight="0.68095237" visible="true" weight="0.13302326" />
+      <window_info active="true" content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="3" sideWeight="0.68125" visible="true" weight="0.13302326" />
       <window_info anchor="bottom" id="DB Execution Console" order="0" weight="0.42992425" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.32795697" />
@@ -404,7 +428,7 @@
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.3252688" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3276515" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.20454545" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.09090909" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.3276515" />
       <window_info anchor="bottom" id="GitHub Pull Requests" order="12" weight="0.3293011" />
@@ -584,13 +608,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/styles.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="28" column="25" lean-forward="true" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/addnewticker.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -621,24 +638,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/add_ticker.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="39" column="14" lean-forward="true" selection-end-line="39" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/delete_ticker.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/add_class.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="51" column="46" selection-start-line="51" selection-start-column="46" selection-end-line="51" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -666,13 +669,6 @@
           <folding>
             <element signature="n#style#0;n#form#0;n#h5#0;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/classes_change.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-423">
-          <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -717,11 +713,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="91" column="28" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="28" />
+        <state relative-caret-position="183">
+          <caret line="411" column="45" selection-start-line="411" selection-start-column="45" selection-end-line="411" selection-end-column="45" />
           <folding>
             <element signature="e#0#68#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/add_class.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="31" column="63" selection-start-line="31" selection-start-column="63" selection-end-line="31" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="49" selection-start-line="49" selection-end-line="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/classes_change.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="18" column="19" lean-forward="true" selection-start-line="18" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/add_ticker.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
         </state>
       </provider>
     </entry>
