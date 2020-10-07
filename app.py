@@ -84,26 +84,27 @@ def index_page():
 def rebalance():
     if request.method == "GET":
         # return redirect("/")
-        portfolio = session.get("portfolio_ticker")
+        portfolio_ticker = session.get("portfolio_ticker")
 
-        # create dict of id input formsload_portfolio in rebalence.html
+        main_currency='EUR'
+
+        # create dict of id
         ids = {}
-        idtag = ['price','realFraction','newnumber','oldnumber']
-        for key in portfolio:
-            ids[key] = {}
+        idtag = ['price', 'newnumber', 'oldnumber']
+        for ticker in portfolio_ticker:
+            ids[ticker] = {}
             for tag in idtag:
-                ids[key].update({tag: tag + "_" + key})
+                ids[ticker].update({tag: tag + "_" + ticker})
 
-        # calculate all cash in usd
-        cash = session.get('cash')
-        total_cash = cash['rub']['usdprice'] + cash['euro']['usdprice'] +  cash['usd']['usdprice']
+        return render_template("rebalance.html",
+                               portfolio_ticker=portfolio_ticker,
+                               portfolio_class=session.get('portfolio_class'),
+                               suggestion=session.get('suggestion'),
+                               total=session.get("total"), total_cash=session.get('total_cash'),
+                               date=session.get('datetime'),
+                               main_currency=main_currency,
+                               ids=ids )
 
-        total = session.get('total')
-        total_ticker = total - total_cash
-
-        return render_template("rebalance.html",portfolio=portfolio, total=total,
-                                   total_cash=total_cash, total_ticker=total_ticker,
-                                    date=session.get('datetime'), ids=ids )
     if request.method == "POST":
         # load new number and price
         # change cash

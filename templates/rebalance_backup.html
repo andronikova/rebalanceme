@@ -8,9 +8,9 @@
 
 <h5 id="total">Total is ${{"{:,.2f}".format(total[main_currency])}} </h5>
 <h6 id="total_add"> including {{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{main_currency}} in tickers
-    and {{"{:,.2f}".format(total_cash[main_currency]) }} in cash</h6>
+    and "{:,.2f}".format(total_cash[main_currency]) }} in cash</h6>
 
-
+<h5>Classes</h5>
 <table class="table">
     <thead>
     <tr>
@@ -22,7 +22,7 @@
     </tr>
 
     <tbody>
-    {% for classname in portfolio_class %}
+    {% for classname in portfolio_class%}
         <tr class="table-active">
             <td> {{classname}} </td>
             <td> {{portfolio_class[classname]['fraction']}} % </td>
@@ -41,6 +41,7 @@
                         </h4>
                     {% endif %}
                 {% endif %}
+
             </td>
             <td> {{ "{:,.2f}".format(suggestion[classname]['EUR'])}} € </td>
         </tr>
@@ -49,58 +50,71 @@
 </table>
 
 
-<form action="\rebalance" method="POST">
-    <div class="form-group">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <td>ticker</td>
-                <td>class</td>
-                <td>old number</td>
-                <td>new number</td>
-                <td>suggestion</td>
-                <td>price</td>
-            </tr>
-        </thead>
 
-        <tbody>
-        {% for ticker in portfolio_ticker %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ticker</th>
+            <th scope="col">old number</th>
+            <th scope="col">suggestion</th>
+            <th scope="col">new number</th>
+
+            <th scope="col">price</th>
+            <th scope="col">desired fraction</th>
+            <th scope="col">real fraction</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for key in portfolio_ticker %}
             <tr>
-                <td>{{ticker}}</td>
-                <td>{{portfolio_ticker[ticker]['classname']}}</td>
-                <td>{{portfolio_ticker[ticker]['number']}}</td>
-                <td>
-                    <input autocomplete='off' name={{ids[ticker]['newnumber']}}  class="form-class" type="number" value={{portfolio_ticker[ticker]['number']}} min="0" max="9999">
+                <td name="key">{{key}}</td>
+
+                <!--old number-->
+                <td name={{ids[key]['oldnumber']}} value={{portfolio[key]['number']}}>
+                    {{portfolio[key]['number']}}
                 </td>
+
                 <td>
-                    {% if portfolio_class[ portfolio_ticker[ticker]['classname'] ]['activeticker'] == ticker%}
-                        {% if suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] != 'None' %}
-                            {% if suggestion[portfolio_ticker[ticker]['classname']]['number'] > 0 %}
-                               +{{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}
-                            {% else %}
-                                {{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}
-                            {% endif %}
-                        {% endif %}
+                    {% if  portfolio[key]['suggestion'] > 0 %}
+                    <div style="color:red"> +{{portfolio[key]['suggestion']}}</div>
+                    {% else %}
+                    <div style="color:blue"> {{portfolio[key]['suggestion']}}</div>
                     {% endif %}
                 </td>
+
+                <!--new number-->
                 <td>
-                    <input autocomplete='off' name={{ids[ticker]['price']}} class="form-class" type="number"  value={{"{:,.2f}".format(portfolio_ticker[ticker]['price'])}} min="0" max="9999999">
+                    <form>
+                        <div class="form-group">
+                            <input autocomplete='off' name={{ids[key]['newnumber']}}  class="form-class" type="number" value={{portfolio[key]['number']}} min="0" max="9999">
+                        </div>
+                    </form>
                 </td>
+
+                <td>
+                    <form>
+                        <div class="form-group">
+                            <input autocomplete='off' name={{ids[key]['price']}} class="form-class" type="number"  value={{"{:,.2f}".format(portfolio[key]['price'])}} min="0" max="9999999">
+                        </div>
+                    </form>
+                </td>
+                <td>{{portfolio[key]['fraction']}}%</td>
+                <td id={{ids[key]['realFraction']}}>{{portfolio[key]['realFraction']}}%</td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>
 
-    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'rebalance') }}';"> Refresh </button>
+<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'rebalance') }}';"> Refresh </button>
 
-    <input id="check" type="button" value="Check" class="btn btn-primary"  />
+<input id="check" type="button" value="Check" class="btn btn-primary"  />
 
-    <br>
-    <br>
-
+<br>
+<br>
+<form action="\rebalance" method="POST">
      <input type='submit' id = "submit" value="Save" class="btn btn-info" disabled/>
-</div>
 </form>
 
 

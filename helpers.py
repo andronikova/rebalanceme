@@ -1,6 +1,7 @@
 import os, urllib.parse, requests, math
 from flask import Flask, render_template, request, redirect, session
 import time
+from sqlalchemy import desc
 
 
 def apiprice(ticker):
@@ -127,7 +128,7 @@ def load_ticker_info(userid, ticker_db, loadprice):
 # function to fill in portfolio_ticker: number, price, full_price, currency, classname
 
     # load data from db tickers
-    datas = ticker_db.query.filter_by(userid=userid).all()
+    datas = ticker_db.query.filter_by(userid=userid).order_by(desc(ticker_db.classname)).all()
     print(f"\nExtracted from ticker_db data is {datas}")
 
     print(len(datas))
