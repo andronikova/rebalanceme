@@ -6,37 +6,24 @@
 
 {% block main %}
 
-<!--<div id="writehere"> 000 </div>-->
+<div class="row mx-md-n5">
+  <div class="col px-md-1">
+      <div class="p-3 border bg-light">
+          <h4>Total portfolio value:</h4>
+          <h3> {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}</h3>
 
-<table class="table table-sm">
-    <tbody>
-        <tr class="table-active">
-            <td>
-                <select class="custom-select" id="currency_select">
-                  <option selected value="EUR">EUR</option>
-                  <option value="USD">USD</option>
-                </select>
-            </td>
-            <td><h4>Total portfolio value:</h4></td>
-            <td><h4> {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}</h4> </td>
-            <td>
-                <table class="table table-sm">
-                    <tr class="table-active">
-                        <td>in cash:</td>
-                        <td>{{ "{:,.2f}".format(total_cash[main_currency]) }} {{symbol[main_currency]}}  </td>
-                    </tr>
-                    <tr class="table-active">
-                        <td> in tickers </td>
-                        <td>{{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbol[main_currency]}}</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>
+          <h5 class="text-left" >in cash:</h5> <h5 class="text-right">{{ "{:,.2f}".format(total_cash[main_currency]) }} {{symbol[main_currency]}} </h5>
+          <h5 class="text-left">in tickers: {{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbol[main_currency]}}</h5>
 
+      </div>
+  </div>
 
-
+  <div class="col px-md-10">
+      <div class="p-3 ">
+          <canvas id="chart" width="300" height="200"></canvas>
+      </div>
+  </div>
+</div>
 
 <table class="table">
     <thead>
@@ -98,16 +85,50 @@
         <input type="submit" name = "refresh" class="form-group" value="⭯">
         press to refresh
     </p>
+
+    <div>
+        <select class="custom-select" id="currency_select">
+            {% if main_currency == 'EUR' %}
+                <option selected value="EUR">EUR</option>
+                <option value="USD">USD</option>
+            {% else %}
+                <option  value="EUR">EUR</option>
+                <option  selected value="USD">USD</option>
+            {% endif %}
+        </select>
+        <span class="caret"></span>
+    </div>
 </form>
 
-
 <script>
+      var pieData = [
+        {% for key in chart_data %}
+          {
+            value: {{chart_data[key]['value']}},
+            label: "{{key}}",
+            color : "{{chart_data[key]['color']}}"
+          },
+        {% endfor %}
+      ];
+
+    var pieOptions = {
+        animation: false
+    };
+
+      // get bar chart canvas
+      var mychart = document.getElementById("chart").getContext("2d");
+      steps = 10
+      max = {{ max }}
+
+      // draw pie chart
+      new Chart(document.getElementById("chart").getContext("2d")).Doughnut(pieData, pieOptions);
+
 
     document.getElementById("currency_select").addEventListener("click", function(){
         var e = document.getElementById("currency_select");
         var main_currency = e.options[e.selectedIndex].value;
 
-        document.querySelector('#writehere').innerHTML = main_currency;
+            document.querySelector('#writehere').innerHTML = main_currency;
     } )
 
 

@@ -6,7 +6,7 @@ import os
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
-from helpers import apiprice, error_page, load_portfolio_info
+from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart
 
 from send_email import scheduling
 from flask_migrate import Migrate
@@ -55,6 +55,8 @@ def index_page():
         symbols = {"USD": '$', "EUR": '€'}
         main_currency = 'EUR'
 
+        chart_data = prepare_data_for_chart()
+
         # for user WITH PORTFOLIO
         return render_template('index.html',
                                portfolio_ticker=session.get('portfolio_ticker'),
@@ -65,7 +67,8 @@ def index_page():
                                suggestion=session.get('suggestion'),
                                date=session.get('datetime'),
                                symbol=symbols,
-                               main_currency=main_currency
+                               main_currency=main_currency,
+                               chart_data=chart_data
                                )
 
     if request.method == "POST":
