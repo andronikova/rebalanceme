@@ -53,7 +53,7 @@ def index_page():
                 return render_template("index_newuser.html")
 
         symbols = {"USD": '$', "EUR": '€'}
-        main_currency = 'EUR'
+        main_currency = session.get('main_currency')
 
         chart_data = prepare_data_for_chart()
 
@@ -79,6 +79,11 @@ def index_page():
 
             if boolres == False:
                 return render_template("index_newuser.html")
+
+            return redirect("/")
+
+        if request.form.get("change_currency") is not None:
+            session['main_currency']  = request.form.get('change_currency')
 
             return redirect("/")
 

@@ -57,7 +57,7 @@
                 {% endif %}
 
             </td>
-            <td> {{ "{:,.2f}".format(suggestion[classname]['EUR'])}} € </td>
+            <td> {{ "{:,.2f}".format(suggestion[classname][main_currency])}} {{symbol[main_currency]}} </td>
         </tr>
 
         {% for key in portfolio_ticker %}
@@ -87,20 +87,18 @@
     </p>
 
     <div>
-        <select class="custom-select" id="currency_select">
-            {% if main_currency == 'EUR' %}
-                <option selected value="EUR">EUR</option>
-                <option value="USD">USD</option>
-            {% else %}
-                <option  value="EUR">EUR</option>
-                <option  selected value="USD">USD</option>
-            {% endif %}
-        </select>
-        <span class="caret"></span>
+        Your mane currency is {{main_currency}}.
+        Press to view sums in
+        {% if main_currency == 'EUR' %}
+            <input type="submit" name="change_currency" class="form-group" value="USD">
+        {% else %}
+            <input type="submit" name="change_currency" class="form-group" value="EUR">
+        {% endif %}
     </div>
 </form>
 
 <script>
+<!--for pie chart-->
       var pieData = [
         {% for key in chart_data %}
           {
@@ -124,14 +122,7 @@
       new Chart(document.getElementById("chart").getContext("2d")).Doughnut(pieData, pieOptions);
 
 
-    document.getElementById("currency_select").addEventListener("click", function(){
-        var e = document.getElementById("currency_select");
-        var main_currency = e.options[e.selectedIndex].value;
-
-            document.querySelector('#writehere').innerHTML = main_currency;
-    } )
-
-
+    <!--for toggle-->
     $(document).ready(function(){
       $("#toggle").click(function(){
         $(".togg").toggle();

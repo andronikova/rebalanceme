@@ -51,9 +51,13 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
     # load currency exchange data
     if loadprice == True:
        exchange = load_exchange_info()
+       # main_currency = user_data[0].main_currency
+       main_currency = 'EUR'
+
     else:
         # use old exchange info
         exchange = session.get('exchange')
+        main_currency = session.get('main_currency')
 
     # load ticker info: number, price, fullPrice, currency, classname
     portfolio_ticker = load_ticker_info(userid, ticker_db, loadprice)
@@ -63,7 +67,7 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
     print(f"\nticker info is loaded and saved in dictionary\n {portfolio_ticker}")
 
     # load cash info: rub, euro, usd, rub in usd, rub in euro, usd in euro, euro in usd
-    portfolio_cash = load_cash_info(userid, cash_db, exchange)
+    portfolio_cash = load_cash_info(userid, cash_db)
     print(f"\ncash info is loaded and saved in dict\n {portfolio_cash}")
 
     # calculate total cash in usd and euro
@@ -100,6 +104,7 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
     session['total_cash'] = total_cash
     session['exchange'] = exchange
     session['suggestion'] = suggestion
+    session['main_currency'] = main_currency
 
     # case we reload prices
     if loadprice is True:
@@ -131,7 +136,6 @@ def load_ticker_info(userid, ticker_db, loadprice):
     datas = ticker_db.query.filter_by(userid=userid).order_by(desc(ticker_db.classname)).all()
     print(f"\nExtracted from ticker_db data is {datas}")
 
-    print(len(datas))
     # check new user
     if len(datas) == 0:
         print('return false')
@@ -187,7 +191,7 @@ def load_ticker_info(userid, ticker_db, loadprice):
     return portfolio_ticker
 
 
-def load_cash_info(userid, cash_db, exchange):
+def load_cash_info(userid, cash_db):
 # load cash info: rub, euro, usd, rub in usd, rub in euro, total_euro, total_usd
     datas = cash_db.query.filter_by(userid=userid).all()
     print(f"Extracted from cash_db data is {datas}")
