@@ -45,6 +45,8 @@ with app.app_context():
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
+        # load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
+
         #check session for portfolio information
         if session.get('portfolio_ticker') is None:
             boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
@@ -91,27 +93,37 @@ def index_page():
 @app.route("/rebalance", methods=['GET','POST'])
 def rebalance():
     if request.method == "GET":
-        # return redirect("/")
-        portfolio_ticker = session.get("portfolio_ticker")
-
-        main_currency='EUR'
-
         # create dict of id
         ids = {}
-        idtag = ['price', 'newnumber', 'oldnumber']
-        for ticker in portfolio_ticker:
+        idtag = ['price', 'newnumber', 'oldnumber', 'classname']
+        for ticker in session.get("portfolio_ticker"):
             ids[ticker] = {}
             for tag in idtag:
                 ids[ticker].update({tag: tag + "_" + ticker})
 
+        print(ids)
+        # calc fraction for cash
+        cash_fraction = round(100 * session.get('total_cash')['USD'] / session.get("total")['USD'])
+
+        # list of classes
+        classname_list = ['None']
+        for classname in session.get("portfolio_class"):
+            classname_list = classname_list + [classname]
+
+        symbols = {"USD": '$', "EUR": '€'}
+
         return render_template("rebalance.html",
-                               portfolio_ticker=portfolio_ticker,
+                               portfolio_ticker=session.get("portfolio_ticker"),
                                portfolio_class=session.get('portfolio_class'),
                                suggestion=session.get('suggestion'),
                                total=session.get("total"), total_cash=session.get('total_cash'),
                                date=session.get('datetime'),
-                               main_currency=main_currency,
+                               classname_list=classname_list,
+                               main_currency=session.get('main_currency'),
+                               cash_fraction=cash_fraction,
+                               symbols=symbols,
                                ids=ids )
+
 
     if request.method == "POST":
         # load new number and price
