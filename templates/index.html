@@ -9,12 +9,28 @@
 <div class="row mx-md-n5">
   <div class="col px-md-1">
       <div class="p-3 border bg-light">
-          <h4>Total portfolio value:</h4>
-          <h3> {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}</h3>
+        <h4 style="text-align:left;">
+            Total portfolio value:
+            <span style="float:right;">
+                {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}
+            </span>
+        </h4>
 
-          <h5 class="text-left" >in cash:</h5> <h5 class="text-right">{{ "{:,.2f}".format(total_cash[main_currency]) }} {{symbol[main_currency]}} </h5>
-          <h5 class="text-left">in tickers: {{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbol[main_currency]}}</h5>
+        <h6 style="text-align:left;">
+            in cash:
+            <span style="float:right;">
+                {{ "{:,.2f}".format(total_cash[main_currency]) }} {{symbol[main_currency]}}
+            </span>
+        </h6>
 
+        <h6 style="text-align:left;">
+            in tickers:
+            <span style="float:right;">
+                {{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbol[main_currency]}}
+            </span>
+        </h6>
+
+          <h5 style="color:red;text-align:left;">Rebalance recommendation:</h5>
       </div>
   </div>
 
@@ -45,7 +61,11 @@
                 {% if suggestion[classname]['number'] == None%}
                         <h6>None</h6>
                 {% else %}
-                    {% if suggestion[classname]['number'] > 0 %}
+                    {% if suggestion[classname]['number'] == 0 %}
+                        <h5>
+                            {{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
+                        </h5>
+                    {% elif suggestion[classname]['number'] > 0 %}
                         <h4 style="color:green">
                             +{{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
                         </h4>
@@ -79,12 +99,8 @@
 <br>
 <br>
 <br>
-<h7>prices and exchange rates are actual for {{ date }}.</h7>
+
 <form action="\" method="POST">
-    <p class="form-group">
-        <input type="submit" name = "refresh" class="form-group" value="⭯">
-        press to refresh
-    </p>
 
     <div>
         Your main currency is {{main_currency}}.
@@ -95,6 +111,14 @@
             <input type="submit" name="change_currency" class="form-group" value="EUR">
         {% endif %}
     </div>
+
+
+<h7>prices and exchange rates are actual for {{ date }}.</h7>
+    <p class="form-group">
+        <input type="submit" name = "refresh" class="form-group" value="⭯">
+        press to refresh
+    </p>
+
 </form>
 
 <script>

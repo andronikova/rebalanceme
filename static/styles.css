@@ -47,3 +47,11 @@ main img
     max-width: 100%;
 }
 
+/*  for left and right alignment on the same line */
+
+.alignleft {
+	float: left;
+}
+.alignright {
+	float: right;
+}

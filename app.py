@@ -95,15 +95,19 @@ def rebalance():
     if request.method == "GET":
         # create dict of id
         ids = {}
-        idtag = ['price', 'newnumber', 'oldnumber', 'classname']
+        idtag = ['price', 'newnumber', 'oldnumber', 'classname','exchange']
         for ticker in session.get("portfolio_ticker"):
             ids[ticker] = {}
             for tag in idtag:
                 ids[ticker].update({tag: tag + "_" + ticker})
 
-        print(ids)
+
         # calc fraction for cash
-        cash_fraction = round(100 * session.get('total_cash')['USD'] / session.get("total")['USD'])
+        total = session.get("total")
+        if total['USD'] != 0:
+            cash_fraction = round(100 * session.get('total_cash')['USD'] / total['USD'])
+        else:
+            cash_fraction = 100
 
         # list of classes
         classname_list = ['None']
@@ -116,21 +120,58 @@ def rebalance():
                                portfolio_ticker=session.get("portfolio_ticker"),
                                portfolio_class=session.get('portfolio_class'),
                                suggestion=session.get('suggestion'),
-                               total=session.get("total"), total_cash=session.get('total_cash'),
+                               total=total,
+                               total_cash=session.get('total_cash'),
                                date=session.get('datetime'),
                                classname_list=classname_list,
                                main_currency=session.get('main_currency'),
+                               exchange=session.get('exchange'),
                                cash_fraction=cash_fraction,
                                symbols=symbols,
                                ids=ids )
 
 
     if request.method == "POST":
-        # load new number and price
-        # change cash
-        # change number in portfolio_db
-        # if newnumber = 0 -> delete
+        portfolio_cash = session.get('portfolio_cash')
+
+        portfolio_ticker = session.get('portfolio_ticker')
+
+        # check that we have enough cash
+        # calculate cash changes for all tickers in ticker currency
+        for ticker in portfolio_ticker:
+            # load new number and price
+            new_number = float(request.form.get('newnumber_' + ticker))
+            price = float(request.form.get('price_' + ticker))
+
+            old_number = portfolio_ticker[ticker]['number']
+            currency = portfolio_ticker[ticker]['currency']
+
+            # change cash in currency of ticker
+            portfolio_cash[currency] += (old_number - new_number) * price
+
+            # load new values in ticker_db
+            ticker_db.query.filter_by(userid=userid, ticker=ticker).update({
+                'number': new_number
+            })
+            db.session.commit()
+
+        # load new cash values in db
+        cash_db.query.filter_by(userid=userid).update({
+            'USD': portfolio_cash['USD'],
+            'EUR' : portfolio_cash['EUR'],
+            'RUB': portfolio_cash['RUB']
+        })
+        db.session.commit()
+
+
         # reload portfolio in session
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+
+        # check for negative cash
+        for key in portfolio_cash:
+            if portfolio_cash[key] < 0:
+                flash("You have negative cash. You need to exchange some of you currency. Go to /cash page ")
+
         return redirect("/")
 
 

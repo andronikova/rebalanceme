@@ -5,59 +5,91 @@
 {% endblock %}
 
 {% block main %}
+<div class="row mx-md-n5">
 
-<div id="test"></div>
+  <div class="col-md-3 pull-md-9">
+      <div class="p-3 border bg-light">
+        <h4 style="text-align:left;">
+            Total:
+            <div style="float:right;" >
+                <span id="total">{{ "{:,.2f}".format(total[main_currency])}}</span>
+                    {{symbols[main_currency]}}
+            </div>
+        </h4>
 
-<h5 id="total">Total is {{"{:,.2f}".format(total[main_currency])}} {{symbols[main_currency]}}</h5>
-<h6 id="total_add"> including {{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbols[main_currency]}} in tickers
-    and {{"{:,.2f}".format(total_cash[main_currency]) }} {{symbols[main_currency]}} in cash</h6>
+        <h6 style="text-align:left;">
+            in cash:
+            <div style="float:right;" >
+                <span id="total_cash">{{ "{:,.2f}".format(total_cash[main_currency]) }}</span>
+                 {{symbols[main_currency]}}
+            </div>
+        </h6>
 
+        <h6 style="text-align:left;">
+            in tickers:
+            <div style="float:right;">
+                <span id="total_ticker">{{"{:,.2f}".format(total[main_currency] - total_cash[main_currency])}}</span>
+                    {{symbols[main_currency]}}
+            </div>
+        </h6>
 
-<table class="table">
-    <thead>
-    <tr>
-        <td>class</td>
-        <td>desired fraction</td>
-        <td>real fraction</td>
-        <td>rebalance suggestion</td>
-        <td>rebalance value</td>
-    </tr>
+      </div>
+  </div>
 
-    <tbody>
-        {% for classname in portfolio_class %}
+  <div class="col-md-9 push-md-3">
+      <div class="p-3  border bg-light">
+        <table class="table table-sm">
+            <thead>
             <tr class="table-active">
-                <td name="classname_field">{{classname}}</td>
-                <td> {{portfolio_class[classname]['fraction']}} % </td>
-                <td id={{classname}}> {{portfolio_class[classname]['realfraction']}} % </td>
-                <td>
-                    {% if suggestion[classname]['number'] == None%}
-                        <h6>None</h6>
-                    {% else %}
-                        {% if suggestion[classname]['number'] > 0 %}
-                            <h4 style="color:green">
-                                +{{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
-                            </h4>
-                        {% else %}
-                            <h4 style="color:red">
-                                {{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
-                            </h4>
-                        {% endif %}
-                    {% endif %}
-                </td>
-                <td> {{ "{:,.2f}".format(suggestion[classname][main_currency])}} {{symbols[main_currency]}} </td>
+                <td>class</td>
+                <td>desired fraction</td>
+                <td>real fraction</td>
+                <td>rebalance suggestion</td>
+                <!--<td>rebalance value</td>-->
             </tr>
-        {% endfor %}
 
-        <tr class="table-active">
-            <td>cash</td>
-            <td>0 %</td>
-            <td id="cash_fraction">{{cash_fraction}} %</td>
-            <td></td>
-            <td></td>
+            <tbody>
+                {% for classname in portfolio_class %}
+                    <tr >
+                        <td name="classname_field">{{classname}}</td>
+                        <td> {{portfolio_class[classname]['fraction']}} % </td>
+                        <td id={{classname}}> {{portfolio_class[classname]['realfraction']}} % </td>
+                        <td>
+                            {% if suggestion[classname]['number'] == None%}
+                                <h6>None</h6>
+                            {% else %}
+                                {% if suggestion[classname]['number'] == 0 %}
+                                    <h5>
+                                {{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
+                                    </h5>
+                                {% elif suggestion[classname]['number'] > 0 %}
+                                    <h5 style="color:green">
+                                        +{{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
+                                    </h5>
+                                {% else %}
+                                    <h5 style="color:red">
+                                        {{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
+                                    </h5>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <!--<td> {{ "{:,.2f}".format(suggestion[classname][main_currency])}} {{symbols[main_currency]}} </td>-->
+                    </tr>
+                {% endfor %}
 
-        </tr>
-    </tbody>
-</table>
+                <tr >
+                    <td>cash</td>
+                    <td>0 %</td>
+                    <td id="cash_fraction">{{cash_fraction}} %</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+
+<br>
 
 
 <form action="\rebalance" method="POST">
@@ -97,9 +129,10 @@
                     <td>
                         <input autocomplete='off' name={{ids[ticker]['newnumber']}}  class="form-class" type="number" value={{portfolio_ticker[ticker]['number']}} min="0" max="999">
                     </td>
+                    <td name={{ids[ticker]['exchange']}} style="display:none;">{{exchange[portfolio_ticker[ticker]['currency']][main_currency]}}</td>
 
                     <td>
-                        <input autocomplete='off' name={{ids[ticker]['price']}} class="form-class" type="number"  value={{"{:,.2f}".format(portfolio_ticker[ticker]['price'])}} min="0" max="9999">
+                        <input autocomplete='off' name={{ids[ticker]['price']}} class="form-class" type="number"  value={{"{:,.2f}".format(portfolio_ticker[ticker]['price'])}} step="0.01" min="0" max="9999">
                         {{symbols[portfolio_ticker[ticker]['currency']]}}
                     </td>
                 </tr>
@@ -130,7 +163,7 @@
 
         var cash = {{total_cash[main_currency]}};
 
-<!--calculation of new total and new cash-->
+        <!--calculation of new total and new cash-->
         for (var i = 0; i < ticker_arr.length; i++)
         {
             let ticker = ticker_arr[i].innerHTML;
@@ -138,30 +171,32 @@
 
             let newnumber = document.getElementsByName("newnumber_" + ticker)[0].value;
             let price = document.getElementsByName("price_" + ticker)[0].value;
+            let exchange_koef =  document.getElementsByName("exchange_" + ticker)[0].innerHTML;
 
             let change = oldnumber - newnumber;
-            cash = cash + change * price;
-            total_ticker = total_ticker + newnumber * price;
+            cash = cash + change * price * exchange_koef;
+            total_ticker = total_ticker + newnumber * price * exchange_koef;
         }
 
-<!--show new total and cash values-->
-        var total = total_ticker + cash;
-        document.querySelector("#total").innerHTML = "Total is $" + total.toFixed(2);
-        document.querySelector("#total_add").innerHTML =  "including $" + total_ticker.toFixed(2)  + " in tickers  and $" + cash.toFixed(2) + " in cash";
 
-<!--calculate new cash fraction-->
+        <!--show new total and cash values-->
+        var total = total_ticker + cash;
+        document.querySelector("#total").innerHTML = total.toFixed(2);
+        document.querySelector("#total_cash").innerHTML =   cash.toFixed(2);
+        document.querySelector("#total_ticker").innerHTML =  total_ticker.toFixed(2);
+
+        <!--calculate new cash fraction-->
         let cash_fraction = 100 * cash / total;
         document.querySelector("#cash_fraction").innerHTML = cash_fraction.toFixed(0) + " %";
 
-<!--calculation of new fraction for every ticker-->
+
+        <!--calculation of new fraction for every ticker in class -->
         var classname_arr = document.getElementsByName("classname_field");
 
         for (var i = 0; i < classname_arr.length; i++)
         {
             let classname = classname_arr[i].innerHTML;
             let tck_sum = 0;
-
-            document.querySelector("#test").innerHTML = classname;
 
             <!--calculate price of all tickers for this classname -->
             for (let i = 0; i < ticker_arr.length; i++)
@@ -175,7 +210,9 @@
                         let newnumber = document.getElementsByName("newnumber_" + ticker)[0].value;
                         let price = document.getElementsByName("price_" + ticker)[0].value;
 
-                        tck_sum = tck_sum + newnumber * price;
+                        let exchange_koef = document.getElementsByName("exchange_" + ticker)[0].innerHTML;
+
+                        tck_sum = tck_sum + newnumber * price * exchange_koef;
                     }
             }
 
@@ -186,7 +223,7 @@
         }
 
 
-        <!--check is cash is positive after all-->
+        <!--check is cash positive after all-->
         if (cash < 0)
         {
             document.querySelector('#submit').disabled = true;

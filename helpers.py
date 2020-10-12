@@ -240,12 +240,12 @@ def load_class_info(userid, class_db, portfolio_ticker, exchange, total):
 
         # calculate real fraction for class
         if total['USD'] != 0:
-            real_fraction = 100 * portfolio_class[row.classname]['USD'] / total['USD']
+            real_fraction = round(100 * portfolio_class[row.classname]['USD'] / total['USD'])
         else:
-            real_fraction = None
+            real_fraction = 100
 
         # update dictionary
-        portfolio_class[row.classname].update({ 'realfraction' : round(real_fraction) })
+        portfolio_class[row.classname].update({ 'realfraction' : real_fraction })
 
     return portfolio_class
 
@@ -254,8 +254,10 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
     suggestion = {}
 
     for classname in portfolio_class:
+
         # calculate deviation
-        real_deviation = portfolio_class[classname]['fraction'] - portfolio_class[classname]['realfraction']
+        real_fraction = portfolio_class[classname]['realfraction']
+        real_deviation = portfolio_class[classname]['fraction'] - real_fraction
         acceptable_deviation = portfolio_class[classname]['fraction'] * portfolio_class[classname]['diapason'] / 100
 
         print(f"\nreal deviation for {classname} is {real_deviation}, while acceptable deviation is {acceptable_deviation}")
@@ -263,6 +265,7 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
         suggestion[classname] = {'number': 0, 'USD': 0, 'EUR': 0}
 
         print(f" portfolio_class[classname]['activeticker'] is {portfolio_class[classname]['activeticker']}")
+
         #load price for active ticker
         if portfolio_class[classname]['activeticker'] != 'None':
             ticker_currency = portfolio_ticker[portfolio_class[classname]['activeticker']]['currency']
@@ -275,6 +278,7 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
         if acceptable_deviation < abs(real_deviation):
             if ticker_price != 0:
                 suggestion[classname]['number'] = math.floor(real_deviation * total[ticker_currency] / ticker_price /100)
+
                 suggestion[classname]['USD'] = suggestion[classname]['number'] * exchange[ticker_currency]['USD'] * ticker_price
                 suggestion[classname]['EUR'] = suggestion[classname]['USD'] * exchange['USD']['EUR']
             else:
