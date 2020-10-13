@@ -1,13 +1,12 @@
 {% extends "layout.html" %}
 
 {% block title  %}
-        rebalance
+    rebalance
 {% endblock %}
 
 {% block main %}
 <div class="row mx-md-n5">
-
-  <div class="col-md-3 pull-md-9">
+  <div class="col-md-5 pull-md-7">
       <div class="p-3 border bg-light">
         <h4 style="text-align:left;">
             Total:
@@ -36,7 +35,7 @@
       </div>
   </div>
 
-  <div class="col-md-9 push-md-3">
+  <div class="col-md-7 push-md-5">
       <div class="p-3  border bg-light">
         <table class="table table-sm">
             <thead>
@@ -90,7 +89,6 @@
 </div>
 
 <br>
-
 
 <form action="\rebalance" method="POST">
     <div class="form-group">
@@ -232,6 +230,7 @@
         else
         {
             document.querySelector('#submit').disabled = false;
+            document.querySelector("#why_disabled").innerHTML = " ";
         }
     } )
 

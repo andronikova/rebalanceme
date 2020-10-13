@@ -34,9 +34,10 @@
       </div>
   </div>
 
-  <div class="col px-md-10">
-      <div class="p-3 ">
-          <canvas id="chart" width="300" height="200"></canvas>
+  <div class="col px-md-5">
+      <div class="p-3">
+          <!--for diagram-->
+          <div id='myDiv'></div>
       </div>
   </div>
 </div>
@@ -123,27 +124,55 @@
 
 <script>
 <!--for pie chart-->
-      var pieData = [
-        {% for key in chart_data %}
-          {
-            value: {{chart_data[key]['value']}},
-            label: "{{key}}",
-            color : "{{chart_data[key]['color']}}"
-          },
-        {% endfor %}
-      ];
+    <!--to transform from python dict to json object-->
+    var data_json = JSON.parse('{{ chart_data | tojson | safe}}');
 
-    var pieOptions = {
-        animation: false
+    <!--chart properties-->
+    var data =
+        [{
+          values: data_json.value ,
+          labels: data_json.names ,
+          text: data_json.hover,
+          type: 'pie',
+          'marker': {
+              'colors': [
+                'rgb	(90,118,126)',
+                'rgb(234,225,223)',
+                'rgb(160,134,159)',
+                'rgb(212,207,203)',
+                'rgb(238,238,238)',
+                'rgb(0,52,134)'
+              ]
+            },
+          textinfo: 'label',
+          automargin: true,
+          hoverinfo: 'text'
+        }];
+
+   var layout = {
+      showlegend: false,
+      height: 230,
+      width: 300,
+      margin:
+      {
+        l: 30,
+        r: 10,
+        b: 5,
+        t: 5,
+        pad: 4
+      },
+      font: {
+            family: 'Avantgarde, monospace',
+            size: 18,
+            color: 'rgb(0,0,0)'
+          },
+      hovermode: "closest",
+
     };
 
-      // get bar chart canvas
-      var mychart = document.getElementById("chart").getContext("2d");
-      steps = 10
-      max = {{ max }}
+    var config = {responsive: true}
 
-      // draw pie chart
-      new Chart(document.getElementById("chart").getContext("2d")).Doughnut(pieData, pieOptions);
+    Plotly.newPlot('myDiv', data, layout,{displayModeBar: false});
 
 
     <!--for toggle-->

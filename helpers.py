@@ -1,4 +1,4 @@
-import os, urllib.parse, requests, math
+import os, urllib.parse, requests, math, json
 from flask import Flask, render_template, request, redirect, session
 import time
 from sqlalchemy import desc
@@ -316,7 +316,6 @@ def calc_total(portfolio_ticker, total_cash, exchange):
 
 def prepare_data_for_chart():
     portfolio_class = session.get('portfolio_class')
-
     total_cash = session.get('total_cash')
     total = session.get('total')
 
@@ -325,24 +324,14 @@ def prepare_data_for_chart():
     else:
         cash_percent = 0
 
-    colors = [
-        "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
-        "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
-        "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
-
-    chart_data = {}
-    i = 0
+    value_list = [cash_percent]
+    name_list = ["cash"]
+    hover_list = [str(cash_percent)  + " %"]
     for classname in portfolio_class:
-        i += 1
+        value_list.append(portfolio_class[classname]['realfraction'])
+        name_list.append(classname)
+        hover_list.append(str(portfolio_class[classname]['realfraction']) + " %")
 
-        chart_data[classname] = {
-            'color' : colors[i],
-            'value' : portfolio_class[classname]['realfraction']
-        }
-
-    chart_data['cash'] = {
-        'color': colors[0],
-        'value': cash_percent
-    }
+    chart_data=({'value':value_list, 'names': name_list, 'hover':hover_list})
 
     return chart_data

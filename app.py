@@ -1,15 +1,16 @@
 from flask import Flask, render_template, request, redirect, session, flash
+from flask_migrate import Migrate
 import math, time
 from flask_mail import Mail, Message
 import os
+
 
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
 from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart
+from send_email import smthelse, scheduling
 
-from send_email import scheduling
-from flask_migrate import Migrate
 app = Flask(__name__)
 
 
@@ -178,13 +179,13 @@ def rebalance():
 @app.route('/settings', methods=['GET','POST'])
 def settings():
     if request.method == "GET":
-      return redirect("/")
-#         return render_template('settings.html')
-#
-#     if request.method == "POST":
-#         if request.form.get("send") is not None:
-#             sending_email()
-#             return redirect("/settings")
+        return render_template('settings.html')
+
+    if request.method == "POST":
+        if request.form.get("send") is not None:
+            smthelse(app)
+            return redirect("/settings")
+
 
 @app.route('/newuser', methods=['GET','POST'])
 def newuser():
@@ -447,8 +448,6 @@ def add_class():
 
     if request.method == "POST":
         classname = request.form.get("classname")
-        fraction = request.form.get("diapason")
-        diapason = request.form.get("diapason")
 
         # check: is it new name for class
         for name in session.get('portfolio_class'):
@@ -470,7 +469,7 @@ def add_class():
 
         # change portfolio
         new_row = class_db(id=max_id+1, userid=userid, classname=classname,
-                           fraction=fraction, diapason=diapason,
+                           fraction=0, diapason=0,
                            activeticker="None")
 
         db.session.add(new_row)
