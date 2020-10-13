@@ -13,7 +13,7 @@ def scheduling(app):
         atexit.register(lambda: scheduler.shutdown())
 
 
-def smthelse(app):
+def sending_emil(app,userid):
     with app.app_context():
         mail = Mail()
         mail.init_app(app)

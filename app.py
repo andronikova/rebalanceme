@@ -1,15 +1,13 @@
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_migrate import Migrate
-import math, time
 from flask_mail import Mail, Message
 import os
-
 
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
 from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart
-from send_email import smthelse, scheduling
+from send_email import sending_emil, scheduling
 
 app = Flask(__name__)
 
@@ -88,6 +86,10 @@ def index_page():
         if request.form.get("change_currency") is not None:
             session['main_currency']  = request.form.get('change_currency')
 
+            return redirect("/")
+
+        if request.form.get("send_by_email") is not None:
+            sending_emil(app,userid)
             return redirect("/")
 
 
@@ -183,8 +185,15 @@ def settings():
 
     if request.method == "POST":
         if request.form.get("send") is not None:
-            smthelse(app)
+            sending_emil(app,userid)
             return redirect("/settings")
+
+
+@app.route('/change_settings', methods=['GET','POST'])
+def change_settings():
+    if request.method == "GET":
+        return render_template('settings.html')
+
 
 
 @app.route('/newuser', methods=['GET','POST'])

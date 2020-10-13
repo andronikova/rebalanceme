@@ -47,6 +47,19 @@ class cash_db(db.Model):
     def __repr__(self):
         return '<cash_db {}>'.format(self.userid)
 
+class user_db(db.Model):
+    userid = db.Column(db.Integer(),primary_key=True)
+    name = db.Column(db.String(64))
+    email = db.Column(db.String(64))
+    password = db.Column(db.String(64))
+    currency = db.Column(db.String(64))
+    minsum = db.Column(db.Integer())
+    reportfrequency = db.Column(db.Integer())
+    reportday = db.Column(db.String(64))
+
+    def __repr__(self):
+        return '<user_db {}>'.format(self.name)
+
 # class history(db.Model):
 #     userid = db.Column(db.Integer())
 #     date = db.Column(db.DateTime, default=datetime.utcnow())
