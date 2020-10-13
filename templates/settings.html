@@ -8,8 +8,18 @@
 
 <h3>Your current settings
     <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_settings') }}';">Change settings</button>
-
 </h3>
+
+<table class="table">
+    <tbody>
+        {% for key in user_settings %}
+            <tr style="text-align:left;">
+                <td >{{key}}</td>
+                <td>{{user_settings[key]}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 <br>
 <br>

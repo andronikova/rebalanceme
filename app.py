@@ -6,7 +6,7 @@ import os
 # from apscheduler.scheduler import Scheduler
 # from flask_apscheduler import APScheduler
 
-from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart
+from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings
 from send_email import sending_emil, scheduling
 
 app = Flask(__name__)
@@ -32,7 +32,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #     scheduling(app)
 
 # load databases
-from models import db, portfolio_db, cash_db, ticker_db, class_db
+from models import db, cash_db, ticker_db, class_db, user_db
 
 #
 # database settings and creation of tables
@@ -89,7 +89,7 @@ def index_page():
             return redirect("/")
 
         if request.form.get("send_by_email") is not None:
-            sending_emil(app,userid)
+            sending_emil(app,user_db,userid)
             return redirect("/")
 
 
@@ -181,19 +181,46 @@ def rebalance():
 @app.route('/settings', methods=['GET','POST'])
 def settings():
     if request.method == "GET":
-        return render_template('settings.html')
+        user_settings = load_user_settings(user_db, userid)
+        if user_settings == False:
+            return error_page("Can't find such user in db")
+
+        return render_template('settings.html', user_settings=user_settings)
 
     if request.method == "POST":
         if request.form.get("send") is not None:
-            sending_emil(app,userid)
+            sending_emil(app,user_db,userid)
             return redirect("/settings")
 
 
 @app.route('/change_settings', methods=['GET','POST'])
 def change_settings():
     if request.method == "GET":
-        return render_template('settings.html')
+        # load user settings from db
+        user_settings = load_user_settings(user_db, userid)
+        if user_settings == False:
+            return error_page("Can't find such user in db")
 
+        # create list of week days
+        week_day = ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+
+        return render_template('settings_change.html',
+                               user_settings=user_settings,
+                               week_day=week_day)
+
+    if request.method == "POST":
+        user_db.query.filter_by(userid=userid).update\
+                ({
+                    'name': request.form.get('name'),
+                    'email': request.form.get('email'),
+                    'currency':request.form.get('currency'),
+                    'minsum':request.form.get('minimal_operation_sum'),
+                    'reportfrequency': request.form.get('report_frequency'),
+                    'reportday':request.form.get('report_day')
+                })
+        db.session.commit()
+
+        return redirect("/settings")
 
 
 @app.route('/newuser', methods=['GET','POST'])

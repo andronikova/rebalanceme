@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        add new ticker
+{% endblock %}
+
+{% block main %}
+
+<h3>Your current settings
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_settings') }}';">Change settings</button>
+</h3>
+<form action="\change_settings" method="POST">
+<table class="table">
+    <tbody>
+        <tr style="text-align:left;">
+            <td>name</td>
+            <td>
+                <input autocomplete='off' type="text" name='name' value={{user_settings['name']}}>
+            </td>
+        </tr>
+
+        <tr style="text-align:left;">
+            <td>email</td>
+            <td>
+                <input autocomplete='on' type="text" name='email' value={{user_settings['email']}} size="64" >
+            </td>
+        </tr>
+
+        <tr style="text-align:left;">
+            <td>currency</td>
+            <td>
+                <!--TODO addEvent listener doesn't work for select-->
+                <select name="currency">
+                    {% if 'EUR'== user_settings['currency'] %}
+                        <option value="EUR" selected>EUR</option>
+                        <option value="USD">USD</option>
+                    {% else %}
+                        <option value="EUR">EUR</option>
+                        <option value="USD" selected>USD</option>
+                    {% endif %}
+                </select>
+            </td>
+        </tr>
+
+        <tr style="text-align:left;">
+            <td>minimal operation sum</td>
+            <td>
+                <input autocomplete='off' type="number" name='minimal_operation_sum' value={{user_settings["minimal_operation_sum"]}} >
+            </td>
+        </tr>
+
+        <tr style="text-align:left;">
+            <td>report frequency</td>
+            <td>
+                <input autocomplete='off' type="number" name='report_frequency' value={{user_settings["report_frequency"]}} min="0" max="1000">
+            </td>
+        </tr>
+
+        <tr style="text-align:left;">
+            <td>report day</td>
+            <td>
+                <select name="report_day">
+                    {% for day in week_day %}
+                        {% if day == user_settings["report_day"] %}
+                            <option selected>{{day}}</option>
+                        {% else %}
+                            <option>{{day}}</option>
+                        {% endif%}
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+<P id="message"></P>
+ <input type='submit' id="submit" value="Save" class="btn btn-info" disabled title="To save all changes."/>
+
+</form>
+
+<script>
+<!--check for empty field-->
+    var input = document.querySelectorAll("input");
+
+    function IsEmpty()
+    {
+        document.querySelector('#submit').disabled = false;
+        document.querySelector('#message').innerHTML = "";
+
+        if (this.value == "")
+        {
+            document.querySelector('#submit').disabled = true;
+            document.querySelector('#message').innerHTML = "You have empty fields.";
+        }
+    }
+
+    for (var i = 0; i < input.length; i++)
+    {
+        input[i].addEventListener('onchange', IsEmpty,false);
+        input[i].addEventListener('keyup', IsEmpty, false);
+        input[i].addEventListener('click', IsEmpty,false);
+
+    }
+</script>
+
+{% endblock %}

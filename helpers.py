@@ -335,3 +335,27 @@ def prepare_data_for_chart():
     chart_data=({'value':value_list, 'names': name_list, 'hover':hover_list})
 
     return chart_data
+
+
+def load_user_settings(user_db, userid):
+    # load data from db tickers
+    datas = user_db.query.filter_by(userid=userid).all()
+
+    # check new user
+    if len(datas) == 0:
+        print('return false')
+        return False
+
+    # load from db tickers: number, currency
+    for row in datas:
+        user_settings = {
+            'name': row.name,
+            'email':row.email,
+            'currency':row.currency,
+            'minimal_operation_sum':row.minsum,
+            'report_frequency':row.reportfrequency,
+            'report_day':row.reportday
+        }
+
+    print(f'User settings are loaded in {user_settings}')
+    return user_settings

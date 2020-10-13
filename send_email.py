@@ -13,13 +13,24 @@ def scheduling(app):
         atexit.register(lambda: scheduler.shutdown())
 
 
-def sending_emil(app,userid):
+def sending_emil(app,user_db,userid):
+    # load user email
+    datas = user_db.query.filter_by(userid=userid).all()
+
+    # check new user
+    if len(datas) == 0:
+        print('return false')
+        return False
+
+    for row in datas:
+        user_email = row.email
+
     with app.app_context():
         mail = Mail()
         mail.init_app(app)
 
         mmm = "Test"
-        msg = Message(mmm, recipients=['andronikova.daria@gmail.com'])
+        msg = Message(mmm, recipients=[user_email])
         msg.body = "You have received a new feedback from."
 
         # print(session.get("total"))
