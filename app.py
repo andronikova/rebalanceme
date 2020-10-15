@@ -2,12 +2,10 @@ from flask import Flask, render_template, request, redirect, session, flash
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
 import os
-
-# from apscheduler.scheduler import Scheduler
-# from flask_apscheduler import APScheduler
+from send_email import sending_emil, scheduling
 
 from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings
-from send_email import sending_emil, scheduling
+
 
 app = Flask(__name__)
 
@@ -37,9 +35,9 @@ with app.app_context():
     db.init_app(app)
     migrate = Migrate(app,db)
 
-
-with app.app_context():
-    scheduling(app,user_db,userid)
+# scheduling email sending with APScheduler
+# with app.app_context():
+#     scheduling(app,user_db,userid)
 
 
 @app.route('/', methods=['GET','POST'])
