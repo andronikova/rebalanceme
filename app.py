@@ -27,7 +27,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 # load databases
-from models import db, cash_db, ticker_db, class_db, user_db
+from models import db, cash_db, ticker_db, class_db, user_db, week_db
 
 #
 # database settings and creation of tables
@@ -180,7 +180,7 @@ def rebalance():
 @app.route('/settings', methods=['GET','POST'])
 def settings():
     if request.method == "GET":
-        user_settings = load_user_settings(user_db, userid)
+        user_settings = load_user_settings(user_db, week_db, userid)
         if user_settings == False:
             return error_page("Can't find such user in db")
 
@@ -196,27 +196,34 @@ def settings():
 def change_settings():
     if request.method == "GET":
         # load user settings from db
-        user_settings = load_user_settings(user_db, userid)
+        user_settings = load_user_settings(user_db, week_db, userid)
         if user_settings == False:
             return error_page("Can't find such user in db")
 
-        # create list of week days
-        week_day = ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-
         return render_template('settings_change.html',
                                user_settings=user_settings,
-                               week_day=week_day)
+                               week_day=['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'])
+
 
     if request.method == "POST":
-        user_db.query.filter_by(userid=userid).update\
-                ({
+        print(f"load report_day {request.form.getlist('report_day') }")
+
+        # change values in user db
+        user_db.query.filter_by(userid=userid).update({
                     'name': request.form.get('name'),
                     'email': request.form.get('email'),
                     'currency':request.form.get('currency'),
-                    'minsum':request.form.get('minimal_operation_sum'),
-                    'reportfrequency': request.form.get('report_frequency'),
-                    'reportday':request.form.get('report_day')
+                    'minsum':request.form.get('minimal_operation_sum')
                 })
+
+        # change values in week_db
+        for week_day in ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']:
+            week_db.query.filter_by(userid=userid).update({week_day.lower(): False})
+
+            for report_day in request.form.getlist('report_day'):
+                if week_day == report_day:
+                    week_db.query.filter_by(userid=userid).update({week_day.lower(): True})
+
         db.session.commit()
 
         return redirect("/settings")

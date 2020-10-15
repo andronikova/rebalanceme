@@ -337,7 +337,7 @@ def prepare_data_for_chart():
     return chart_data
 
 
-def load_user_settings(user_db, userid):
+def load_user_settings(user_db, week_db, userid):
     # load data from db tickers
     datas = user_db.query.filter_by(userid=userid).all()
 
@@ -346,15 +346,23 @@ def load_user_settings(user_db, userid):
         print('return false')
         return False
 
-    # load from db tickers: number, currency
+    # load info about report day
+    datas_week = week_db.query.filter_by(userid=userid,).all()
+
+    days=[]
+    # choose only column with true value
+    for day in datas_week[0].__dict__:
+        if getattr(datas_week[0], day) is True:
+            days.append(day)
+
+    # write down all user info in dict
     for row in datas:
         user_settings = {
             'name': row.name,
             'email':row.email,
             'currency':row.currency,
             'minimal_operation_sum':row.minsum,
-            'report_frequency':row.reportfrequency,
-            'report_day':row.reportday
+            'report_day': days
         }
 
     print(f'User settings are loaded in {user_settings}')

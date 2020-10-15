@@ -13,10 +13,23 @@
 <table class="table">
     <tbody>
         {% for key in user_settings %}
-            <tr style="text-align:left;">
-                <td >{{key}}</td>
-                <td>{{user_settings[key]}}</td>
-            </tr>
+            {% if key == 'report_day' %}
+                    <tr style="text-align:left;">
+                        <td>{{key}}</td>
+                        <td>
+                            {% for report_day in user_settings[key] %}
+                                {{report_day.capitalize()}}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+            {% else %}
+                <tr style="text-align:left;">
+                    <td >{{key}}</td>
+                    <td>{{user_settings[key]}}</td>
+                </tr>
+            {% endif %}
+
         {% endfor %}
     </tbody>
 </table>
