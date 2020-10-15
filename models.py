@@ -47,6 +47,15 @@ class user_db(db.Model):
     def __repr__(self):
         return '<user_db {}>'.format(self.name)
 
-# class history(db.Model):
-#     userid = db.Column(db.Integer())
-#     date = db.Column(db.DateTime, default=datetime.utcnow())
+class week_db(db.Model):
+    userid = db.Column(db.Integer(), primary_key=True)
+    monday = db.Column(db.Boolean())
+    tuesday = db.Column(db.Boolean())
+    wednesday = db.Column(db.Boolean())
+    thursday = db.Column(db.Boolean())
+    friday = db.Column(db.Boolean())
+    saturday = db.Column(db.Boolean())
+    sunday = db.Column(db.Boolean())
+
+    def __repr__(self):
+        return '<week_db {}>'.format(self.userid)
