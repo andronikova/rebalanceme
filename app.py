@@ -28,8 +28,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or \
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-
-
 # load databases
 from models import db, cash_db, ticker_db, class_db, user_db
 
