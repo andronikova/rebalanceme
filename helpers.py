@@ -1,5 +1,5 @@
-import os, urllib.parse, requests, math, json
-from flask import Flask, render_template, request, redirect, session
+import os, urllib.parse, requests, math
+from flask import render_template, session
 import time
 from sqlalchemy import desc
 

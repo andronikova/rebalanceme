@@ -1,30 +1,35 @@
-from flask import render_template, session
 from flask_mail import Mail, Message
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers import background
 import atexit
+import apscheduler
 
-
-def scheduling(app):
+def scheduling(app,user_db,userid):
     with app.app_context():
-        scheduler = BackgroundScheduler(daemon=True)
-        scheduler.add_job(smthelse, 'interval', args=[app], minutes=10, id='job_id')
-        scheduler.start()
+
+        scheduler = background.BackgroundScheduler(daemon=True)
+        scheduler.add_job(sending_emil, 'interval', args=[app], minutes=2, id='job_id')
+
+        try:
+            scheduler.start()
+        except (KeyboardInterrupt):
+            logger.debug('Got SIGTERM! Terminating...')
 
         atexit.register(lambda: scheduler.shutdown())
 
 
-def sending_emil(app,user_db,userid):
+def sending_emil(app):
     # load user email
-    datas = user_db.query.filter_by(userid=userid).all()
+    # datas = user_db.query.filter_by(userid=userid).all()
+    #
+    # # check new user
+    # if len(datas) == 0:
+    #     print('return false')
+    #     return False
 
-    # check new user
-    if len(datas) == 0:
-        print('return false')
-        return False
-
-    for row in datas:
-        user_email = row.email
-
+    # for row in datas:
+    #     user_email = row.email
+    user_email='andronikova.daria@gmail.com'
     with app.app_context():
         mail = Mail()
         mail.init_app(app)

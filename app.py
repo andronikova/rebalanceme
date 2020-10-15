@@ -28,8 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or \
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-# with app.app_context():
-#     scheduling(app)
+
 
 # load databases
 from models import db, cash_db, ticker_db, class_db, user_db
@@ -39,6 +38,10 @@ from models import db, cash_db, ticker_db, class_db, user_db
 with app.app_context():
     db.init_app(app)
     migrate = Migrate(app,db)
+
+
+with app.app_context():
+    scheduling(app,user_db,userid)
 
 
 @app.route('/', methods=['GET','POST'])
