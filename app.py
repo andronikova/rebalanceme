@@ -42,11 +42,11 @@ with app.app_context():
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
-        # load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
+        # load_portfolio_info(userid, ticker_db, cash_db, class_db,user_db, True)
 
         #check session for portfolio information
         if session.get('portfolio_ticker') is None:
-            boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
+            boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db,user_db, True)
 
             if boolres == False:
                 return render_template("index_newuser.html")
@@ -67,14 +67,15 @@ def index_page():
                                date=session.get('datetime'),
                                symbol=symbols,
                                main_currency=main_currency,
-                               chart_data=chart_data
+                               chart_data=chart_data,
+                               recommendation=session.get('recommendation')
                                )
 
     if request.method == "POST":
         if request.form.get("refresh") is not None:
             print("refreshing page")
 
-            boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
+            boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, True)
 
             if boolres == False:
                 return render_template("index_newuser.html")
@@ -166,7 +167,7 @@ def rebalance():
 
 
         # reload portfolio in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
 
         # check for negative cash
         for key in portfolio_cash:
@@ -263,7 +264,7 @@ def cash():
             db.session.commit()
 
             # reload portfolio
-            load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+            load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
 
             return redirect('/cash')
 
@@ -324,7 +325,7 @@ def change_class_info():
                 db.session.commit()
 
         # reload portfolio
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
         return redirect("/class_and_tickers")
 
 @app.route('/change_ticker_info', methods=['GET','POST'])
@@ -373,7 +374,7 @@ def change_ticker_info():
             db.session.commit()
 
         # reload portfolio
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
 
         return redirect('/class_and_tickers')
 
@@ -418,7 +419,7 @@ def add_ticker():
         db.session.commit()
 
         # reload  new portfolio in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, True)
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, True)
 
     return redirect("/class_and_tickers")
 
@@ -448,7 +449,7 @@ def delete_ticker():
         db.session.commit()
 
         # reload info in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
 
         return redirect('/class_and_tickers')
 
@@ -476,7 +477,7 @@ def delete_class():
         db.session.commit()
 
         # reload info in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
 
         if len(not_string) >= 1:
             flash('Class deletion leads to None class in tickers:' + not_string)
@@ -518,7 +519,7 @@ def add_class():
         db.session.commit()
 
         # reload  new portfolio in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, False)
+        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
 
         return redirect("/class_and_tickers")
 

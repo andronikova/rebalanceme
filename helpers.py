@@ -45,17 +45,22 @@ def apiexchange(base, exchange_currency):
 def error_page(message):
     return render_template("error_page.html",message=message)
 
-def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
-    # load all necessary data from databases, calculate suggestions, save everything in session
+def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
+    # def: main function to load all necessary data from databases, calculate suggestions, save everything in session
+    #load info for this user from user_id
+    datas= user_db.query.filter_by(userid=userid).all()
+
     # check user existance
-        # return error_page("Such user doesn't exist")
+    if len(datas) == 0:
+        return error_page("Such user doesn't exist")
+
+    min_rebalance_sum = datas[0].minsum
+    currency_of_min_sum = datas[0].currency
 
     # load currency exchange data
     if loadprice == True:
        exchange = load_exchange_info()
-       # main_currency = user_data[0].main_currency
-       #TODO load main currency from user_db
-       main_currency = 'EUR'
+       main_currency = datas[0].currency
 
     else:
         # use old exchange info
@@ -86,8 +91,17 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
     print(f"\nclasses info is loaded and saved in dict\n {portfolio_class}")
 
     # calculate rebalance suggestion
-    suggestion = calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange)
+    suggestion = calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, total_cash, exchange)
     print(f"\n rebalance suggestions are \n{suggestion}")
+
+    # check that rebalance sum in class more than min_operation_sum, in this case set 0 for rebalancing
+    suggestion = rebalance_sum_more_than_minsum(suggestion, min_rebalance_sum, currency_of_min_sum)
+    print(f"\n rebalance suggestions after check for > min_sum \n{suggestion}")
+
+    suggestion = check_that_suggestion_less_than_cash(suggestion, total_cash, exchange)
+
+    # create message with rebalance recommendation
+    recommendation = calc_recommendation(suggestion)
 
     # clear session
     session.pop('portfolio_ticker', None)
@@ -97,6 +111,7 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
     session.pop('total_cash', None)
     session.pop('exchange', None)
     session.pop('suggestion', None)
+    session.pop('recommendation', None)
 
     # save everything in session
     # TODO clear session after 12 hours
@@ -108,6 +123,7 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
     session['exchange'] = exchange
     session['suggestion'] = suggestion
     session['main_currency'] = main_currency
+    session['recommendation'] = recommendation
 
     # case we reload prices
     if loadprice is True:
@@ -253,8 +269,9 @@ def load_class_info(userid, class_db, portfolio_ticker, exchange, total):
     return portfolio_class
 
 
-def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange):
+def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, total_cash, exchange):
     suggestion = {}
+    rebalance_sum = 0
 
     for classname in portfolio_class:
 
@@ -265,7 +282,7 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
 
         print(f"\nreal deviation for {classname} is {real_deviation}, while acceptable deviation is {acceptable_deviation}")
 
-        suggestion[classname] = {'number': 0, 'USD': 0, 'EUR': 0}
+        suggestion[classname] = {'number': 0, 'USD': 0, 'EUR': 0, 'message':""}
 
         print(f" portfolio_class[classname]['activeticker'] is {portfolio_class[classname]['activeticker']}")
 
@@ -273,6 +290,8 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
         if portfolio_class[classname]['activeticker'] != 'None':
             ticker_currency = portfolio_ticker[portfolio_class[classname]['activeticker']]['currency']
             ticker_price = portfolio_ticker[portfolio_class[classname]['activeticker']]['price']
+
+        # case when active ticker is None
         else:
             ticker_currency = 'USD'
             ticker_price = 0
@@ -287,7 +306,67 @@ def calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange
             else:
                 suggestion[classname] = {'number': None, 'USD': 0, 'EUR': 0}
 
+        # calculate total rebalancing sum
+        rebalance_sum += suggestion[classname]['USD']
+        print(f"\ntotal rabalance sum is {rebalance_sum}")
+
     return suggestion
+
+
+def rebalance_sum_more_than_minsum(suggestion, min_rebalance_sum, currency_of_min_sum):
+    for classname in suggestion:
+        if abs(suggestion[classname][currency_of_min_sum]) < min_rebalance_sum:
+            suggestion[classname]["EUR"] = 0
+            suggestion[classname]["USD"] = 0
+            suggestion[classname]['number'] = 0
+
+    return suggestion
+
+
+def check_that_suggestion_less_than_cash(suggestion, total_cash, exchange):
+    # routine to check that total rebalancing sum is less than total cash
+    rebalance_sum = 0
+
+    # calc total sum of rebalancing
+    for classname in suggestion:
+        rebalance_sum += suggestion[classname]['USD']
+
+
+    if rebalance_sum > total_cash['USD']:
+        print('total rabalance sum is bigger than cash, the number of tck for rebalancing will be decreased')
+        lowest_price = 100000000
+        lowest_classname = ''
+
+        # searching for class with cheepest active ticker
+        for classname in suggestion:
+            if suggestion[classname]['USD'] != 0:
+                price = suggestion[classname]['USD']/suggestion[classname]['number']
+                if  price < lowest_price:
+                    lowest_price = price
+                    lowest_classname = classname
+
+        # decrease suggested number in class with cheepest active ticker by 1
+        if lowest_classname != '':
+            price = suggestion[lowest_classname]['USD']/suggestion[lowest_classname]['number']
+            suggestion[lowest_classname]['number'] -= 1
+            suggestion[lowest_classname]['USD'] = price * suggestion[lowest_classname]['number']
+            suggestion[lowest_classname]['EUR'] = suggestion[lowest_classname]['USD'] * exchange['USD']['EUR']
+
+    return suggestion
+
+
+def calc_recommendation(suggestion):
+    rebalance_sum = 0
+    # calc total sum of rebalancing
+    for classname in suggestion:
+        rebalance_sum += suggestion[classname]['USD']
+
+    if rebalance_sum == 0:
+        text = 'Your portfolio is perfectly rebalanced.'
+    else:
+        text = 'Your portfolio needs rebalancing. Go to rebalance page.'
+
+    return text
 
 
 def calc_total_cash(portfolio_cash, exchange):
