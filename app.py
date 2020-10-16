@@ -4,8 +4,7 @@ from flask_mail import Mail, Message
 import os
 from send_email import sending_emil, scheduling
 
-from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings
-
+from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, test_scheduled_job
 
 app = Flask(__name__)
 
@@ -181,15 +180,16 @@ def rebalance():
 def settings():
     if request.method == "GET":
         user_settings = load_user_settings(user_db, week_db, userid)
+
         if user_settings == False:
             return error_page("Can't find such user in db")
 
         return render_template('settings.html', user_settings=user_settings)
 
     if request.method == "POST":
-        if request.form.get("send") is not None:
-            sending_emil(app,user_db,userid)
-            return redirect("/settings")
+        test_scheduled_job(app,week_db,user_db,ticker_db, cash_db, class_db)
+
+        return redirect("/settings")
 
 
 @app.route('/change_settings', methods=['GET','POST'])

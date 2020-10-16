@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title  %}
-        add new ticker
+        user settings
 {% endblock %}
 
 {% block main %}
@@ -14,14 +14,18 @@
     <tbody>
         {% for key in user_settings %}
             {% if key == 'report_day' %}
-                    <tr style="text-align:left;">
-                        <td>{{key}}</td>
-                        <td>
+                <tr style="text-align:left;">
+                    <td>{{key}}</td>
+                    <td>
+                        {% for ordered in ['monday', 'tuesday','wednesday','thursday','friday','saturday','sunday']%}
                             {% for report_day in user_settings[key] %}
-                                {{report_day.capitalize()}}<br>
+                                {% if ordered == report_day %}
+                                    {{report_day.capitalize()}}<br>
+                                {% endif %}
                             {% endfor %}
-                        </td>
-                    </tr>
+                        {% endfor %}
+                    </td>
+                </tr>
 
             {% else %}
                 <tr style="text-align:left;">

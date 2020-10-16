@@ -1,8 +1,10 @@
-import os, urllib.parse, requests, math
+import os, urllib.parse, requests, math, time
 from flask import render_template, session
-import time
+from datetime import datetime
 from sqlalchemy import desc
 
+# DELETE!! use for test_scheduled_job only
+from flask_mail import Mail, Message
 
 def apiprice(ticker):
     # load price from NY
@@ -52,6 +54,7 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, loadprice):
     if loadprice == True:
        exchange = load_exchange_info()
        # main_currency = user_data[0].main_currency
+       #TODO load main currency from user_db
        main_currency = 'EUR'
 
     else:
@@ -367,3 +370,82 @@ def load_user_settings(user_db, week_db, userid):
 
     print(f'User settings are loaded in {user_settings}')
     return user_settings
+
+
+def test_scheduled_job(app,week_db,user_db,ticker_db, cash_db, class_db):
+    # find out day of week
+    today = datetime.today().strftime('%A').lower()
+    print(f'\ntoday is {today}')
+
+    # load all users with True for this day in week_db
+    datas = week_db.query.filter(getattr(week_db,today)==True).all()
+
+    print(f"from week_db loaded : {datas}")
+
+    if len(datas)==0:
+        return False
+
+    # load exchange info
+    exchange = load_exchange_info()
+
+    for row in datas:
+        print(f"\n---------\nuserid is : {row.userid}")
+        userid = row.userid
+
+        # load for each user its portfolio info as well as rebalance recommendation
+        portfolio_ticker = load_ticker_info(userid, ticker_db, True)
+        portfolio_cash = load_cash_info(userid, cash_db)
+
+        total_cash = calc_total_cash(portfolio_cash, exchange)
+        total = calc_total(portfolio_ticker, total_cash, exchange)
+        portfolio_class = load_class_info(userid, class_db, portfolio_ticker, exchange, total)
+        suggestion = calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange)
+        chart_data = prepare_data_for_chart()
+
+        # create html page for message
+        user_email = user_db.query.filter_by(userid=userid).all()[0].email
+        # user_email = '104pet104@gmail.com'
+        print(f"\nuser email is {user_email}")
+
+    # send message
+        with app.app_context():
+            mail = Mail()
+            mail.init_app(app)
+            topic = 'Test report'
+            message = Message(topic, recipients=[user_email])
+            # message.body = "Test scheduled job"
+
+            message.html = render_template('email_message.html',
+                               portfolio_ticker=portfolio_ticker,
+                               portfolio_cash=portfolio_cash,
+                               portfolio_class=portfolio_class,
+                               total=total,
+                               total_cash=total_cash,
+                               suggestion=suggestion,
+                               symbol={"USD": '$', "EUR": '€'},
+                               main_currency="USD",
+                               chart_data=chart_data)
+
+            mail.send(message)
+
+
+        # test_email_sending(app, message)
+
+
+
+def test_email_sending(app, message):
+
+
+    with app.app_context():
+        mail = Mail()
+        mail.init_app(app)
+
+        # message = Message(topic, recipients=[user_email])
+        # message.body = "Test scheduled job"
+
+
+        # msg.html = render_template('email_message.html', portfolio=session.get('portfolio'),
+        #                            total=session.get('total'), cash=session.get('cash'),
+        #                            date=session.get('datetime'))
+
+        mail.send(message)

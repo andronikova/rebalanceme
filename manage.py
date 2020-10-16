@@ -8,6 +8,12 @@ from flask_mail import Mail, Message
 
 @manager.command
 def scheduled_job():
+    # find out day of week
+    # load all users with True for this day in week_db
+    # load for each user its portfolio info as well as rebalance recomendation
+    # create html page for message
+    # send message
+
     email_sending()
     print('Scheduled job is done!')
 
