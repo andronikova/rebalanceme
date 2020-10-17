@@ -22,7 +22,8 @@
 </head>
 
 <body>
-<h3 style="color:red">Rebalance message</h3>
+<h3 style="color:black">Rebalance message: {{recommendation}}</h3>
+
     <h3>Total portfolio value: {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}</h3>
     <h5>in cash:{{ "{:,.2f}".format(total_cash[main_currency]) }} {{symbol[main_currency]}} </h5>
     <h5> in tickers: {{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbol[main_currency]}}</h5>
@@ -39,7 +40,7 @@
 
         <tbody>
         {% for classname in portfolio_class%}
-            <tr class="table-active">
+            <tr class="table-active" bgcolor="#f0ffff">
                 <td  style="text-align:left;"><h3>{{classname}}</h3> </td>
                 <td  style="text-align:center;"><h5> {{portfolio_class[classname]['realfraction']}} % ({{portfolio_class[classname]['fraction']}} % )</h5></td>
                 <td style="text-align:center;">

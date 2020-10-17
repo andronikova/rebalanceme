@@ -47,8 +47,7 @@
     <thead>
     <tr>
         <td><button id="toggle">▾</button>       class   </td>
-        <td>desired fraction</td>
-        <td>real fraction</td>
+        <td>real (desired) fraction, %</td>
         <td>rebalance suggestion</td>
         <td>rebalance value</td>
     </tr>
@@ -57,8 +56,7 @@
     {% for classname in portfolio_class%}
         <tr class="table-active">
             <td> {{classname}} </td>
-            <td> {{portfolio_class[classname]['fraction']}} % </td>
-            <td> {{portfolio_class[classname]['realfraction']}} % </td>
+            <td> {{portfolio_class[classname]['realfraction']}} ( {{portfolio_class[classname]['fraction']}} ) </td>
             <td>
                 {% if suggestion[classname]['number'] == None%}
                         <h6>None</h6>
@@ -82,12 +80,22 @@
             <td> {{ "{:,.2f}".format(suggestion[classname][main_currency])}} {{symbol[main_currency]}} </td>
         </tr>
 
+        <tr style="display:none; line-height:5px;" class="togg">
+            <td>ticker name</td>
+            <td>number</td>
+            <td>price</td>
+            <td>total price</td>
+        </tr>
         {% for key in portfolio_ticker %}
             {% if portfolio_ticker[key]['classname'] == classname%}
+
                 <tr style="display:none;" class="togg">
+
                     <td>{{key}}</td>
+                    <td>{{portfolio_ticker[key]['number']}}</td>
+                    <td>{{"{:,.2f}".format(portfolio_ticker[key]['price'])}}{{ symbol[portfolio_ticker[key]['currency']] }}</td>
                     <td>{{ "{:,.2f}".format(portfolio_ticker[key]['fullPrice']) }} {{ symbol[portfolio_ticker[key]['currency']] }}</td>
-                    <td>{{portfolio_ticker[key]['number']}} * {{"{:,.2f}".format(portfolio_ticker[key]['price'])}}{{ symbol[portfolio_ticker[key]['currency']] }}</td>
+
                 </tr>
             {% endif %}
         {% endfor %}
@@ -179,8 +187,10 @@
 
 
     <!--for toggle-->
-    $(document).ready(function(){
-      $("#toggle").click(function(){
+    $(document).ready(function()
+    {
+      $("#toggle").click(function()
+      {
         $(".togg").toggle();
       });
 

@@ -49,26 +49,26 @@
 
             <tbody>
                 {% for classname in portfolio_class %}
-                    <tr >
+                    <tr style="line-height:20px;">
                         <td name="classname_field">{{classname}}</td>
                         <td> {{portfolio_class[classname]['fraction']}} % </td>
                         <td id={{classname}}> {{portfolio_class[classname]['realfraction']}} % </td>
                         <td>
                             {% if suggestion[classname]['number'] == None%}
-                                <h6>None</h6>
+                                <h8>None</h8>
                             {% else %}
                                 {% if suggestion[classname]['number'] == 0 %}
-                                    <h5>
+                                    <h6>
                                 {{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
-                                    </h5>
+                                    </h6>
                                 {% elif suggestion[classname]['number'] > 0 %}
-                                    <h5 style="color:green">
+                                    <h6 style="color:green">
                                         +{{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
-                                    </h5>
+                                    </h6>
                                 {% else %}
-                                    <h5 style="color:red">
+                                    <h6 style="color:red">
                                         {{ suggestion[classname]['number'] }} {{portfolio_class[classname]['activeticker']}}
-                                    </h5>
+                                    </h6>
                                 {% endif %}
                             {% endif %}
                         </td>

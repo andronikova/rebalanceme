@@ -458,7 +458,6 @@ def test_scheduled_job(app,week_db,user_db,ticker_db, cash_db, class_db):
 
     # load all users with True for this day in week_db
     datas = week_db.query.filter(getattr(week_db,today)==True).all()
-
     print(f"from week_db loaded : {datas}")
 
     if len(datas)==0:
@@ -470,6 +469,11 @@ def test_scheduled_job(app,week_db,user_db,ticker_db, cash_db, class_db):
     for row in datas:
         print(f"\n---------\nuserid is : {row.userid}")
         userid = row.userid
+        # Load user unfo
+        user_datas = user_db.query.filter_by(userid=userid).all()
+        user_email = user_datas[0].email
+        main_currency = user_datas[0].currency
+        min_rebalance_sum = user_datas[0].minsum
 
         # load for each user its portfolio info as well as rebalance recommendation
         portfolio_ticker = load_ticker_info(userid, ticker_db, True)
@@ -478,12 +482,13 @@ def test_scheduled_job(app,week_db,user_db,ticker_db, cash_db, class_db):
         total_cash = calc_total_cash(portfolio_cash, exchange)
         total = calc_total(portfolio_ticker, total_cash, exchange)
         portfolio_class = load_class_info(userid, class_db, portfolio_ticker, exchange, total)
-        suggestion = calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, exchange)
-        chart_data = prepare_data_for_chart()
+        suggestion = calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, total_cash, exchange)
 
-        # create html page for message
-        user_email = user_db.query.filter_by(userid=userid).all()[0].email
-        # user_email = '104pet104@gmail.com'
+        suggestion = rebalance_sum_more_than_minsum(suggestion, min_rebalance_sum, main_currency)
+        suggestion = check_that_suggestion_less_than_cash(suggestion, total_cash, exchange)
+
+        recommendation = calc_recommendation(suggestion)
+
         print(f"\nuser email is {user_email}")
 
     # send message
@@ -494,6 +499,7 @@ def test_scheduled_job(app,week_db,user_db,ticker_db, cash_db, class_db):
             message = Message(topic, recipients=[user_email])
             # message.body = "Test scheduled job"
 
+            # create html page for message
             message.html = render_template('email_message.html',
                                portfolio_ticker=portfolio_ticker,
                                portfolio_cash=portfolio_cash,
@@ -502,29 +508,7 @@ def test_scheduled_job(app,week_db,user_db,ticker_db, cash_db, class_db):
                                total_cash=total_cash,
                                suggestion=suggestion,
                                symbol={"USD": '$', "EUR": '€'},
-                               main_currency="USD",
-                               chart_data=chart_data)
+                               main_currency=main_currency,
+                               recommendation=recommendation)
 
             mail.send(message)
-
-
-        # test_email_sending(app, message)
-
-
-
-def test_email_sending(app, message):
-
-
-    with app.app_context():
-        mail = Mail()
-        mail.init_app(app)
-
-        # message = Message(topic, recipients=[user_email])
-        # message.body = "Test scheduled job"
-
-
-        # msg.html = render_template('email_message.html', portfolio=session.get('portfolio'),
-        #                            total=session.get('total'), cash=session.get('cash'),
-        #                            date=session.get('datetime'))
-
-        mail.send(message)
