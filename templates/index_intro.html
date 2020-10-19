@@ -1,0 +1,22 @@
+{% extends "layout_empty.html" %}
+
+{% block title  %}
+        user settings
+{% endblock %}
+
+{% block main %}
+Welcome to rebalanceme app!
+<br>
+<br>
+To work with your own portfolio please
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'login') }}';">Log in</button>
+or
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'registration') }}';">Register</button>
+
+<br>
+<br>
+<div>To see how does app look like, login as Test User</div>
+<div>(you will be able to see all functionalities, but will not be able make any changes.) </div>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'login') }}';">Go to test accaunt </button>
+
+{% endblock %}

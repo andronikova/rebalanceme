@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
+from werkzeug.security import check_password_hash, generate_password_hash
 import os
 from send_email import sending_emil, scheduling
 
@@ -9,7 +10,7 @@ from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_
 app = Flask(__name__)
 
 
-userid = 1 #TODO - download from session
+# userid = 1 #TODO - download from session
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or \
                            "fg45hjkrgrJJKJLDSV890000jkjk"
@@ -43,13 +44,18 @@ with app.app_context():
 def index_page():
     if request.method == "GET":
         # load_portfolio_info(userid, ticker_db, cash_db, class_db,user_db, True)
+        if session.get('userid') is None:
+            return render_template("index_intro.html")
+        else:
+            userid = session.get('userid')
 
         #check session for portfolio information
         if session.get('portfolio_ticker') is None:
             boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db,user_db, True)
 
             if boolres == False:
-                return render_template("index_newuser.html")
+                return error_page("There is no portfolio for such user.")
+
 
         symbols = {"USD": '$', "EUR": '€'}
         main_currency = session.get('main_currency')
@@ -522,6 +528,63 @@ def add_class():
         load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
 
         return redirect("/class_and_tickers")
+
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == "GET":
+        return render_template('login.html')
+
+    if request.method == "POST":
+        email = request.form.get("email")
+
+        # Query database for username
+        datas = user_db.query.filter_by(email=email).all()
+
+        # Ensure username exists and password is correct
+        if len(datas) != 1 or not check_password_hash(datas[0].password, request.form.get("password")):
+            return error_page("invalid username and/or password")
+
+        # Remember which user has logged in
+        session["userid"] = datas[0].userid
+
+        return redirect('/')
+
+
+@app.route('/registration', methods=['GET','POST'])
+def registration():
+    if request.method == "GET":
+        return render_template('registration.html')
+
+    if request.method == "POST":
+        # email = request.form.get("email")
+        #
+        # # Query database for username
+        # datas = user_db.query.filter_by(email=email).all()
+        #
+        # if len(datas) != 0:
+        #     return error_page("User with email" + email + " already exists.")
+        #
+        # # hash password
+        # hashed = generate_password_hash(request.form.get("password"))
+        #
+        # # load last id from user_db
+        # max_id = user_db.query.order_by(user_db.userid.desc()).first().userid
+        # print(f'last userid is {max_id}')
+        #
+        # new_user = user_db(userid=max_id + 1, name=request.form.get("username"),email=email,password=hashed,
+        #                    currency='USD',minsum=0)
+        # db.session.add(new_user)
+        # db.session.commit()
+
+        return redirect('/')
+
+
+
+@app.route('/testaccaunt', methods=['GET','POST'])
+def testaccaunt():
+    if request.method == "GET":
+        return render_template('testaccaunt.html')
 
 
 

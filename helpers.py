@@ -47,7 +47,7 @@ def error_page(message):
 
 def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
     # def: main function to load all necessary data from databases, calculate suggestions, save everything in session
-    #load info for this user from user_id
+    # load info for this user from user_id
     datas= user_db.query.filter_by(userid=userid).all()
 
     # check user existance
