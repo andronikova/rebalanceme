@@ -8,6 +8,8 @@
 
 <h3>Your current settings
     <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_settings') }}';">Change settings</button>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_settings') }}';">Change password</button>
+
 </h3>
 
 <table class="table">
@@ -25,12 +27,24 @@
                             {% endfor %}
                         {% endfor %}
                     </td>
+                    <td></td>
                 </tr>
 
             {% else %}
                 <tr style="text-align:left;">
                     <td >{{key}}</td>
                     <td>{{user_settings[key]}}</td>
+                    {% if key=='email' %}
+                        <td>
+                            <form action="\settings" method="POST">
+                                    <div class="form-group">
+                                        <input id="send" name="send" type="submit" value="Send test email">
+                                    </div>
+                            </form>
+                        </td>
+                        {% else %}
+                            <td></td>
+                    {% endif %}
                 </tr>
             {% endif %}
 
@@ -38,15 +52,12 @@
     </tbody>
 </table>
 
+
 <br>
+Delete this user - TODO
 <br>
 
-Send test mail
-<form action="\settings" method="POST">
-        <div class="form-group">
-            <input id="send" name="send" type="submit">
-        </div>
-</form>
+
 
 
 

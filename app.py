@@ -43,6 +43,8 @@ with app.app_context():
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
+        # session.clear()
+
         # load_portfolio_info(userid, ticker_db, cash_db, class_db,user_db, True)
         if session.get('userid') is None:
             return render_template("index_intro.html")
@@ -53,8 +55,9 @@ def index_page():
         if session.get('portfolio_ticker') is None:
             boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db,user_db, True)
 
+            # case of empty portfolio
             if boolres == False:
-                return error_page("There is no portfolio for such user.")
+                return render_template('create_portfolio.html')
 
 
         symbols = {"USD": '$', "EUR": '€'}
@@ -81,7 +84,7 @@ def index_page():
         if request.form.get("refresh") is not None:
             print("refreshing page")
 
-            boolres = load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, True)
+            boolres = load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, True)
 
             if boolres == False:
                 return render_template("index_newuser.html")
@@ -94,16 +97,25 @@ def index_page():
             return redirect("/")
 
         if request.form.get("send_by_email") is not None:
-            sending_emil(app,user_db,userid)
+            sending_emil(app,user_db,session.get('userid'))
             return redirect("/")
 
 
 @app.route("/rebalance", methods=['GET','POST'])
 def rebalance():
     if request.method == "GET":
+        # check user in session
+        if session.get('userid') is None:
+            return render_template("index_intro.html")
+
+        # check nonempty portfolio
+        if session.get('portfolio_ticker') is None:
+            return render_template('create_portfolio.html')
+
         # create dict of id
         ids = {}
         idtag = ['price', 'newnumber', 'oldnumber', 'classname','exchange']
+
         for ticker in session.get("portfolio_ticker"):
             ids[ticker] = {}
             for tag in idtag:
@@ -158,13 +170,13 @@ def rebalance():
             portfolio_cash[currency] += (old_number - new_number) * price
 
             # load new values in ticker_db
-            ticker_db.query.filter_by(userid=userid, ticker=ticker).update({
+            ticker_db.query.filter_by(userid=session.get('userid'), ticker=ticker).update({
                 'number': new_number
             })
             db.session.commit()
 
         # load new cash values in db
-        cash_db.query.filter_by(userid=userid).update({
+        cash_db.query.filter_by(userid=session.get('userid')).update({
             'USD': portfolio_cash['USD'],
             'EUR' : portfolio_cash['EUR'],
             'RUB': portfolio_cash['RUB']
@@ -173,7 +185,7 @@ def rebalance():
 
 
         # reload portfolio in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
+        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
 
         # check for negative cash
         for key in portfolio_cash:
@@ -186,7 +198,11 @@ def rebalance():
 @app.route('/settings', methods=['GET','POST'])
 def settings():
     if request.method == "GET":
-        user_settings = load_user_settings(user_db, week_db, userid)
+        # check user in session
+        if session.get('userid') is None:
+            return render_template("index_intro.html")
+
+        user_settings = load_user_settings(user_db, week_db, session.get('userid'))
 
         if user_settings == False:
             return error_page("Can't find such user in db")
@@ -200,10 +216,14 @@ def settings():
 
 
 @app.route('/change_settings', methods=['GET','POST'])
-def change_settings():
+def  change_settings():
     if request.method == "GET":
+        # check user in session
+        if session.get('userid') is None:
+            return render_template("index_intro.html")
+
         # load user settings from db
-        user_settings = load_user_settings(user_db, week_db, userid)
+        user_settings = load_user_settings(user_db, week_db, session.get('userid'))
         if user_settings == False:
             return error_page("Can't find such user in db")
 
@@ -216,7 +236,7 @@ def change_settings():
         print(f"load report_day {request.form.getlist('report_day') }")
 
         # change values in user db
-        user_db.query.filter_by(userid=userid).update({
+        user_db.query.filter_by(userid=session.get('userid')).update({
                     'name': request.form.get('name'),
                     'email': request.form.get('email'),
                     'currency':request.form.get('currency'),
@@ -225,11 +245,11 @@ def change_settings():
 
         # change values in week_db
         for week_day in ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']:
-            week_db.query.filter_by(userid=userid).update({week_day.lower(): False})
+            week_db.query.filter_by(userid=session.get('userid')).update({week_day.lower(): False})
 
             for report_day in request.form.getlist('report_day'):
                 if week_day == report_day:
-                    week_db.query.filter_by(userid=userid).update({week_day.lower(): True})
+                    week_db.query.filter_by(userid=session.get('userid')).update({week_day.lower(): True})
 
         db.session.commit()
 
@@ -245,6 +265,10 @@ def newuser():
 @app.route('/cash', methods=['GET','POST'])
 def cash():
     if request.method == "GET":
+        # check user in session
+        if session.get('userid') is None:
+            return render_template("index_intro.html")
+
         return render_template('cash.html', portfolio_cash=session.get('portfolio_cash'),
                            exchange=session.get('exchange')
                            )
@@ -266,11 +290,11 @@ def cash():
                 return error_page("You don't have enough cash.")
 
             # change cash db
-            cash_db.query.filter_by(userid=userid).update({currency:newcash})
+            cash_db.query.filter_by(userid=session.get('userid')).update({currency:newcash})
             db.session.commit()
 
             # reload portfolio
-            load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
+            load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
 
             return redirect('/cash')
 
@@ -278,6 +302,14 @@ def cash():
 @app.route('/class_and_tickers', methods=['GET','POST'])
 def class_and_tickers():
     if request.method == "GET":
+        # check user in session
+        if session.get('userid') is None:
+            return render_template("index_intro.html")
+
+        # check nonempty portfolio
+        if session.get('portfolio_ticker') is None:
+            return render_template('create_portfolio.html')
+
         return render_template('class_and_tickers.html',
                                portfolio_class=session.get('portfolio_class'),
                                portfolio_ticker=session.get('portfolio_ticker'))
@@ -323,7 +355,7 @@ def change_class_info():
                 # print(f"new active ticker for {tag} is {new_activeticker}")
 
                 # save new values in db
-                class_db.query.filter_by(userid=userid,classname=classname).update({
+                class_db.query.filter_by(userid=session.get('userid'),classname=classname).update({
                     'fraction': new_fraction,
                     'diapason' : new_diapason,
                     'activeticker' : new_activeticker
@@ -331,7 +363,7 @@ def change_class_info():
                 db.session.commit()
 
         # reload portfolio
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
+        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
         return redirect("/class_and_tickers")
 
 @app.route('/change_ticker_info', methods=['GET','POST'])
@@ -368,19 +400,19 @@ def change_ticker_info():
                 portfolio_class = session.get('portfolio_class')
                 if portfolio_class[old_class]['activeticker']==tck:
                     # put None in active ticker cell for this class
-                    class_db.query.filter_by(userid=userid, classname=old_class).update({
+                    class_db.query.filter_by(userid=session.get('userid'), classname=old_class).update({
                             'activeticker': 'None'})
                     db.session.commit()
 
             # save new values in db
-            ticker_db.query.filter_by(userid=userid, ticker=tck).update({
+            ticker_db.query.filter_by(userid=session.get('userid'), ticker=tck).update({
                 'currency': new_currency,
                 'classname': new_class
             })
             db.session.commit()
 
         # reload portfolio
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
+        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
 
         return redirect('/class_and_tickers')
 
@@ -388,8 +420,8 @@ def change_ticker_info():
 @app.route('/add_ticker', methods=['GET','POST'])
 def add_ticker():
     if request.method == "GET":
+        # print(f"portfolio class is ")
         return render_template('add_ticker.html',
-                               portfolio_ticker=session.get('portfolio_ticker'),
                                portfolio_class=session.get('portfolio_class')
                                )
 
@@ -404,28 +436,32 @@ def add_ticker():
             return error_page("Error! Could not load price for such ticker. Probably, ticker name is not correct!")
 
         # load other info about this ticker
-        classname = request.form.get("classname")
+        if session.get('portfolio_class') is not None:
+            classname = request.form.get("classname")
+        else:
+            classname = 'None'
+
         currency = request.form.get('currency')
 
         # check that this ticker is not in portfolio
-        datas = ticker_db.query.filter_by(userid=userid,ticker=ticker).all()
+        datas = ticker_db.query.filter_by(userid=session.get('userid'),ticker=ticker).all()
         print(f"check the db for such ticker {datas}")
 
         if len(datas) != 0:
-            return error_page("You already have  such ticker!")
+            return error_page("You already have such ticker!")
 
         # load last id from ticker_db and put new id by hand (to avoid IntegrityError duplicate key violates unique-constraint)
         max_id = ticker_db.query.order_by(ticker_db.id.desc()).first().id
 
         # change portfolio
-        new_row = ticker_db(id=max_id+1, userid=userid,
+        new_row = ticker_db(id=max_id+1, userid=session.get('userid'),
                             ticker=ticker, number=0,classname=classname,currency=currency )
 
         db.session.add(new_row)
         db.session.commit()
 
         # reload  new portfolio in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, True)
+        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, True)
 
     return redirect("/class_and_tickers")
 
@@ -446,16 +482,16 @@ def delete_ticker():
         for classname in portfolio_class:
             if portfolio_class[classname]['activeticker']==ticker:
                 # put None in active ticker cell for this class
-                class_db.query.filter_by(userid=userid, classname=classname).update({
+                class_db.query.filter_by(userid=session.get('userid'), classname=classname).update({
                     'activeticker': 'None'})
                 db.session.commit()
 
         # delete this ticker from db
-        ticker_db.query.filter_by(userid=userid,ticker=ticker).delete(synchronize_session='evaluate')
+        ticker_db.query.filter_by(userid=session.get('userid'),ticker=ticker).delete(synchronize_session='evaluate')
         db.session.commit()
 
         # reload info in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
+        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
 
         return redirect('/class_and_tickers')
 
@@ -474,16 +510,16 @@ def delete_class():
         for ticker in portfolio_ticker:
             if portfolio_ticker[ticker]['classname'] == classname:
                 not_string += " " + ticker
-                ticker_db.query.filter_by(userid=userid, ticker=ticker).update({
+                ticker_db.query.filter_by(userid=session.get('userid'), ticker=ticker).update({
                     'classname': 'None'})
                 db.session.commit()
 
         # delete this class from db
-        class_db.query.filter_by(userid=userid,classname=classname).delete(synchronize_session='evaluate')
+        class_db.query.filter_by(userid=session.get('userid'),classname=classname).delete(synchronize_session='evaluate')
         db.session.commit()
 
         # reload info in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
+        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
 
         if len(not_string) >= 1:
             flash('Class deletion leads to None class in tickers:' + not_string)
@@ -493,15 +529,16 @@ def delete_class():
 @app.route('/add_class', methods=['GET','POST'])
 def add_class():
     if request.method == "GET":
-        return render_template('add_class.html', portfolio_ticker=session.get('portfolio_ticker') )
+        return render_template('add_class.html')
 
     if request.method == "POST":
         classname = request.form.get("classname")
 
         # check: is it new name for class
-        for name in session.get('portfolio_class'):
-            if name == classname:
-                return error_page('Such class exists! Choose another name.')
+        if session.get('portfolio_class') is not None:
+            for name in session.get('portfolio_class'):
+                if name == classname:
+                    return error_page('Such class exists! Choose another name.')
 
         #check, that name consists of letters only
         if classname.isalpha() == False:
@@ -517,7 +554,7 @@ def add_class():
         max_id = class_db.query.order_by(class_db.id.desc()).first().id
 
         # change portfolio
-        new_row = class_db(id=max_id+1, userid=userid, classname=classname,
+        new_row = class_db(id=max_id+1, userid=session.get('userid'), classname=classname,
                            fraction=0, diapason=0,
                            activeticker="None")
 
@@ -525,14 +562,28 @@ def add_class():
         db.session.commit()
 
         # reload  new portfolio in session
-        load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, False)
+        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
 
         return redirect("/class_and_tickers")
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
 
 
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == "GET":
+        # Forget any user_id
+        session.clear()
+
         return render_template('login.html')
 
     if request.method == "POST":
@@ -542,11 +593,12 @@ def login():
         datas = user_db.query.filter_by(email=email).all()
 
         # Ensure username exists and password is correct
-        if len(datas) != 1 or not check_password_hash(datas[0].password, request.form.get("password")):
+        if len(datas) != 1 or not check_password_hash(datas[0].hash, request.form.get("password")):
             return error_page("invalid username and/or password")
 
         # Remember which user has logged in
         session["userid"] = datas[0].userid
+        session["username"] = datas[0].name
 
         return redirect('/')
 
@@ -554,31 +606,48 @@ def login():
 @app.route('/registration', methods=['GET','POST'])
 def registration():
     if request.method == "GET":
+        # Forget any user_id
+        session.clear()
+
         return render_template('registration.html')
 
     if request.method == "POST":
-        # email = request.form.get("email")
-        #
-        # # Query database for username
-        # datas = user_db.query.filter_by(email=email).all()
-        #
-        # if len(datas) != 0:
-        #     return error_page("User with email" + email + " already exists.")
-        #
-        # # hash password
-        # hashed = generate_password_hash(request.form.get("password"))
-        #
-        # # load last id from user_db
-        # max_id = user_db.query.order_by(user_db.userid.desc()).first().userid
-        # print(f'last userid is {max_id}')
-        #
-        # new_user = user_db(userid=max_id + 1, name=request.form.get("username"),email=email,password=hashed,
-        #                    currency='USD',minsum=0)
-        # db.session.add(new_user)
-        # db.session.commit()
+        email = request.form.get("email")
+
+        # hash password
+        hashed = generate_password_hash(request.form.get("password"))
+
+        # Query database for username
+        datas = user_db.query.filter_by(email=email).all()
+
+        if len(datas) != 0:
+            return error_page("User with email" + email + " already exists.")
+
+        # load last id from user_db
+        max_id = user_db.query.order_by(user_db.userid.desc()).first().userid
+        user_id = max_id + 1
+        print(f'last userid is {max_id}')
+
+        # create new row in user_db
+        new_user = user_db(userid=user_id, name=request.form.get("username"), email=email, hash=hashed,
+                           currency='USD', minsum=0)
+        db.session.add(new_user)
+
+        # create new row in cash_db
+        new_cash_row = cash_db(userid=user_id, RUB=0, USD=0, EUR=0)
+        db.session.add(new_cash_row)
+
+        # create new row in week_db
+        new_week_row = week_db(userid=user_id, monday=False, tuesday=False,wednesday=False,
+                               thursday=False,friday=False,saturday=False,sunday=False)
+        db.session.add(new_week_row)
+        db.session.commit()
+
+        # save in user in session
+        session["userid"] = user_id
+        session["username"] = request.form.get("username")
 
         return redirect('/')
-
 
 
 @app.route('/testaccaunt', methods=['GET','POST'])
@@ -586,6 +655,32 @@ def testaccaunt():
     if request.method == "GET":
         return render_template('testaccaunt.html')
 
+
+@app.route("/changepassword", methods=["GET", "POST"])
+def changepassword():
+    # """ Change user password"""
+    # if request.method == "GET":
+    #     return render_template("changepassword.html")
+    #
+    # if request.method == "POST":
+    #
+    #     # check emptiness
+    #     if not request.form.get("password"):
+    #         return apology("must provide password", 403)
+    #
+    #     if not request.form.get("confirmation"):
+    #         return apology("must provide password confirmation", 403)
+    #
+    #     # check equality
+    #     if request.form.get("password") != request.form.get("confirmation"):
+    #         return apology("Incorrect password confirmation", 403)
+    #
+    #     # hash password
+    #     hashed = generate_password_hash(request.form.get("password"))
+    #
+    #     db.execute("UPDATE users SET hash=:hashed WHERE id==:userid", hashed=hashed, userid=session["user_id"])
+
+    return redirect("/")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        create your portfolio
+{% endblock %}
+
+{% block main %}
+Welcome!
+<br>
+<div>To work with portfolio you need at least one class and one ticker.</div>
+<br>
+
+<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_class') }}';">Add class</button>
+
+<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_ticker') }}';">Add ticker</button>
+
+{% endblock %}

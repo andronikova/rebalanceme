@@ -13,10 +13,12 @@
                     <tr>
                         <td>ticker symbol</td>
                         <td>ticker currency</td>
+                        {% if portfolio_class != None %}
                         <td>
                             ticker class
                             <a href="#" data-toggle="tooltip" title="To use new class, add this class previously">⍰</a>
                         </td>
+                        {% endif %}
                         <td></td>
                     </tr>
 
@@ -33,6 +35,7 @@
                             <option value="RUB">RUB</option>
                         </select>
                     </td>
+                    {% if portfolio_class != None %}
                     <td>
                         <select name='classname'>
                             {% for classname in portfolio_class %}
@@ -40,6 +43,7 @@
                             {% endfor %}
                         </select>
                     </td>
+                    {% endif %}
                     <td>
                         <input id="submitnewticker" name="submitnewticker" type="submit" disabled>
                     </td>

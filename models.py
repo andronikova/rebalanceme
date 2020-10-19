@@ -38,7 +38,7 @@ class user_db(db.Model):
     userid = db.Column(db.Integer(),primary_key=True)
     name = db.Column(db.String(64))
     email = db.Column(db.String(64))
-    password = db.Column(db.String(64))
+    hash = db.Column(db.String(128))
     currency = db.Column(db.String(64))
     minsum = db.Column(db.Integer())
 

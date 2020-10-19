@@ -67,23 +67,31 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
         exchange = session.get('exchange')
         main_currency = session.get('main_currency')
 
-    # load ticker info: number, price, fullPrice, currency, classname
-    portfolio_ticker = load_ticker_info(userid, ticker_db, loadprice)
-    if portfolio_ticker == False:
-        return False
-
-    print(f"\nticker info is loaded and saved in dictionary\n {portfolio_ticker}")
+    # save in session
+    session['exchange'] = exchange
+    session['main_currency'] = main_currency
 
     # load cash info: rub, euro, usd, rub in usd, rub in euro, usd in euro, euro in usd
     portfolio_cash = load_cash_info(userid, cash_db)
+    session['portfolio_cash'] = portfolio_cash
     print(f"\ncash info is loaded and saved in dict\n {portfolio_cash}")
 
     # calculate total cash in usd and euro
     total_cash = calc_total_cash(portfolio_cash, exchange)
     print(f"\ntotal cash is\n{total_cash}")
 
+
+    # load ticker info: number, price, fullPrice, currency, classname
+    portfolio_ticker = load_ticker_info(userid, ticker_db, loadprice)
+    # if there is no ticker in portfolio - redirect user to create_portfolio page
+    if portfolio_ticker == False:
+        return False
+
+    print(f"\nticker info is loaded and saved in dictionary\n {portfolio_ticker}")
+
     # calculate total (sum of all tickers and cash) in usd and euro
     total = calc_total(portfolio_ticker, total_cash, exchange)
+    session['total_cash'] = total_cash
     print(f"\ntotal is\n{total}")
 
     # load class info : desired fraction, real fraction, active ticker
@@ -105,24 +113,17 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
 
     # clear session
     session.pop('portfolio_ticker', None)
-    session.pop('portfolio_cash', None)
     session.pop('portfolio_class', None)
     session.pop('total', None)
-    session.pop('total_cash', None)
-    session.pop('exchange', None)
     session.pop('suggestion', None)
     session.pop('recommendation', None)
 
     # save everything in session
     # TODO clear session after 12 hours
     session['portfolio_ticker'] = portfolio_ticker
-    session['portfolio_cash'] = portfolio_cash
     session['portfolio_class'] = portfolio_class
     session['total'] = total
-    session['total_cash'] = total_cash
-    session['exchange'] = exchange
     session['suggestion'] = suggestion
-    session['main_currency'] = main_currency
     session['recommendation'] = recommendation
 
     # case we reload prices
