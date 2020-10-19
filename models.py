@@ -41,8 +41,6 @@ class user_db(db.Model):
     password = db.Column(db.String(64))
     currency = db.Column(db.String(64))
     minsum = db.Column(db.Integer())
-    reportfrequency = db.Column(db.Integer())
-    reportday = db.Column(db.String(64))
 
     def __repr__(self):
         return '<user_db {}>'.format(self.name)
