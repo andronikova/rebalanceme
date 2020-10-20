@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, session, flash
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
 from werkzeug.security import check_password_hash, generate_password_hash
-import os
+import os, secrets
 from send_email import sending_emil, scheduling
 
 from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, send_email
@@ -10,7 +10,7 @@ from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_
 app = Flask(__name__)
 
 
-# userid = 1 #TODO - download from session
+test_account_userid = 1
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or \
                            "fg45hjkrgrJJKJLDSV890000jkjk"
@@ -153,6 +153,9 @@ def rebalance():
 
 
     if request.method == "POST":
+        # for test account - don't do anything
+        if session.get('userid') == test_account_userid: return redirect("/")
+
         portfolio_cash = session.get('portfolio_cash')
 
         portfolio_ticker = session.get('portfolio_ticker')
@@ -212,6 +215,9 @@ def settings():
 
     if request.method == "POST":
         if request.form.get("send") is not None:
+            # for test account - don't do anything
+            if session.get('userid') == test_account_userid: return redirect("/settings")
+
             # send test email
             datas = user_db.query.filter_by(userid=session.get('userid')).all()
 
@@ -223,7 +229,8 @@ def settings():
             return redirect("/settings")
 
         if request.form.get("delete") is not None:
-            # delete this user
+            # for test account - don't do anything
+            if session.get('userid') == test_account_userid: return redirect("/")
 
             # delete user from all db: week, cash, ticker, class, user
             week_db.query.filter_by(userid=session.get('userid')).delete(synchronize_session='evaluate')
@@ -258,6 +265,9 @@ def  change_settings():
 
 
     if request.method == "POST":
+        # for test account - don't do anything
+        if session.get('userid') == test_account_userid: return redirect("/settings")
+
         print(f"load report_day {request.form.getlist('report_day') }")
 
         # change values in user db
@@ -294,6 +304,9 @@ def cash():
 
     if request.method == "POST":
         if request.form.get("cashvalue") is not None:
+            # for test account - don't do anything
+            if session.get('userid') == test_account_userid: return redirect("/cash")
+
             print('get new cash values from user')
             # value from cash page
             cash = float(request.form.get('cashvalue'))
@@ -355,6 +368,9 @@ def change_class_info():
 
     if request.method == "POST":
         if request.form.get("submit") is not None:
+            # for test account - don't do anything
+            if session.get('userid') == test_account_userid: return redirect("/class_and_tickers")
+
             portfolio_class = session.get("portfolio_class")
 
             for classname in portfolio_class:
@@ -404,6 +420,9 @@ def change_ticker_info():
                                )
 
     if request.method == "POST":
+        # for test account - don't do anything
+        if session.get('userid') == test_account_userid: return redirect("/class_and_tickers")
+
         portfolio_ticker = session.get("portfolio_ticker")
 
         for tck in portfolio_ticker:
@@ -445,6 +464,9 @@ def add_ticker():
                                )
 
     if request.method == "POST":
+        # for test account - don't do anything
+        if session.get('userid') == test_account_userid: return redirect("/class_and_tickers")
+
         # check new ticker and load ticker price
         ticker = request.form.get("newticker")
 
@@ -492,6 +514,9 @@ def delete_ticker():
                                portfolio_ticker=session.get('portfolio_ticker'))
 
     if request.method == "POST":
+        # for test account - don't do anything
+        if session.get('userid') == test_account_userid: return redirect("/class_and_tickers")
+
         # load ticker name
         ticker = request.form.get("ticker")
 
@@ -521,6 +546,9 @@ def delete_class():
         return render_template('delete_class.html', portfolio_class=session.get('portfolio_class'))
 
     if request.method == "POST":
+        # for test account - don't do anything
+        if session.get('userid') == test_account_userid: return redirect("/class_and_tickers")
+
         classname = request.form.get("classname")
 
         # change classname to None for all tickers in this class
@@ -551,6 +579,9 @@ def add_class():
         return render_template('add_class.html')
 
     if request.method == "POST":
+        # for testoaccount - don't do anything
+        if session.get('userid') == test_account_userid: return redirect("/class_and_tickers")
+
         classname = request.form.get("classname")
 
         # check: is it new name for class
@@ -602,6 +633,60 @@ def logout():
     return redirect("/")
 
 
+@app.route('/change_password', methods=['GET','POST'])
+def change_password():
+    if request.method == "GET":
+        return render_template('change_password.html')
+
+    if request.method == "POST":
+        userid = session.get('userid')
+        datas = user_db.query.filter_by(userid=userid).all()
+
+        # check old password
+        if check_password_hash(datas[0].hash, request.form.get("old")) is False:
+            return error_page('Your old password is not correct.')
+
+        # save new hashed password
+        user_db.query.filter_by(userid=userid).update(
+            {
+                'hash':generate_password_hash(request.form.get("new"))
+            })
+        db.session.commit()
+
+        return redirect('/')
+
+@app.route('/forgot_password', methods=['GET','POST'])
+def forgot_password():
+    if request.method == "GET":
+        return render_template('forgot_password.html')
+
+    if request.method == "POST":
+        # check that this email in user_db
+        email = request.form.get("email")
+        datas = user_db.query.filter_by(email=email).all()
+        if len(datas) == 0:
+            return error_page('There is no user with email ' + email)
+
+        # generate new password
+        new_password = secrets.token_hex(16)
+
+        # send password to user
+        text = 'Dear ' + datas[0].name + '\nhere is your new password:\n' + new_password
+        text += '\nPlease, change this password as soon as possible. \n\nRebalanceMe'
+        topic = 'RebalanceMe: your new password'
+
+        send_email(email, text, topic, app)
+        print(f"new password has been created and send to {email}")
+
+        # save this password in user_db
+        user_db.query.filter_by(email=email).update({
+            'hash' : generate_password_hash(new_password)
+        })
+        db.session.commit()
+
+        return redirect('/login')
+
+
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == "GET":
@@ -611,7 +696,6 @@ def login():
         return render_template('login.html')
 
     if request.method == "POST":
-        # TODO frogot password
         email = request.form.get("email")
 
         # Query database for username
@@ -702,10 +786,12 @@ def create_portfolio():
                                )
 
 
-@app.route('/testaccaunt', methods=['GET','POST'])
-def testaccaunt():
+@app.route('/testaccount', methods=['GET','POST'])
+def testaccount():
     if request.method == "GET":
-        return render_template('testaccaunt.html')
+        session["userid"] = 1
+
+        return redirect('/')
 
 
 @app.route("/changepassword", methods=["GET", "POST"])
