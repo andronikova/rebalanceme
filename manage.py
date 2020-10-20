@@ -34,6 +34,7 @@ def scheduled_job():
         userid = row.userid
         # Load user unfo
         user_datas = user_db.query.filter_by(userid=userid).all()
+
         user_email = user_datas[0].email
         main_currency = user_datas[0].currency
         min_rebalance_sum = user_datas[0].minsum

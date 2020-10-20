@@ -48,13 +48,6 @@
         </tr>
 
         <tr style="text-align:left;">
-            <td>report frequency</td>
-            <td>
-                <input autocomplete='off' type="number" name='report_frequency' value={{user_settings["report_frequency"]}} min="0" max="1000">
-            </td>
-        </tr>
-
-        <tr style="text-align:left;">
             <td>
                 report day
                 <a href="#" data-toggle="tooltip" title="Choose day, when you would like to receive email with rebalance suggestions. If you don't want this email, just live all boxes empty.">⍰</a></td>
@@ -75,21 +68,6 @@
         </tr>
 
 
-
-        <!--<tr style="text-align:left;">-->
-            <!--<td>report day</td>-->
-            <!--<td>-->
-                <!--<select name="report_day">-->
-                    <!--{% for day in week_day %}-->
-                        <!--{% if day == user_settings["report_day"] %}-->
-                            <!--<option selected>{{day}}</option>-->
-                        <!--{% else %}-->
-                            <!--<option>{{day}}</option>-->
-                        <!--{% endif%}-->
-                    <!--{% endfor %}-->
-                <!--</select>-->
-            <!--</td>-->
-        <!--</tr>-->
 
     </tbody>
 </table>

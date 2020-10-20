@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import os
 from send_email import sending_emil, scheduling
 
-from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, test_scheduled_job
+from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, send_email
 
 app = Flask(__name__)
 
@@ -96,9 +96,9 @@ def index_page():
 
             return redirect("/")
 
-        if request.form.get("send_by_email") is not None:
-            sending_emil(app,user_db,session.get('userid'))
-            return redirect("/")
+        # if request.form.get("send_by_email") is not None:
+        #     sending_emil(app,user_db,session.get('userid'))
+        #     return redirect("/")
 
 
 @app.route("/rebalance", methods=['GET','POST'])
@@ -210,9 +210,33 @@ def settings():
         return render_template('settings.html', user_settings=user_settings)
 
     if request.method == "POST":
-        test_scheduled_job(app,week_db,user_db,ticker_db, cash_db, class_db)
+        if request.form.get("send") is not None:
+            # send test email
+            datas = user_db.query.filter_by(userid=session.get('userid')).all()
 
-        return redirect("/settings")
+            topic = 'Test message from REBALANCEme'
+            text = 'It is test email from REBALANCEme app.'
+
+            send_email(datas[0].email, text, topic, app)
+
+            return redirect("/settings")
+
+        if request.form.get("delete") is not None:
+            # delete this user
+
+            # delete user from all db: week, cash, ticker, class, user
+            week_db.query.filter_by(userid=session.get('userid')).delete(synchronize_session='evaluate')
+            class_db.query.filter_by(userid=session.get('userid')).delete(synchronize_session='evaluate')
+            ticker_db.query.filter_by(userid=session.get('userid')).delete(synchronize_session='evaluate')
+            cash_db.query.filter_by(userid=session.get('userid')).delete(synchronize_session='evaluate')
+            user_db.query.filter_by(userid=session.get('userid')).delete(synchronize_session='evaluate')
+
+            db.session.commit()
+
+            # clear session
+            session.clear()
+
+            return redirect("/")
 
 
 @app.route('/change_settings', methods=['GET','POST'])
@@ -621,7 +645,7 @@ def registration():
         datas = user_db.query.filter_by(email=email).all()
 
         if len(datas) != 0:
-            return error_page("User with email" + email + " already exists.")
+            return error_page("User with email " + email + " already exists.")
 
         # load last id from user_db
         max_id = user_db.query.order_by(user_db.userid.desc()).first().userid

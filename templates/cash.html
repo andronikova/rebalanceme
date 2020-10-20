@@ -20,15 +20,16 @@
 
 <form action="\cash" method="POST" style="display:inline">
     <div class="form-group">
-        <h5>Change cash value</h5>
+        <h5>Change cash value
         <input autocomplete='off' class="form-class" type="number" name="cashvalue" step="0.01" min="-9999999" max="9999999">
         <select name="currency">
+            <option value="USD">USD</option>
             <option value="RUB">RUB</option>
             <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
         </select>
 
         <input name="changecash" type="submit" value="Save cash" class="btn btn-primary">
+    </h5>
     </div>
 </form>
 
