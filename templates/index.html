@@ -81,10 +81,10 @@
         </tr>
 
         <tr style="display:none; line-height:5px;" class="togg">
-            <td>ticker name</td>
+            <td>ticker</td>
             <td>number</td>
             <td>price</td>
-            <td>total price</td>
+            <td>total</td>
         </tr>
         {% for key in portfolio_ticker %}
             {% if portfolio_ticker[key]['classname'] == classname%}
@@ -105,31 +105,36 @@
 </table>
 
 
+<br>
+<br>
+<br>
 
-<br>
-<br>
-<br>
 
 <form action="\" method="POST">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+            <p>Your main currency is {{main_currency}}.</p>
+            <p>
+                Press to view sums in
+                {% if main_currency == 'EUR' %}
+                    <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="USD" >
+                {% else %}
+                    <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="EUR">
+                {% endif %}
+            </p>
+        </div>
+        <div class="col-sm"></div>
+        <div class="col-sm">
+            <div>prices and exchange rates are actual for</div>
+            <div>{{ date }}.</div>
+            <div class="form-group">
+                <input type="submit" name = "refresh" value="Refresh" class="btn btn-primary mb-2">
+            </div>
 
-    <div>
-        Your main currency is {{main_currency}}.
-        Press to view sums in
-        {% if main_currency == 'EUR' %}
-            <input type="submit" name="change_currency" class="form-group" value="USD">
-        {% else %}
-            <input type="submit" name="change_currency" class="form-group" value="EUR">
-        {% endif %}
+        </div>
+      </div>
     </div>
-
-
-<h7>prices and exchange rates are actual for {{ date }}.</h7>
-    <p class="form-group">
-        <input type="submit" name = "refresh" class="form-group" value="⭯">
-        press to refresh
-    </p>
-
-    <!--<input type="submit" name = "send_by_email" class="form-group" value="Send e-mail">-->
 
 </form>
 

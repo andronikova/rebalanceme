@@ -47,3 +47,7 @@ main img
 	float: right;
 }
 
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited
+{
+    background-color: #A2AFBD !important;
+}
