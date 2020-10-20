@@ -5,23 +5,13 @@ nav .navbar-brand
     font-family: Avant Garde,Avantgarde,Century Gothic,CenturyGothic,AppleGothic,sans-serif;
 }
 
-/* colors for brand */
-nav .navbar-brand .blue
-{
-    color: #537fbe;
-}
+
+/* color for brand */
 nav .navbar-brand .red
 {
-    color: #ea433b;
+    color: #a0869f;
 }
-nav .navbar-brand .yellow
-{
-    color: #f5b82e;
-}
-nav .navbar-brand .green
-{
-    color: #2e944b;
-}
+
 
 main .form-control
 {
@@ -39,6 +29,8 @@ main
 
     /* center contents */
     text-align: center;
+
+    font-family: Avant Garde,Avantgarde,Century Gothic,CenturyGothic,AppleGothic,sans-serif;
 }
 
 main img
@@ -48,7 +40,6 @@ main img
 }
 
 /*  for left and right alignment on the same line */
-
 .alignleft {
 	float: left;
 }
@@ -56,4 +47,3 @@ main img
 	float: right;
 }
 
-/* row style in tables */

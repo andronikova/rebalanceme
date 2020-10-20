@@ -113,21 +113,27 @@
                     <td name="ticker">{{ticker}}</td>
                     <td name={{ids[ticker]['classname']}}>{{portfolio_ticker[ticker]['classname']}}</td>
                     <td name={{ids[ticker]['oldnumber']}}>{{portfolio_ticker[ticker]['number']}}</td>
-                    <td>
-                        {% if portfolio_ticker[ticker]['classname'] != 'None' %}
-                            {% if portfolio_class[ portfolio_ticker[ticker]['classname'] ]['activeticker'] == ticker%}
-                                {% if suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] != 'None' %}
-                                    {% if suggestion[portfolio_ticker[ticker]['classname']]['number'] > 0 %}
-                                       +{{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}
-                                    {% else %}
-                                        {{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}
-                                    {% endif %}
+
+                    {% set suggest = 0 %}
+
+                    {% if portfolio_ticker[ticker]['classname'] != 'None' -%}
+                        {% if portfolio_class[ portfolio_ticker[ticker]['classname'] ]['activeticker'] == ticker%}
+                            {% if suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] != 'None' %}
+
+                                {% set suggest = suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] %}
+
+                                {% if suggestion[portfolio_ticker[ticker]['classname']]['number'] > 0 %}
+                                    <td>+{{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}</td>
+                                {% else %}
+                                    <td>{{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}</td>
                                 {% endif %}
                             {% endif %}
                         {% endif %}
-                    </td>
+                    {% endif %}
+
                     <td>
-                        <input autocomplete='off' name={{ids[ticker]['newnumber']}}  class="form-class" type="number" value={{portfolio_ticker[ticker]['number']}} min="0" max="999">
+                        {% set new_value = suggest + portfolio_ticker[ticker]['number'] %}
+                        <input autocomplete='off' name={{ids[ticker]['newnumber']}}  class="form-class" type="number" value={{new_value}} min="0" max="9999">
                     </td>
                     <td name={{ids[ticker]['exchange']}} style="display:none;">{{exchange[portfolio_ticker[ticker]['currency']][main_currency]}}</td>
 
@@ -141,8 +147,6 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'rebalance') }}';"> Refresh </button>
 
     <input id="check" type="button" value="Check" title="Press to recalulate cash, sum of all tickers and real fraction for classes." class="btn btn-primary"  />
 

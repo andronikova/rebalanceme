@@ -2,15 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09a832da-bc27-4266-ae82-32c9efa2a225" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/change_password.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/forgot_password.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index_intro.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index_intro.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cash.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cash.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/class_and_tickers.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/class_and_tickers.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/layout_empty.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout_empty.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/settings.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/rebalance.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/rebalance.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,11 +22,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="539">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/cash.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="86">
+              <caret line="23" column="110" selection-start-line="23" selection-start-column="110" selection-end-line="23" selection-end-column="110" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/layout.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="82">
+              <caret line="33" selection-start-line="33" selection-end-line="34" selection-end-column="48" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="62">
-              <caret line="457" selection-start-line="457" selection-end-line="457" selection-end-column="40" />
+            <state relative-caret-position="180">
+              <caret line="368" column="34" selection-start-line="368" selection-start-column="34" selection-end-line="368" selection-end-column="34" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
               </folding>
@@ -38,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="27" column="38" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="38" />
+            <state relative-caret-position="234">
+              <caret line="151" column="33" lean-forward="true" selection-start-line="151" selection-start-column="17" selection-end-line="151" selection-end-column="33" />
               <folding>
                 <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#h6#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -53,7 +70,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/settings.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
+            <state relative-caret-position="180">
               <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-end-line="11" />
             </state>
           </provider>
@@ -69,22 +86,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.py">
+        <entry file="file://$PROJECT_DIR$/static/styles.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="677" column="18" selection-start-line="677" selection-start-column="18" selection-end-line="677" selection-end-column="18" />
-              <folding>
-                <element signature="e#0#75#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="198">
+              <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/layout_empty.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="34" column="48" selection-start-line="34" selection-start-column="48" selection-end-line="34" selection-end-column="48" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/forgot_password.html">
+        <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
+            <state relative-caret-position="-10">
+              <caret line="678" column="66" selection-start-line="678" selection-start-column="66" selection-end-line="678" selection-end-column="66" />
+              <folding>
+                <element signature="e#0#75#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -129,6 +155,7 @@
       <find>accaun</find>
       <find>if session.get('userid') ==</find>
       <find>update</find>
+      <find>red</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -160,32 +187,32 @@
         <option value="$PROJECT_DIR$/templates/delete_class.html" />
         <option value="$PROJECT_DIR$/templates/tickers_change.html" />
         <option value="$PROJECT_DIR$/templates/rebalance_backup.html" />
-        <option value="$PROJECT_DIR$/templates/layout.html" />
         <option value="$PROJECT_DIR$/templates/add_class.html" />
-        <option value="$PROJECT_DIR$/templates/class_and_tickers.html" />
         <option value="$PROJECT_DIR$/templates/classes_change.html" />
         <option value="$PROJECT_DIR$/send_email.py" />
-        <option value="$PROJECT_DIR$/static/styles.css" />
         <option value="$PROJECT_DIR$/templates/email_message.html" />
         <option value="$PROJECT_DIR$/templates/error_page.html" />
         <option value="$PROJECT_DIR$/templates/test_accaunt.html" />
         <option value="$PROJECT_DIR$/templates/registration.html" />
         <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/templates/add_ticker.html" />
-        <option value="$PROJECT_DIR$/templates/rebalance.html" />
         <option value="$PROJECT_DIR$/templates/settings_change.html" />
-        <option value="$PROJECT_DIR$/templates/cash.html" />
         <option value="$PROJECT_DIR$/manage.py" />
-        <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/templates/create_portfolio.html" />
-        <option value="$PROJECT_DIR$/helpers.py" />
-        <option value="$PROJECT_DIR$/templates/layout_empty.html" />
         <option value="$PROJECT_DIR$/templates/index_intro.html" />
         <option value="$PROJECT_DIR$/templates/change_password.html" />
         <option value="$PROJECT_DIR$/templates/settings.html" />
         <option value="$PROJECT_DIR$/templates/login.html" />
-        <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/templates/forgot_password.html" />
+        <option value="$PROJECT_DIR$/app.py" />
+        <option value="$PROJECT_DIR$/templates/class_and_tickers.html" />
+        <option value="$PROJECT_DIR$/templates/cash.html" />
+        <option value="$PROJECT_DIR$/templates/rebalance.html" />
+        <option value="$PROJECT_DIR$/templates/index.html" />
+        <option value="$PROJECT_DIR$/helpers.py" />
+        <option value="$PROJECT_DIR$/static/styles.css" />
+        <option value="$PROJECT_DIR$/templates/layout.html" />
+        <option value="$PROJECT_DIR$/templates/layout_empty.html" />
       </list>
     </option>
   </component>
@@ -424,17 +451,16 @@
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3276515" />
       <window_info anchor="bottom" id="GitHub Pull Requests" order="11" weight="0.3293011" />
-      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.4990086" visible="true" weight="0.24621212" />
+      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.4990086" visible="true" weight="0.33901516" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" x="24" y="409" width="241" height="248" id="Structure" order="3" sideWeight="0.42011833" side_tool="true" visible="true" weight="0.1756885" />
+      <window_info anchor="right" x="24" y="409" width="241" height="248" id="Structure" order="3" sideWeight="0.42011833" side_tool="true" weight="0.1756885" />
     </layout>
     <layout-to-restore>
       <window_info x="515" y="-933" width="672" height="554" id="DB Browser" order="0" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
-      <window_info x="24" y="409" width="241" height="248" id="Structure" order="1" sideWeight="0.38860103" side_tool="true" weight="0.11069767" />
-      <window_info id="Favorites" order="2" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
-      <window_info content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="3" sideWeight="0.61139894" weight="0.17488372" />
+      <window_info id="Favorites" order="1" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
+      <window_info content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="2" sideWeight="0.57988167" weight="0.17853752" />
       <window_info anchor="bottom" id="DB Execution Console" order="0" weight="0.42992425" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.32795697" />
@@ -444,14 +470,18 @@
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.3252688" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3276515" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4990086" visible="true" weight="0.21212122" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
-      <window_info anchor="bottom" id="Python Console" order="11" weight="0.3276515" />
-      <window_info anchor="bottom" id="GitHub Pull Requests" order="12" weight="0.3293011" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3276515" />
+      <window_info anchor="bottom" id="GitHub Pull Requests" order="11" weight="0.3293011" />
+      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.4990086" visible="true" weight="0.33901516" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" x="24" y="409" width="241" height="248" id="Structure" order="3" sideWeight="0.42011833" side_tool="true" weight="0.1756885" />
     </layout-to-restore>
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -601,13 +631,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/styles.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="59" selection-start-line="59" selection-end-line="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/error_page.html">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -629,13 +652,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/cash.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="37" column="25" lean-forward="true" selection-start-line="37" selection-start-column="25" selection-end-line="37" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/settings_change.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -646,35 +662,6 @@
             <element signature="n#style#0;n#tr#2;n#tbody#0;n#table#0;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#tr#3;n#tbody#0;n#table#0;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#tr#5;n#tbody#0;n#table#0;n#form#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/class_and_tickers.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="9" column="89" selection-start-line="9" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="53" column="71" selection-start-line="53" selection-start-column="71" selection-end-line="53" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/rebalance.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="126" column="33" selection-start-line="126" selection-start-column="33" selection-end-line="126" selection-end-column="33" />
-          <folding>
-            <element signature="n#div#0;n#div#0;n#!!top" />
-            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h6#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h6#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#5;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#form#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -720,26 +707,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/layout_empty.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="43" column="76" selection-start-line="43" selection-start-column="76" selection-end-line="43" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="27" column="38" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="38" />
-          <folding>
-            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h6#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#h6#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#1;n#tbody#0;n#table#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/index_intro.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -770,13 +737,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/settings.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/change_password.html">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -798,6 +758,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/settings.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/class_and_tickers.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="53" column="94" selection-start-line="53" selection-start-column="94" selection-end-line="53" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/rebalance.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="134" column="87" lean-forward="true" selection-start-line="134" selection-start-column="87" selection-end-line="134" selection-end-column="87" />
+          <folding>
+            <element signature="n#div#0;n#div#0;n#!!top" />
+            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h6#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h6#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#5;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/cash.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="86">
+          <caret line="23" column="110" selection-start-line="23" selection-start-column="110" selection-end-line="23" selection-end-column="110" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/forgot_password.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
@@ -807,8 +803,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="677" column="18" selection-start-line="677" selection-start-column="18" selection-end-line="677" selection-end-column="18" />
+        <state relative-caret-position="-10">
+          <caret line="678" column="66" selection-start-line="678" selection-start-column="66" selection-end-line="678" selection-end-column="66" />
           <folding>
             <element signature="e#0#75#0" expanded="true" />
           </folding>
@@ -817,11 +813,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helpers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="457" selection-start-line="457" selection-end-line="457" selection-end-column="40" />
+        <state relative-caret-position="180">
+          <caret line="368" column="34" selection-start-line="368" selection-start-column="34" selection-end-line="368" selection-end-column="34" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="151" column="33" lean-forward="true" selection-start-line="151" selection-start-column="17" selection-end-line="151" selection-end-column="33" />
+          <folding>
+            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h6#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#h6#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#tr#1;n#tbody#0;n#table#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/layout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="82">
+          <caret line="33" selection-start-line="33" selection-end-line="34" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/layout_empty.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="34" column="48" selection-start-line="34" selection-start-column="48" selection-end-line="34" selection-end-column="48" />
         </state>
       </provider>
     </entry>
