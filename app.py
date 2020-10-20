@@ -10,7 +10,7 @@ from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_
 app = Flask(__name__)
 
 
-test_account_userid = 1
+test_account_userid = 10
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or \
                            "fg45hjkrgrJJKJLDSV890000jkjk"
