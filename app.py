@@ -57,7 +57,7 @@ def index_page():
 
             # case of empty portfolio
             if boolres == False:
-                return render_template('create_portfolio.html')
+                return redirect('/create_portfolio')
 
 
         symbols = {"USD": '$', "EUR": '€'}
@@ -87,7 +87,7 @@ def index_page():
             boolres = load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, True)
 
             if boolres == False:
-                return render_template("index_newuser.html")
+                return redirect('/create_portfolio')
 
             return redirect("/")
 
@@ -110,7 +110,8 @@ def rebalance():
 
         # check nonempty portfolio
         if session.get('portfolio_ticker') is None:
-            return render_template('create_portfolio.html')
+            return redirect('/create_portfolio')
+
 
         # create dict of id
         ids = {}
@@ -280,12 +281,6 @@ def  change_settings():
         return redirect("/settings")
 
 
-@app.route('/newuser', methods=['GET','POST'])
-def newuser():
-    #TODO  create new row in cash_db with zero money
-    return redirect("/")
-
-
 @app.route('/cash', methods=['GET','POST'])
 def cash():
     if request.method == "GET":
@@ -332,7 +327,7 @@ def class_and_tickers():
 
         # check nonempty portfolio
         if session.get('portfolio_ticker') is None:
-            return render_template('create_portfolio.html')
+            return redirect('/create_portfolio')
 
         return render_template('class_and_tickers.html',
                                portfolio_class=session.get('portfolio_class'),
@@ -390,6 +385,7 @@ def change_class_info():
         load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
         return redirect("/class_and_tickers")
 
+
 @app.route('/change_ticker_info', methods=['GET','POST'])
 def change_ticker_info():
     if request.method == "GET":
@@ -444,7 +440,6 @@ def change_ticker_info():
 @app.route('/add_ticker', methods=['GET','POST'])
 def add_ticker():
     if request.method == "GET":
-        # print(f"portfolio class is ")
         return render_template('add_ticker.html',
                                portfolio_class=session.get('portfolio_class')
                                )
@@ -519,10 +514,10 @@ def delete_ticker():
 
         return redirect('/class_and_tickers')
 
+
 @app.route('/delete_class', methods=['GET','POST'])
 def delete_class():
     if request.method == "GET":
-
         return render_template('delete_class.html', portfolio_class=session.get('portfolio_class'))
 
     if request.method == "POST":
@@ -586,7 +581,12 @@ def add_class():
         db.session.commit()
 
         # reload  new portfolio in session
-        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
+        if session.get('portfolio_ticker') is None:
+            # load new prices
+            load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, True)
+        else:
+            # use prices from session
+            load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
 
         return redirect("/class_and_tickers")
 
@@ -611,6 +611,7 @@ def login():
         return render_template('login.html')
 
     if request.method == "POST":
+        # TODO frogot password
         email = request.form.get("email")
 
         # Query database for username
@@ -665,6 +666,7 @@ def registration():
         new_week_row = week_db(userid=user_id, monday=False, tuesday=False,wednesday=False,
                                thursday=False,friday=False,saturday=False,sunday=False)
         db.session.add(new_week_row)
+
         db.session.commit()
 
         # save in user in session
@@ -672,6 +674,32 @@ def registration():
         session["username"] = request.form.get("username")
 
         return redirect('/')
+
+
+@app.route('/create_portfolio', methods=['GET','POST'])
+def create_portfolio():
+    if request.method == "GET":
+        userid = session.get('userid')
+        user_data = user_db.query.filter_by(userid=userid).all()
+
+        cash_data = cash_db.query.filter_by(userid=userid).all()
+
+        user_settings = load_user_settings(user_db, week_db, session.get('userid'))
+
+        classes = []
+        for row in class_db.query.filter_by(userid=userid).all():
+            classes.append(row.classname)
+
+        tickers = []
+        for row in ticker_db.query.filter_by(userid=userid).all():
+            tickers.append(row.ticker)
+
+        return render_template('create_portfolio.html',
+                                username=user_data[0].name,
+                                user_settings=user_settings,
+                                USD=cash_data[0].USD, RUB=cash_data[0].RUB, EUR=cash_data[0].EUR,
+                               classes=classes, tickers=tickers
+                               )
 
 
 @app.route('/testaccaunt', methods=['GET','POST'])

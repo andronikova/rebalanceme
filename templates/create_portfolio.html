@@ -5,13 +5,81 @@
 {% endblock %}
 
 {% block main %}
-Welcome!
-<br>
-<div>To work with portfolio you need at least one class and one ticker.</div>
+<h4>Hello, {{username}}!</h4>
 <br>
 
-<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_class') }}';">Add class</button>
+<h6>To work with portfolio you need at least one class and one ticker.</h6>
+<br>
+<br>
 
-<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_ticker') }}';">Add ticker</button>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <h5>Your class and tickers</h5>
+        {% if classes == [] %}
+            <p style="float:left;">You don't have any class in your portfolio.</p>
+            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_class') }}';">Add class</button>
+
+        {% else %}
+            <p style="float:left;">Your class:</p>
+                {% for i in classes %}
+            <h6>{{i}}</h6>
+                {% endfor %}
+        {% endif %}
+
+            <p></p>
+        {% if tickers == [] %}
+            <p style="float:left;">You don't have any ticker in your portfolio yet.</p>
+            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_ticker') }}';">Add ticker</button>
+        {% else %}
+            <p style="float:left;">Your ticker:
+                {% for i in tickers %}
+                        {{i}}
+                {% endfor %}
+                    </p>
+        {% endif %}
+
+
+    </div>
+
+    <div class="col-sm">
+            <h5>Your cash:</h5>
+            <p>USD: {{USD}}</p>
+            <p>EUR: {{EUR}}</p>
+            <p>RUB: {{RUB}}</p>
+
+            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'cash') }}';">Add cash</button>
+
+    </div>
+
+    <div class="col-sm" >
+      <h5>Your portfolio settings are:</h5>
+        <p style="float:left;">main currency : {{user_settings['currency']}}</p>
+        <p style="float:left;">minimal operation sum : {{user_settings['minimal_operation_sum']}} {{user_settings['currency']}} <a href="#" data-toggle="tooltip" title="Threshold value for rebalance operation. Calculate it, tacking into accaunt comission value for each operation of your broker.">⍰</a></p>
+        <p style="float:left;">report day :
+                {% if user_settings['report_day'] == [] %}
+                        never<a href="#" data-toggle="tooltip" title="You will not receive rebalance report.">⍰</a>
+                {% else %}
+                        {% for i in user_settings['report_day'] %}
+                                {{i.capitalize()}}
+                        {% endfor %}
+                {% endif %}
+        </p>
+        <p></p>
+            <span></span>
+        <span>
+                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_settings') }}';">Change settings</button>
+        </span>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
 
 {% endblock %}

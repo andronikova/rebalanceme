@@ -80,9 +80,11 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
     total_cash = calc_total_cash(portfolio_cash, exchange)
     print(f"\ntotal cash is\n{total_cash}")
 
-
     # load ticker info: number, price, fullPrice, currency, classname
     portfolio_ticker = load_ticker_info(userid, ticker_db, loadprice)
+
+    # I put it before check to have empty session in case there is no ticker in portfolio
+    session.pop('portfolio_ticker', None)
     # if there is no ticker in portfolio - redirect user to create_portfolio page
     if portfolio_ticker == False:
         return False
@@ -97,6 +99,8 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
     # load class info : desired fraction, real fraction, active ticker
     portfolio_class = load_class_info(userid, class_db, portfolio_ticker, exchange, total)
     print(f"\nclasses info is loaded and saved in dict\n {portfolio_class}")
+    if portfolio_class == False:
+        return False
 
     # calculate rebalance suggestion
     suggestion = calc_rebalance_suggestion(portfolio_ticker, portfolio_class, total, total_cash, exchange)
@@ -112,7 +116,6 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
     recommendation = calc_recommendation(suggestion)
 
     # clear session
-    session.pop('portfolio_ticker', None)
     session.pop('portfolio_class', None)
     session.pop('total', None)
     session.pop('suggestion', None)
