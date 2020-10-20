@@ -54,7 +54,7 @@
 
     <tbody>
     {% for classname in portfolio_class%}
-        <tr class="table-active">
+        <tr class="table-active" style="background-color:#c9bac8;">
             <td> {{classname}} </td>
             <td> {{portfolio_class[classname]['realfraction']}} ( {{portfolio_class[classname]['fraction']}} ) </td>
             <td>
@@ -89,7 +89,7 @@
         {% for key in portfolio_ticker %}
             {% if portfolio_ticker[key]['classname'] == classname%}
 
-                <tr style="display:none;" class="togg">
+                <tr style="display:none; background-color:#EEEEEE;" class="togg">
 
                     <td>{{key}}</td>
                     <td>{{portfolio_ticker[key]['number']}}</td>

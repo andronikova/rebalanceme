@@ -109,13 +109,13 @@
         {% for orderedname in classname_list %}
             {% for ticker in portfolio_ticker %}
                 {% if orderedname == portfolio_ticker[ticker]['classname'] %}
-                <tr>
+                <tr style="background-color:#EEEEEE;">
                     <td name="ticker">{{ticker}}</td>
                     <td name={{ids[ticker]['classname']}}>{{portfolio_ticker[ticker]['classname']}}</td>
                     <td name={{ids[ticker]['oldnumber']}}>{{portfolio_ticker[ticker]['number']}}</td>
 
                     {% set suggest = 0 %}
-
+                    <td>
                     {% if portfolio_ticker[ticker]['classname'] != 'None' -%}
                         {% if portfolio_class[ portfolio_ticker[ticker]['classname'] ]['activeticker'] == ticker%}
                             {% if suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] != 'None' %}
@@ -123,13 +123,14 @@
                                 {% set suggest = suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] %}
 
                                 {% if suggestion[portfolio_ticker[ticker]['classname']]['number'] > 0 %}
-                                    <td>+{{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}</td>
+                                    +{{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}
                                 {% else %}
-                                    <td>{{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}</td>
+                                    {{ suggestion[ portfolio_ticker[ticker]['classname'] ]['number'] }}
                                 {% endif %}
                             {% endif %}
                         {% endif %}
                     {% endif %}
+                    </td>
 
                     <td>
                         {% set new_value = suggest + portfolio_ticker[ticker]['number'] %}

@@ -9,7 +9,7 @@ from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_
 
 app = Flask(__name__)
 
-
+# should be = 1, but is you want make some change in user test account - put some random number
 test_account_userid = 10
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or \
