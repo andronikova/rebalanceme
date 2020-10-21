@@ -1,9 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_migrate import Migrate
-from flask_mail import Mail, Message
 from werkzeug.security import check_password_hash, generate_password_hash
 import os, secrets
-from send_email import sending_emil, scheduling
 
 from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, send_email
 
@@ -17,9 +15,9 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY_rebalanceme')
 app.config['MAIL_SERVER'] = 'smtp.yandex.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'andronikova.daria@ya.ru'  # введите свой адрес электронной почты здесь
-app.config['MAIL_DEFAULT_SENDER'] = 'andronikova.daria@ya.ru'  # и здесь
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD') # введите пароль
+app.config['MAIL_USERNAME'] = 'andronikova.daria@ya.ru'
+app.config['MAIL_DEFAULT_SENDER'] = 'andronikova.daria@ya.ru'
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or \
                                         "postgresql://postgres:1111111@localhost:5432/rebalanceme"
@@ -29,15 +27,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # load databases
 from models import db, cash_db, ticker_db, class_db, user_db, week_db
 
-#
+
 # database settings and creation of tables
 with app.app_context():
     db.init_app(app)
     migrate = Migrate(app,db)
-
-# scheduling email sending with APScheduler
-# with app.app_context():
-#     scheduling(app,user_db,userid)
 
 
 @app.route('/', methods=['GET','POST'])

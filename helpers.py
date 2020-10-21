@@ -1,10 +1,8 @@
 import os, urllib.parse, requests, math, time
 from flask import render_template, session
-from datetime import datetime
 from sqlalchemy import desc
-
-# DELETE!! use for test_scheduled_job only
 from flask_mail import Mail, Message
+
 
 def apiprice(ticker):
     # load price from NY
@@ -463,6 +461,5 @@ def send_email(email, text, topic, app):
         message = Message(topic, recipients=[email])
 
         message.body = text
-
 
         mail.send(message)
