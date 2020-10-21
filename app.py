@@ -12,6 +12,7 @@ app = Flask(__name__)
 # should be = 1, but is you want make some change in user test account - put some random number
 test_account_userid = 1
 
+#TODO hide all keys
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or \
                            "fg45hjkrgrJJKJLDSV890000jkjk"
 app.config['MAIL_SERVER'] = 'smtp.yandex.com'
@@ -596,7 +597,7 @@ def add_class():
 
         # check that name consist of english letter only
         eng_alphabet=("abcdefghijklmnopqrstuvwxyz")
-        for one_char in classname:
+        for one_char in classname.lower():
             if one_char not in eng_alphabet:
                 return error_page('Use only latin letters!')
 
