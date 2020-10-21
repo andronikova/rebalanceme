@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="09a832da-bc27-4266-ae82-32c9efa2a225" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -468,7 +467,7 @@
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3276515" />
       <window_info anchor="bottom" id="GitHub Pull Requests" order="11" weight="0.3293011" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="12" sideWeight="0.4990086" visible="true" weight="0.3866878" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="12" sideWeight="0.4990086" visible="true" weight="0.56259906" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
