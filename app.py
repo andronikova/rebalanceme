@@ -13,14 +13,13 @@ app = Flask(__name__)
 test_account_userid = 1
 
 #TODO hide all keys
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or \
-                           "fg45hjkrgrJJKJLDSV890000jkjk"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY_rebalanceme')
 app.config['MAIL_SERVER'] = 'smtp.yandex.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'andronikova.daria@ya.ru'  # введите свой адрес электронной почты здесь
 app.config['MAIL_DEFAULT_SENDER'] = 'andronikova.daria@ya.ru'  # и здесь
-app.config['MAIL_PASSWORD'] = 'assa1221'  # введите пароль
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD') # введите пароль
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or \
                                         "postgresql://postgres:1111111@localhost:5432/rebalanceme"
@@ -794,32 +793,6 @@ def testaccount():
 
         return redirect('/')
 
-
-@app.route("/changepassword", methods=["GET", "POST"])
-def changepassword():
-    # """ Change user password"""
-    # if request.method == "GET":
-    #     return render_template("changepassword.html")
-    #
-    # if request.method == "POST":
-    #
-    #     # check emptiness
-    #     if not request.form.get("password"):
-    #         return apology("must provide password", 403)
-    #
-    #     if not request.form.get("confirmation"):
-    #         return apology("must provide password confirmation", 403)
-    #
-    #     # check equality
-    #     if request.form.get("password") != request.form.get("confirmation"):
-    #         return apology("Incorrect password confirmation", 403)
-    #
-    #     # hash password
-    #     hashed = generate_password_hash(request.form.get("password"))
-    #
-    #     db.execute("UPDATE users SET hash=:hashed WHERE id==:userid", hashed=hashed, userid=session["user_id"])
-
-    return redirect("/")
 
 
 if __name__ == "__main__":
