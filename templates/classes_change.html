@@ -16,7 +16,7 @@
             <td>desired fraction</td>
             <td>fraction diapason</td>
             <td>active ticker
-                <a href="#" data-toggle="tooltip" title="Only tickers from this class are available. To change class of ticker go to 'class and tickers/change ticker info'">⍰</a>
+                <a href="#" data-toggle="tooltip" title="Only tickers from this class are available. To change class of ticker go to 'classes and tickers/change ticker info'">⍰</a>
             </td>
         </tr>
     </thead>
@@ -24,7 +24,11 @@
     <tbody>
         {% for classname in portfolio_class%}
             <tr class="table-active">
-                <td> {{classname}} </td>
+                <td>
+                    <div class="form-group">
+                        <input class="classname" autocomplete='off' type="text" id={{ids[classname]['name']}}  name={{ids[classname]['name']}} value={{classname}}>
+                    </div>
+                </td>
                 <td>
                     <div class="form-group">
                         <input class="fraction" autocomplete='off' type="number" id={{ids[classname]['fraction']}}  name={{ids[classname]['fraction']}} value={{portfolio_class[classname]['fraction']}} min="0" max="100">

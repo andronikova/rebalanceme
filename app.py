@@ -362,7 +362,7 @@ def change_class_info():
 
         # create dict of id : classname +_realfraction /fraction_diap / active ticker
         ids = {}
-        idtag = ['fraction','diapason','activeticker']
+        idtag = ['fraction','diapason','activeticker','name']
         for key in portfolio_class:
             ids[key] = {}
             for tag in idtag:
@@ -382,23 +382,32 @@ def change_class_info():
             portfolio_class = session.get("portfolio_class")
 
             for classname in portfolio_class:
+                # load classname from website
+                tag = 'name_' + classname
+                new_classname = request.form.get(tag)
+
+                if new_classname != classname:
+                    # check: is it new name for class
+                    if session.get('portfolio_class') is not None:
+                        for name in session.get('portfolio_class'):
+                            if name == new_classname:
+                                return error_page('Such class exists! Choose another name.')
+
                 # load new fraction from website
                 tag = 'fraction_' + classname
                 new_fraction = request.form.get(tag)
-                # print(f"new fraction for {tag} is {new_fraction}")
 
                 #load new diapason from website
                 tag = 'diapason_' + classname
                 new_diapason = request.form.get(tag)
-                # print(f"new fraction for {tag} is {new_diapason}")
 
                 # load new active ticker
                 tag = 'activeticker_' + classname
                 new_activeticker = request.form.get(tag)
-                # print(f"new active ticker for {tag} is {new_activeticker}")
 
                 # save new values in db
                 class_db.query.filter_by(userid=session.get('userid'),classname=classname).update({
+                    'classname': new_classname,
                     'fraction': new_fraction,
                     'diapason' : new_diapason,
                     'activeticker' : new_activeticker
@@ -598,15 +607,15 @@ def add_class():
                 if name == classname:
                     return error_page('Such class exists! Choose another name.')
 
-        #check, that name consists of letters only
-        if classname.isalpha() == False:
-            return error_page('Class name should consist of letters only!')
-
-        # check that name consist of english letter only
-        eng_alphabet=("abcdefghijklmnopqrstuvwxyz")
-        for one_char in classname.lower():
-            if one_char not in eng_alphabet:
-                return error_page('Use only latin letters!')
+        # #check, that name consists of letters only
+        # if classname.isalpha() == False:
+        #     return error_page('Class name should consist of letters only!')
+        #
+        # # check that name consist of english letter only
+        # eng_alphabet=("abcdefghijklmnopqrstuvwxyz")
+        # for one_char in classname.lower():
+        #     if one_char not in eng_alphabet:
+        #         return error_page('Use only latin letters!')
 
         # load last id from class_db and put new id by hand (to avoid IntegrityError duplicate key violates unique-constraint)
         max_id = class_db.query.order_by(class_db.id.desc()).first().id

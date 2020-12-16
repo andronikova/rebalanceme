@@ -53,7 +53,7 @@
 
                     <div class="col-md-auto">
                         <div class="form-group" style="text-align:right;">
-                            actual for {{ date }}
+                            last update {{ date }}
                             <input type="submit" name = "refresh" value="Refresh" class="btn btn-primary mb-2">
                         </div>
                     </div>
@@ -76,16 +76,23 @@
 <table class="table">
     <thead>
     <tr>
-        <td><button id="toggle" title="Press to see all tickers.">▾</button>       class   </td>
+        <td><button id="toggle" title="Press to see all tickers.">▾</button> class</td>
         <td>real (desired) fraction, %</td>
         <td>rebalance suggestion</td>
         <td>rebalance value</td>
     </tr>
 
     <tbody>
+        <tr style="display:none; line-height:5px;" class="togg">
+            <td>ticker</td>
+            <td>number</td>
+            <td>price</td>
+            <td>total</td>
+        </tr>
+
     {% for classname in portfolio_class%}
         <tr class="table-active" style="background-color:#c9bac8;">
-            <td> {{classname}} </td>
+            <td>{{classname}} </td>
             <td> {{portfolio_class[classname]['realfraction']}} ( {{portfolio_class[classname]['fraction']}} ) </td>
             <td>
                 {% if suggestion[classname]['number'] == None%}
@@ -110,12 +117,6 @@
             <td> {{ "{:,.2f}".format(suggestion[classname][main_currency])}} {{symbol[main_currency]}} </td>
         </tr>
 
-        <tr style="display:none; line-height:5px;" class="togg">
-            <td>ticker</td>
-            <td>number</td>
-            <td>price</td>
-            <td>total</td>
-        </tr>
         {% for key in portfolio_ticker %}
             {% if portfolio_ticker[key]['classname'] == classname%}
 
