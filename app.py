@@ -88,11 +88,14 @@ def index_page():
         if request.form.get("change_currency") is not None:
             session['main_currency']  = request.form.get('change_currency')
 
-            return redirect("/")
+            # change values in user db
+            user_db.query.filter_by(userid=session.get('userid')).update({
+                'currency': request.form.get('change_currency'),
+            })
 
-        # if request.form.get("send_by_email") is not None:
-        #     sending_emil(app,user_db,session.get('userid'))
-        #     return redirect("/")
+            db.session.commit()
+
+            return redirect("/")
 
 
 @app.route("/rebalance", methods=['GET','POST'])

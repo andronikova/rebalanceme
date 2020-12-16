@@ -8,30 +8,60 @@
 
 <div class="row mx-md-n5">
   <div class="col px-md-1">
-      <div class="p-3 border bg-light">
-        <h4 style="text-align:left;">
-            Total portfolio value:
-            <span style="float:right;">
-                {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}
-            </span>
-        </h4>
+      <div class="row mx-md-n5">
+          <div class="p-3 border bg-light">
+            <h4 style="text-align:left;">
+                Total portfolio value:
+                <span style="float:right;">
+                    {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}
+                </span>
+            </h4>
 
-        <h6 style="text-align:left;">
-            in cash:
-            <span style="float:right;">
-                {{ "{:,.2f}".format(total_cash[main_currency]) }} {{symbol[main_currency]}}
-            </span>
-        </h6>
+            <h6 style="text-align:left;">
+                in cash:
+                <span style="float:right;">
+                    {{ "{:,.2f}".format(total_cash[main_currency]) }} {{symbol[main_currency]}}
+                </span>
+            </h6>
 
-        <h6 style="text-align:left;">
-            in tickers:
-            <span style="float:right;">
-                {{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbol[main_currency]}}
-            </span>
-        </h6>
+            <h6 style="text-align:left;">
+                in tickers:
+                <span style="float:right;">
+                    {{ "{:,.2f}".format(total[main_currency] - total_cash[main_currency])}} {{symbol[main_currency]}}
+                </span>
+            </h6>
 
-          <br>
-          <h5 style="color:red;text-align:left;">{{recommendation}}</h5>
+              <br>
+              <h5 style="color:red;text-align:left;">{{recommendation}}</h5>
+          </div>
+
+          <div class="p-3">
+              <form action="\" method="POST">
+                <div class="container">
+                  <div class="row">
+
+                    <div class="col-md-auto">
+                            {% if main_currency == 'EUR' %}
+                                <input type="submit" class="btn btn-primary mb-2" value="EUR" disabled>
+                                <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="USD" >
+                            {% else %}
+                                <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="EUR">
+                                <input type="submit" class="btn btn-primary mb-2" value="USD" disabled>
+
+                            {% endif %}
+                    </div>
+
+                    <div class="col-md-auto">
+                        <div class="form-group" style="text-align:right;">
+                            actual for {{ date }}
+                            <input type="submit" name = "refresh" value="Refresh" class="btn btn-primary mb-2">
+                        </div>
+                    </div>
+
+                  </div>
+                </div>
+            </form>
+          </div>
       </div>
   </div>
 
@@ -110,33 +140,7 @@
 <br>
 
 
-<form action="\" method="POST">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm">
-            <p>Your main currency is {{main_currency}}.</p>
-            <p>
-                Press to view sums in
-                {% if main_currency == 'EUR' %}
-                    <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="USD" >
-                {% else %}
-                    <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="EUR">
-                {% endif %}
-            </p>
-        </div>
-        <div class="col-sm"></div>
-        <div class="col-sm">
-            <div>prices and exchange rates are actual for</div>
-            <div>{{ date }}.</div>
-            <div class="form-group">
-                <input type="submit" name = "refresh" value="Refresh" class="btn btn-primary mb-2">
-            </div>
 
-        </div>
-      </div>
-    </div>
-
-</form>
 
 <script>
 <!--for pie chart-->
