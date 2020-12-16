@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title  %}
+        about
+{% endblock %}
+
+{% block main %}
+
+
+<p style="text-align:justify;">
+    <span style="color:#a0869f;">REBALANCEme</span> is a site made to help you rationally navigate through the storming environment  of the securities market.
+</p>
+<p style="text-align:justify;">
+    It is made for the followers of the <a href="https://en.wikipedia.org/wiki/Passive_management">passive investment philosophy</a>, or "buy-and-hold" approach. Such investors buy broadly diversified funds of stocks or bonds and regularly rebalance them (sell one of them and buy another one) to achieve a constant ratio between them.
+</p>
+
+<h4 style="text-align:left;">
+    How does it work?
+</h4>
+<p style="text-align:justify;">
+ You start with creating several asset classes, which you are going to invest into, e.g. stocks and bonds. For each class you assign one or more funds (tickers), you'd like to invest into or you already have. You can also include individual stocks here, but this is not recommended by academic studies.
+ Finally you type in the desired ratio between asset classes and the acceptable deviation from that.
+</p>
+
+<p style="text-align:justify;">
+ <span style="color:#a0869f;">REBALANCEme</span> design allows you to choose only one active ticker in each class, assuming that you  need to sell or buy only one ticket to re-establish the class ratio.
+</p>
+
+<p style="text-align:justify;">
+   As fund prices constantly change, <span style="color:#a0869f;">REBALANCEme</span> follows them and calculates the value and current ratio for each class.
+</p>
+
+<p style="text-align:justify;">
+    If you are investing regularly, <span style="color:#a0869f;">REBALANCEme</span> allows you to feed into the information of cash deposited on your brokerage account, so that you get updated rebalance suggestions next week. If you have transaction costs like brokerage commission you can set a minimum value for any trade, thus minimizing their number and rebalancing rarely.
+</p>
+
+<p style="text-align:justify;">
+After you set up all the parameters, you will regularly get an email-report with suggestions for rebalancing, thus allowing you to achieve the desired constant level of risk with minimal effort.
+</p>
+
+Have fun and stay the course!
+
+<br>
+<br>
+<br>
+
+<p style="text-align:justify;"> Market data provided by <a href="https://finnhub.io/">Finnhub</a>. </p>
+
+
+{% endblock %}
