@@ -365,7 +365,7 @@ def calc_recommendation(suggestion):
         rebalance_sum += suggestion[classname]['USD']
 
     if rebalance_sum == 0:
-        text = 'Your portfolio is balanced.'
+        text = 'No action needed. Your portfolio is balanced.'
     else:
         text = 'Your portfolio needs rebalancing. Go to rebalance page.'
 
