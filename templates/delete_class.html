@@ -8,7 +8,7 @@
 
 <form action="\delete_class" method="POST">
     <div class="form-group">
-        <select name='classname' id="classname">
+        <select name='classname' id="id_classname">
             <option selected>None</option>
             {% for classname in portfolio_class %}
                 <option>{{classname}}</option>
@@ -21,8 +21,8 @@
 </form>
 
 <script>
-    document.querySelector('#classname').onclick = function(){
-        if (document.querySelector('#classname').value === 'None') {
+    document.querySelector('#id_classname').onclick = function(){
+        if (document.querySelector('#id_classname').value === 'None') {
             document.querySelector('#delete').disabled = true;
         } else {
             document.querySelector('#delete').disabled = false;

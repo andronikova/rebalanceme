@@ -387,11 +387,21 @@ def change_class_info():
                 new_classname = request.form.get(tag)
 
                 if new_classname != classname:
+                    # check for spaces in the name
+                    for i in new_classname:
+                        if ord(i) == 32:
+                            return error_page('Please, do not use space in the name!')
+
                     # check: is it new name for class
                     if session.get('portfolio_class') is not None:
                         for name in session.get('portfolio_class'):
                             if name == new_classname:
                                 return error_page('Such class exists! Choose another name.')
+
+                    # change classname in ticker db
+                    ticker_db.query.filter_by(userid=session.get('userid'), classname=classname).update({
+                        'classname': new_classname
+                    })
 
                 # load new fraction from website
                 tag = 'fraction_' + classname
@@ -606,6 +616,11 @@ def add_class():
             for name in session.get('portfolio_class'):
                 if name == classname:
                     return error_page('Such class exists! Choose another name.')
+
+        # check for spaces in the name
+        for i in classname:
+            if ord(i) == 32:
+                return error_page('Please, do not use space in the name!')
 
         # #check, that name consists of letters only
         # if classname.isalpha() == False:

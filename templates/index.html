@@ -6,10 +6,34 @@
 
 {% block main %}
 
-<div class="row mx-md-n5">
-  <div class="col px-md-1">
-      <div class="row mx-md-n5">
+<form action="\" method="POST">
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <span style="float:left;">
+                    {% if main_currency == 'EUR' %}
+                        <input type="submit" class="btn btn-primary mb-2" value="EUR" disabled title="Your current currency.">
+                        <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="USD" title="Press to make USD your current currency.">
+                    {% else %}
+                        <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="EUR" title="Press to make EUR your current currency.">
+                        <input type="submit" class="btn btn-primary mb-2" value="USD" disabled title="Your current currency.">
+                    {% endif %}
+                </span>
+            </div>
+            <div class="col">
+                <div style="float:right;">   last update {{ date }}</div>
+                <br>
+                <input type="submit" name = "refresh" value="Refresh" class="btn btn-primary mb-2" style="float:right;">
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+  <div class="col">
+      <div class="row">
           <div class="p-3 border bg-light">
+
             <h4 style="text-align:left;">
                 Total portfolio value:
                 <span style="float:right;">
@@ -34,42 +58,14 @@
               <br>
               <h5 style="color:red;text-align:left;">{{recommendation}}</h5>
           </div>
-
-          <div class="p-3">
-              <form action="\" method="POST">
-                <div class="container">
-                  <div class="row">
-
-                    <div class="col-md-auto">
-                            {% if main_currency == 'EUR' %}
-                                <input type="submit" class="btn btn-primary mb-2" value="EUR" disabled>
-                                <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="USD" >
-                            {% else %}
-                                <input type="submit" name="change_currency" class="btn btn-primary mb-2" value="EUR">
-                                <input type="submit" class="btn btn-primary mb-2" value="USD" disabled>
-
-                            {% endif %}
-                    </div>
-
-                    <div class="col-md-auto">
-                        <div class="form-group" style="text-align:right;">
-                            last update {{ date }}
-                            <input type="submit" name = "refresh" value="Refresh" class="btn btn-primary mb-2">
-                        </div>
-                    </div>
-
-                  </div>
-                </div>
-            </form>
-          </div>
       </div>
   </div>
 
-  <div class="col px-md-5">
-      <div class="p-3">
+  <div class="col">
+      <!--<div class="p-3">-->
           <!--for diagram-->
           <div id='myDiv'></div>
-      </div>
+      <!--</div>-->
   </div>
 </div>
 
@@ -165,8 +161,9 @@
                 'rgb(0,52,134)'
               ]
             },
-          textinfo: 'label',
-          automargin: true,
+          textinfo: "label",
+          textposition: "inside",
+          <!--automargin: true,-->
           hoverinfo: 'text'
         }];
 
@@ -177,7 +174,7 @@
       margin:
       {
         l: 30,
-        r: 10,
+        r: 30,
         b: 5,
         t: 5,
         pad: 4
