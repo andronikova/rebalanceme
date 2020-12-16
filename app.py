@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_migrate import Migrate
 from werkzeug.security import check_password_hash, generate_password_hash
-import os, secrets
+import os, secrets, time
 
 from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, send_email
 
@@ -37,7 +37,6 @@ with app.app_context():
 @app.route('/', methods=['GET','POST'])
 def index_page():
     if request.method == "GET":
-        # session.clear()
 
         # load_portfolio_info(userid, ticker_db, cash_db, class_db,user_db, True)
         if session.get('userid') is None:
@@ -53,6 +52,18 @@ def index_page():
             if boolres == False:
                 return redirect('/create_portfolio')
 
+        else: # check the date of last loading of prices
+            # find day, month, year
+            year_month_day = ""
+            for i in session.get('datetime'):
+                if i == " ":
+                    break
+                else:
+                    year_month_day += i
+
+            # if prices wasn't load today - refresh them
+            if  year_month_day != time.strftime("%Y-%m-%d"):
+                load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, True)
 
         symbols = {"USD": '$', "EUR": '€'}
         main_currency = session.get('main_currency')

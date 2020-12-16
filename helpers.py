@@ -43,6 +43,7 @@ def apiexchange(base, exchange_currency):
 def error_page(message):
     return render_template("error_page.html",message=message)
 
+
 def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
     # def: main function to load all necessary data from databases, calculate suggestions, save everything in session
     # load info for this user from user_id
@@ -129,7 +130,7 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
 
     # case we reload prices
     if loadprice is True:
-        session['datetime'] = time.strftime("%d-%m-%Y, %H:%M")
+        session['datetime'] = time.strftime("%Y-%m-%d %H:%M")
         #TODO make heroku set right time zone
 
     return True
