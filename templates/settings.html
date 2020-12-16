@@ -15,41 +15,53 @@
 <form action="\settings" method="POST">
 <table class="table">
     <tbody>
-        {% for key in user_settings %}
-            {% if key == 'report_day' %}
-                <tr style="text-align:left;">
-                    <td>{{key}}</td>
-                    <td>
-                        {% for ordered in ['monday', 'tuesday','wednesday','thursday','friday','saturday','sunday']%}
-                            {% for report_day in user_settings[key] %}
-                                {% if ordered == report_day %}
-                                    {{report_day.capitalize()}}<br>
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                    </td>
-                    <td></td>
-                </tr>
+        <tr style="text-align:left;">
+            <td>name</td>
+            <td>{{user_settings['name']}}</td>
+            <td></td>
+        </tr>
 
-            {% else %}
-                <tr style="text-align:left;">
-                    <td >{{key}}</td>
-                    <td>{{user_settings[key]}}</td>
-                    {% if key=='email' %}
-                        <td>
+        <tr style="text-align:left;">
+            <td>e-mail</td>
+            <td>{{user_settings['email']}}</td>
+            <td>
+                <div class="form-group">
+                    <input id="send" name="send" type="submit" value="Send test email" class="btn btn-primary mb-2">
+                </div>
+            </td>
+        </tr>
 
-                            <div class="form-group">
-                                <input id="send" name="send" type="submit" value="Send test email" class="btn btn-primary mb-2">
-                            </div>
+        <tr style="text-align:left;">
+            <td>main currency</td>
+            <td>{{user_settings['currency']}}</td>
+            <td></td>
+        </tr>
 
-                        </td>
-                        {% else %}
-                            <td></td>
-                    {% endif %}
-                </tr>
-            {% endif %}
+        <tr style="text-align:left;">
+            <td>minimal operation sum
+                <a href="#" data-toggle="tooltip" title="Minimum value for any trade. Allows to minimize trade's number and rebalance rarely. Choose it by taking into account brokerage commission.">⍰</a></td>
+            </td>
+            <td>{{user_settings['minimal_operation_sum']}}</td>
+            <td></td>
+        </tr>
 
-        {% endfor %}
+        <tr style="text-align:left;">
+            <td>report day
+                <a href="#" data-toggle="tooltip" title="Report day, when you will recieve email with rebalance suggestion. If you don't want this email, just don't choose any day.">⍰</a></td>
+            </td>
+            <td>
+                {% for ordered in ['monday', 'tuesday','wednesday','thursday','friday','saturday','sunday']%}
+                    {% for report_day in user_settings['report_day'] %}
+                        {% if ordered == report_day %}
+                            {{report_day.capitalize()}}<br>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </td>
+            <td></td>
+        </tr>
+
+
     </tbody>
 </table>
 </form>
