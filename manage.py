@@ -59,7 +59,7 @@ def scheduled_job():
         with app.app_context():
             mail = Mail()
             mail.init_app(app)
-            topic = 'Test report'
+            topic = 'REBALANCEme report'
             message = Message(topic, recipients=[user_email])
 
             # create html page for message
