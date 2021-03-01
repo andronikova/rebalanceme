@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_migrate import Migrate
 from werkzeug.security import check_password_hash, generate_password_hash
+from pytz import timezone
+from datetime import datetime
+
 import os, secrets, time
 
 from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, send_email
@@ -69,6 +72,12 @@ def index_page():
         main_currency = session.get('main_currency')
 
         chart_data = prepare_data_for_chart()
+
+        defolt_time = session.get('datetime')
+        datetime_obj = datetime.strptime(defolt_time, "%Y-%m-%d %H:%M")
+        my_time = datetime_obj.replace(tzinfo=timezone('Europe/Vienna'))
+
+        print('!!!! machine time is {} timezone in UTC is {}'.format(session.get('datetime'), my_time ))
 
         # for user WITH PORTFOLIO
         return render_template('index.html',
