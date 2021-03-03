@@ -21,7 +21,10 @@
                 </span>
             </div>
             <div class="col">
-                <div style="float:right;">last update: {{ moment(date).calendar() }}</div>
+                <div style="float:right;">last update:
+                    {{moment(date).fromNow()}}
+
+                </div>
 
                 <br>
                 <input type="submit" name = "refresh" value="Refresh" class="btn btn-primary mb-2" style="float:right;">
