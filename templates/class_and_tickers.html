@@ -5,6 +5,44 @@
 {% endblock %}
 
 {% block main %}
+<h3>Classes info
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_class_info') }}';">Change</button>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_class') }}';">Add class</button>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'delete_class') }}';">Delete class</button>
+</h3>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>class</td>
+            <td>desired fraction</td>
+            <td>fraction range
+            <a href="#" data-toggle="tooltip" title="Acceptable deviation from desired fraction. If the real fraction differs from the desired one by less than this number - rebalancing will not be offered.">⍰</a>
+            </td>
+            <td>active ticker
+            <a href="#" data-toggle="tooltip" title="This ticker will be used to rebalance the class.">⍰</a>
+            </td>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for classname in portfolio_class%}
+            <tr class="table-active">
+                <td> {{classname}} </td>
+                <td> {{portfolio_class[classname]['fraction']}} % </td>
+
+
+                <td> {{portfolio_class[classname]['diapason']}} % </td>
+                <td> {{portfolio_class[classname]['activeticker']}}  </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br><br>
+
 <h3>Tickers info
     <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_ticker_info') }}';">Change ticker info</button>
     <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_ticker') }}';">Add ticker</button>
@@ -34,42 +72,8 @@
     </tbody>
 </table>
 
-<br><br>
-<h3>Classes info
-    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'change_class_info') }}';">Change</button>
-    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'add_class') }}';">Add class</button>
-    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for( 'delete_class') }}';">Delete class</button>
-</h3>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <td>class</td>
-            <td>desired fraction</td>
-            <td>fraction diapason
-            <a href="#" data-toggle="tooltip" title="Acceptable deviation from desired fraction. If the real fraction differs from the desired one by less than this number - rebalancing will not be offered.">⍰</a>
-            </td>
-            <td>active ticker
-            <a href="#" data-toggle="tooltip" title="This ticker will be used to rebalance the class.">⍰</a>
-            </td>
-
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for classname in portfolio_class%}
-            <tr class="table-active">
-                <td> {{classname}} </td>
-                <td> {{portfolio_class[classname]['fraction']}} % </td>
-
-
-                <td> {{portfolio_class[classname]['diapason']}} % </td>
-                <td> {{portfolio_class[classname]['activeticker']}}  </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
 <script>
     $(document).ready(function(){

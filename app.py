@@ -36,7 +36,7 @@ from models import db, cash_db, ticker_db, class_db, user_db, week_db
 # database settings and creation of tables
 with app.app_context():
     db.init_app(app)
-    migrate = Migrate(app,db)
+    migrate = Migrate(app,db,compare_type=True)
 
 
 @app.route('/', methods=['GET','POST'])
@@ -315,32 +315,35 @@ def cash():
                            )
 
     if request.method == "POST":
-        if request.form.get("cashvalue") is not None:
-            # for test account - don't do anything
-            if session.get('userid') == test_account_userid: return redirect("/cash")
+        # for test account - don't do anything
+        if session.get('userid') == test_account_userid: return redirect("/cash")
 
-            print('get new cash values from user')
-            # value from cash page
-            cash = float(request.form.get('cashvalue'))
-            currency = request.form.get('currency')
+        if request.form.get('cashvalue') == "":
+            return error_page('Input window was empty.')
 
-            # value from cash in session
-            oldcash = session.get('portfolio_cash')
-            print(f"old cash is {oldcash}")
-            newcash = oldcash[currency] + cash
+        print('get new cash values from user')
 
-            # in case of decreasing of cash - check do we have such money
-            if newcash < 0:
-                return error_page("You don't have enough cash.")
+        # value from cash page
+        cash = float(request.form.get('cashvalue'))
+        currency = request.form.get('currency')
 
-            # change cash db
-            cash_db.query.filter_by(userid=session.get('userid')).update({currency:newcash})
-            db.session.commit()
+        # value from cash in session
+        oldcash = session.get('portfolio_cash')
+        print(f"old cash is {oldcash}")
+        newcash = oldcash[currency] + cash
 
-            # reload portfolio
-            load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
+        # in case of decreasing of cash - check do we have such money
+        if newcash < 0:
+            return error_page("You don't have enough cash.")
 
-            return redirect('/cash')
+        # change cash db
+        cash_db.query.filter_by(userid=session.get('userid')).update({currency:newcash})
+        db.session.commit()
+
+        # reload portfolio
+        load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
+
+        return redirect('/cash')
 
 
 @app.route('/class_and_tickers', methods=['GET','POST'])
