@@ -36,7 +36,7 @@ from models import db, cash_db, ticker_db, class_db, user_db, week_db
 # database settings and creation of tables
 with app.app_context():
     db.init_app(app)
-    migrate = Migrate(app,db,compare_type=True)
+    migrate = Migrate(app,db)
 
 
 @app.route('/', methods=['GET','POST'])

@@ -15,7 +15,7 @@
             {% endfor %}
         </select>
 
-        <input id="delete" name="delete" type="submit" disabled value="Delete">
+        <input id="id_delete" name="delete" type="submit" disabled value="Delete">
     </div>
 
 </form>
@@ -26,9 +26,9 @@
 <script>
     document.querySelector('#id_classname').onclick = function(){
         if (document.querySelector('#id_classname').value === 'None') {
-            document.querySelector('#delete').disabled = true;
+            document.querySelector('#id_delete').disabled = true;
         } else {
-            document.querySelector('#delete').disabled = false;
+            document.querySelector('#id_delete').disabled = false;
         }
     }
 </script>

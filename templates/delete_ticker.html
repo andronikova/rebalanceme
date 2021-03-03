@@ -20,7 +20,7 @@ You can change number of ticker in rebalance page.
             {% endfor %}
         </select>
 
-        <input id="deleteticker" name="deleteticker" type="submit" disabled value="Delete">
+        <input id="id_deleteticker" name="deleteticker" type="submit" disabled value="Delete">
     </div>
 
 </form>
@@ -30,9 +30,9 @@ You can change number of ticker in rebalance page.
 <script>
     document.querySelector('#id_ticker').onclick = function(){
         if (document.querySelector('#id_ticker').value === 'None') {
-            document.querySelector('#deleteticker').disabled = true;
+            document.querySelector('#id_deleteticker').disabled = true;
         } else {
-            document.querySelector('#deleteticker').disabled = false;
+            document.querySelector('#id_deleteticker').disabled = false;
         }
     }
 </script>
