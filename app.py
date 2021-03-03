@@ -1,14 +1,16 @@
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_migrate import Migrate
 from werkzeug.security import check_password_hash, generate_password_hash
-from pytz import timezone
+import pytz
 from datetime import datetime
+from flask_moment import Moment
 
 import os, secrets, time
 
 from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, send_email
 
 app = Flask(__name__)
+moment = Moment(app)
 
 # should be = 1, but is you want make some change in user test account - put some random number
 test_account_userid = 1
@@ -73,11 +75,9 @@ def index_page():
 
         chart_data = prepare_data_for_chart()
 
-        defolt_time = session.get('datetime')
-        datetime_obj = datetime.strptime(defolt_time, "%Y-%m-%d %H:%M")
-        my_time = datetime_obj.replace(tzinfo=timezone('Europe/Vienna'))
-
-        print('!!!! machine time is {} timezone in UTC is {}'.format(session.get('datetime'), my_time ))
+        # to show time in right time zone. By default Heroku uses UTC time
+        # datetime_obj = datetime.strptime(session.get('datetime'), "%Y-%m-%d %H:%M")
+        # timezone = pytz.timezone('US/Alaska')
 
         # for user WITH PORTFOLIO
         return render_template('index.html',
@@ -87,7 +87,8 @@ def index_page():
                                total=session.get('total'),
                                total_cash=session.get('total_cash'),
                                suggestion=session.get('suggestion'),
-                               date=session.get('datetime'),
+                               # date=datetime_obj.astimezone(timezone),
+                               date=datetime.strptime(session.get('datetime'), "%Y-%m-%d %H:%M"),
                                symbol=symbols,
                                main_currency=main_currency,
                                chart_data=chart_data,
