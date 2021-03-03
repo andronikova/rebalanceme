@@ -330,7 +330,7 @@ def cash():
         # value from cash in session
         oldcash = session.get('portfolio_cash')
         print(f"old cash is {oldcash}")
-        newcash = oldcash[currency] + cash
+        newcash = 100*(oldcash[currency] + cash)
 
         # in case of decreasing of cash - check do we have such money
         if newcash < 0:

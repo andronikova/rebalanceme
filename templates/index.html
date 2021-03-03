@@ -125,11 +125,12 @@
     <table style="display:none; background-color:#EEEEEE;" class=" table togg">
 
         <thead>
-            <!--<tr style="display:none; line-height:2px; background-color:#FFFFFF;" class="togg">-->
-                <!--<td>ticker</td>-->
-                <!--<td>number </td>-->
-                <!--<td>total</td>-->
-            <!--</tr>-->
+            <tr style="display:none; line-height:2px; background-color:#FFFFFF;" class="togg">
+                <td>ticker</td>
+                <td>total </td>
+                <td>number</td>
+                <td>price</td>
+            </tr>
         </thead>
         <tbody>
             {% for key in portfolio_ticker %}
@@ -137,8 +138,9 @@
 
                     <tr>
                         <td>{{key}}</td>
-                        <td>{{portfolio_ticker[key]['number']}} x {{"{:,.2f}".format(portfolio_ticker[key]['price'])}}{{ symbol[portfolio_ticker[key]['currency']] }}</td>
                         <td>{{ "{:,.2f}".format(portfolio_ticker[key]['fullPrice']) }} {{ symbol[portfolio_ticker[key]['currency']] }}</td>
+                        <td>{{portfolio_ticker[key]['number']}} </td>
+                        <td>{{"{:,.2f}".format(portfolio_ticker[key]['price'])}} {{ symbol[portfolio_ticker[key]['currency']] }}</td>
                     </tr>
                 {% endif %}
             {% endfor %}

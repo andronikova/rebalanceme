@@ -227,7 +227,7 @@ def load_cash_info(userid, cash_db):
 
     for key in portfolio_cash:
         # write in dict value for the currency
-        portfolio_cash[key] = datas[0].__dict__[key]
+        portfolio_cash[key] = datas[0].__dict__[key] / 100
 
     return portfolio_cash
 

@@ -27,7 +27,7 @@ class class_db(db.Model):
 
 class cash_db(db.Model):
     userid = db.Column(db.Integer(),primary_key=True)
-    RUB = db.Column(db.Integer(10,2))
+    RUB = db.Column(db.Integer())
     EUR = db.Column(db.Integer())
     USD = db.Column(db.Integer())
 
