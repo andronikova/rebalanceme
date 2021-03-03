@@ -39,7 +39,7 @@
           <div class="p-3 border bg-light">
 
             <h4 style="text-align:left;">
-                Total portfolio value:
+                Total:
                 <span style="float:right;">
                     {{ "{:,.2f}".format(total[main_currency])}} {{symbol[main_currency]}}
                 </span>
@@ -77,22 +77,25 @@
     <thead>
     <tr>
         <td><button id="toggle" title="Press to see all tickers.">▾</button> class</td>
+        <td>value</td>
         <td>real (desired) fraction, %</td>
         <td>rebalance suggestion</td>
         <td>rebalance value</td>
     </tr>
+</table>
 
-    <tbody>
-        <tr style="display:none; line-height:5px; background-color:#EEEEEE;" class="togg">
-            <td>ticker</td>
-            <td>number</td>
-            <td>price</td>
-            <td>total</td>
-        </tr>
+
 
     {% for classname in portfolio_class%}
+    <table class="table">
+        <tbody>
         <tr class="table-active" style="background-color:#c9bac8;">
-            <td>{{classname}} </td>
+            <td>{{classname}}
+                <!--<a href="#" data-toggle="tooltip"  class="popup" data-toggle="modal" data-target="#myModal">+</a>-->
+            </td>
+
+
+            <td>{{ "{:,.2f}".format(portfolio_class[classname][main_currency])}} {{symbol[main_currency]}}</td>
             <td> {{portfolio_class[classname]['realfraction']}} ( {{portfolio_class[classname]['fraction']}} ) </td>
             <td>
                 {% if suggestion[classname]['number'] == None%}
@@ -116,24 +119,33 @@
             </td>
             <td> {{ "{:,.2f}".format(suggestion[classname][main_currency])}} {{symbol[main_currency]}} </td>
         </tr>
+        </tbody>
+    </table>
 
-        {% for key in portfolio_ticker %}
-            {% if portfolio_ticker[key]['classname'] == classname%}
+    <table style="display:none; background-color:#EEEEEE;" class=" table togg">
 
-                <tr style="display:none; background-color:#EEEEEE;" class="togg">
+        <thead>
+            <!--<tr style="display:none; line-height:2px; background-color:#FFFFFF;" class="togg">-->
+                <!--<td>ticker</td>-->
+                <!--<td>number </td>-->
+                <!--<td>total</td>-->
+            <!--</tr>-->
+        </thead>
+        <tbody>
+            {% for key in portfolio_ticker %}
+                {% if portfolio_ticker[key]['classname'] == classname%}
 
-                    <td>{{key}}</td>
-                    <td>{{portfolio_ticker[key]['number']}}</td>
-                    <td>{{"{:,.2f}".format(portfolio_ticker[key]['price'])}}{{ symbol[portfolio_ticker[key]['currency']] }}</td>
-                    <td>{{ "{:,.2f}".format(portfolio_ticker[key]['fullPrice']) }} {{ symbol[portfolio_ticker[key]['currency']] }}</td>
+                    <tr>
+                        <td>{{key}}</td>
+                        <td>{{portfolio_ticker[key]['number']}} x {{"{:,.2f}".format(portfolio_ticker[key]['price'])}}{{ symbol[portfolio_ticker[key]['currency']] }}</td>
+                        <td>{{ "{:,.2f}".format(portfolio_ticker[key]['fullPrice']) }} {{ symbol[portfolio_ticker[key]['currency']] }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 
-                </tr>
-            {% endif %}
-        {% endfor %}
     {% endfor %}
-
-    </tbody>
-</table>
 
 
 <br>
@@ -208,12 +220,9 @@
     });
 
 
-    <!--timezone from user-->
-
-        var timezone = jstz.determine();
-
-        document.querySelector('#timezone').innerHTML = "Timezone:" + timezone.name() + timezone.offset();
-
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
 
 </script>
 

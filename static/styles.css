@@ -51,3 +51,10 @@ main img
 {
     background-color: #A2AFBD !important;
 }
+
+
+table
+{
+    table-layout: fixed;
+    width: 100px;
+}
