@@ -21,12 +21,7 @@
                 </span>
             </div>
             <div class="col">
-                <div style="float:right;">   last update {{ date }}</div>
-                <br>
-                <div>IN yout timezone: {{ moment(date).calendar() }} </div>
-                <div>The current date and time is: {{ moment().format('MMMM Do YYYY, h:mm:ss a') }}.</div>
-
-
+                <div style="float:right;">last update: {{ moment(date).calendar() }}</div>
 
                 <br>
                 <input type="submit" name = "refresh" value="Refresh" class="btn btn-primary mb-2" style="float:right;">

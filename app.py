@@ -75,10 +75,6 @@ def index_page():
 
         chart_data = prepare_data_for_chart()
 
-        # to show time in right time zone. By default Heroku uses UTC time
-        # datetime_obj = datetime.strptime(session.get('datetime'), "%Y-%m-%d %H:%M")
-        # timezone = pytz.timezone('US/Alaska')
-
         # for user WITH PORTFOLIO
         return render_template('index.html',
                                portfolio_ticker=session.get('portfolio_ticker'),
@@ -87,7 +83,6 @@ def index_page():
                                total=session.get('total'),
                                total_cash=session.get('total_cash'),
                                suggestion=session.get('suggestion'),
-                               # date=datetime_obj.astimezone(timezone),
                                date=datetime.strptime(session.get('datetime'), "%Y-%m-%d %H:%M"),
                                symbol=symbols,
                                main_currency=main_currency,
@@ -161,8 +156,7 @@ def rebalance():
                                suggestion=session.get('suggestion'),
                                total=total,
                                total_cash=session.get('total_cash'),
-                               date=session.get('datetime'),
-                               classname_list=classname_list,
+                               date=datetime.strptime(session.get('datetime'), "%Y-%m-%d %H:%M"),                               classname_list=classname_list,
                                main_currency=session.get('main_currency'),
                                exchange=session.get('exchange'),
                                cash_fraction=cash_fraction,
