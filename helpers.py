@@ -190,7 +190,7 @@ def load_ticker_info(userid, ticker_db, loadprice):
                         'price': None,
                         'fullPrice': None
                     })
-                error_page('Could not load price')
+                error_page('ERROR. Could not load price')
 
     # load old prices from session for every tck, check the existence of such tck in session
     if loadprice == False:

@@ -9,13 +9,13 @@
 <form action="\delete_class" method="POST">
     <div class="form-group">
         <select name='classname' id="id_classname">
-            <option selected>None</option>
-            {% for classname in portfolio_class %}
-                <option>{{classname}}</option>
+            <option selected></option>
+            {% for name_of_class in portfolio_class %}
+                <option>{{name_of_class}}</option>
             {% endfor %}
         </select>
 
-        <input id="id_delete" name="delete" type="submit" disabled value="Delete">
+        <input id="id_delete" name="delete" type="submit" value="Delete">
     </div>
 
 </form>

@@ -585,6 +585,10 @@ def delete_class():
 
         classname = request.form.get("classname")
 
+        # check that user select real class
+        if classname == "":
+            return error_page("ERROR!\nYou should choose class for deletion.")
+
         # change classname to None for all tickers in this class
         portfolio_ticker = session.get('portfolio_ticker')
         not_string = ""
@@ -603,7 +607,7 @@ def delete_class():
         load_portfolio_info(session.get('userid'), ticker_db, cash_db, class_db, user_db, False)
 
         if len(not_string) >= 1:
-            flash('Class deletion leads to None class in tickers:' + not_string)
+            return error_page('Class has been deleted.\n Class deletion resulted in None class for next tickers:' + not_string)
         return redirect('/class_and_tickers')
 
 
@@ -622,12 +626,12 @@ def add_class():
         if session.get('portfolio_class') is not None:
             for name in session.get('portfolio_class'):
                 if name == classname:
-                    return error_page('Such class exists! Choose another name.')
+                    return error_page('ERROR.\nSuch class exists! Choose another name.')
 
         # check for spaces in the name
         for i in classname:
             if ord(i) == 32:
-                return error_page('Please, do not use space in the name!')
+                return error_page('ERROR.\nPlease, do not use space in the name!')
 
         # #check, that name consists of letters only
         # if classname.isalpha() == False:
@@ -683,7 +687,7 @@ def change_password():
 
         # check old password
         if check_password_hash(datas[0].hash, request.form.get("old")) is False:
-            return error_page('Your old password is not correct.')
+            return error_page('ERROR.\nYour old password is not correct.')
 
         # save new hashed password
         user_db.query.filter_by(userid=userid).update(
