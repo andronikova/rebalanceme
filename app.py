@@ -554,6 +554,10 @@ def delete_ticker():
         # load ticker name
         ticker = request.form.get("ticker")
 
+        #  check for empty input field
+        if ticker == "":
+            return error_page("ERROR!\nYou should choose ticker for deletion.")
+
         # check if it is active ticker for some class
         portfolio_class = session.get('portfolio_class')
 

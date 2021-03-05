@@ -10,8 +10,8 @@
 
 <form action="\delete_ticker" method="POST">
     <div class="form-group">
-        <select name='ticker' id="id_ticker">
-            <option selected>None</option>
+        <select name='ticker'>
+            <option selected></option>
             {% for tck in portfolio_ticker %}
                 {% if portfolio_ticker[tck]['number'] == 0 %}
                     <option>{{tck}}</option>
@@ -19,22 +19,13 @@
             {% endfor %}
         </select>
 
-        <input id="id_deleteticker" type="submit" value="Delete">
+        <input id="id_deleteticker" name="delete" type="submit" value="Delete">
     </div>
 
 </form>
 
 <br><br><br><br><br><br><br><br>
 
-<script>
-    document.querySelector('#id_ticker').onclick = function(){
-        if (document.querySelector('#id_ticker').value === 'None') {
-            document.querySelector('#id_deleteticker').disabled = true;
-        } else {
-            document.querySelector('#id_deleteticker').disabled = false;
-        }
-    }
-</script>
 
 
 {% endblock %}
