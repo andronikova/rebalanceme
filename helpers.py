@@ -411,11 +411,11 @@ def prepare_data_for_chart():
 
     value_list = [cash_percent]
     name_list = ["cash"]
-    hover_list = [str(cash_percent)  + " %"]
+    hover_list = ['cash, ' + str(cash_percent)  + " %"]
     for classname in portfolio_class:
         value_list.append(portfolio_class[classname]['realfraction'])
         name_list.append(classname)
-        hover_list.append(str(portfolio_class[classname]['realfraction']) + " %")
+        hover_list.append( classname + ', ' + str(portfolio_class[classname]['realfraction']) + " %")
 
     chart_data=({'value':value_list, 'names': name_list, 'hover':hover_list})
 

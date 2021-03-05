@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block main %}
-Warning: you can delete only ticker with zero number.
-You can change number of ticker in rebalance page.
+<p>Warning: you can delete only ticker with zero number.</p>
+<p>You can change number of ticker in rebalance page.</p>
 
 <form action="\delete_ticker" method="POST">
     <div class="form-group">
@@ -16,11 +16,10 @@ You can change number of ticker in rebalance page.
                 {% if portfolio_ticker[tck]['number'] == 0 %}
                     <option>{{tck}}</option>
                 {% endif %}
-
             {% endfor %}
         </select>
 
-        <input id="id_deleteticker" name="deleteticker" type="submit" disabled value="Delete">
+        <input id="id_deleteticker" type="submit" disabled value="Delete">
     </div>
 
 </form>

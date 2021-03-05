@@ -78,7 +78,7 @@
     <tr>
         <td><button id="toggle" title="Press to see all tickers.">▾</button> class</td>
         <td>total</td>
-        <td>real (desired) fraction, %</td>
+        <td>real/desired fraction, %</td>
         <td>rebalance suggestion</td>
         <td>rebalance value</td>
     </tr>
@@ -90,13 +90,10 @@
     <table class="table">
         <tbody>
         <tr class="table-active" style="background-color:#c9bac8;">
-            <td>{{classname}}
-                <!--<a href="#" data-toggle="tooltip"  class="popup" data-toggle="modal" data-target="#myModal">+</a>-->
-            </td>
-
+            <td>{{classname}}</td>
 
             <td>{{ "{:,.2f}".format(portfolio_class[classname][main_currency])}} {{symbol[main_currency]}}</td>
-            <td> {{portfolio_class[classname]['realfraction']}} ( {{portfolio_class[classname]['fraction']}} ) </td>
+            <td> {{portfolio_class[classname]['realfraction']}}/{{portfolio_class[classname]['fraction']}}</td>
             <td>
                 {% if suggestion[classname]['number'] == None%}
                         <h6>None</h6>
@@ -170,30 +167,55 @@
           type: 'pie',
           'marker': {
               'colors': [
+              <!--grey-->
+                'rgb(199,197,205)',
+
+                <!--blue-->
+                'rgb(0,52,134)',
+
+                <!--beige-->
+                'rgb((234,225,223))',
+
+                <!--dirty purple-->
+                'rgb(201,186,200)',
+
+                <!--light grey-->
+                'rgb(206, 214, 217)',
+
+                <!--blue-grey-->
+                'rgb(141,144,166)',
+
+                <!--blue-->
                 'rgb(90,118,126)',
-                'rgb(234,225,223)',
-                'rgb(160,134,159)',
-                'rgb(212,207,203)',
-                'rgb(238,238,238)',
-                'rgb(0,52,134)'
+
+                <!--dirty blue-->
+                'rgb(90,118,126)'
               ]
             },
-          textinfo: "label",
-          textposition: "inside",
-          <!--automargin: true,-->
+          textinfo: "none",
+          textposition: "outside",
+          automargin: true,
           hoverinfo: 'text'
         }];
 
    var layout = {
-      showlegend: false,
-      height: 230,
-      width: 300,
+      showlegend: true,
+
+      legend:
+       {
+       orientation: 'h',
+        x: 1.1,
+        y: 0.8,
+        },
+
+      width: 400,
+      height: 200,
       margin:
       {
-        l: 30,
-        r: 30,
-        b: 5,
-        t: 5,
+        l: 20,
+        r: 10,
+        b: 10,
+        t: 10,
         pad: 4
       },
       font: {
