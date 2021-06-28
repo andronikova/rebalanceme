@@ -24,6 +24,7 @@ def scheduled_job():
     print(f"from week_db loaded : {datas}")
 
     if len(datas) == 0:
+        print('there is no user who asks report in this day')
         # send message to me
         with app.app_context():
             mail = Mail()
@@ -44,12 +45,13 @@ def scheduled_job():
     for row in datas:
         print(f"\n---------\nuserid is : {row.userid}")
         userid = row.userid
-        user_name += row.name + ', '
 
         # Load user unfo
         user_datas = user_db.query.filter_by(userid=userid).all()
 
         user_email = user_datas[0].email
+        user_name = user_name + user_datas[0].name + ', '
+
         main_currency = user_datas[0].currency
         min_rebalance_sum = user_datas[0].minsum
 
@@ -96,7 +98,7 @@ def scheduled_job():
         mail.init_app(app)
         topic = 'REBALANCEme report'
         message = Message(topic, recipients=['andronikova.daria@gmail.com'])
-        message.body = 'Heroku made scheduled job, rebalance report has been send to: ' + user_name
+        message.body = 'Heroku made scheduled job, rebalance report has been send to: ' + user_name[:-2]
 
         mail.send(message)
 
