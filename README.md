@@ -1,6 +1,6 @@
 REBALANCEme is a site made to help you rationally navigate through the storming environment of the securities market.
 
-It is made for the followers of the passive investment philosophy, or "buy-and-hold" approach. Such investors buy broadly diversified funds of stocks or bonds and regularly rebalance them (sell one of them and buy another one) to achieve a constant ratio between them.
+It is made for the followers of [the passive investment philosophy](https://en.wikipedia.org/wiki/Passive_management), or "buy-and-hold" approach. Such investors buy broadly diversified funds of stocks or bonds and regularly rebalance them (sell one of them and buy another one) to achieve a constant ratio between them.
 
 ## How does it work?
 You start with creating several asset classes, which you are going to invest into, e.g. stocks and bonds. For each class you assign one or more funds (tickers), you'd like to invest into or you already have. You can also include individual stocks here, but this is not recommended by academic studies. Finally you type in the desired ratio between asset classes and the acceptable deviation from that.
@@ -16,4 +16,4 @@ After you set up all the parameters, you will regularly get an email-report with
 Have fun and stay the course!
 
 
-Market data provided by (marketstack.com)[marketstack.com].
+Market data provided by [marketstack](marketstack.com).
