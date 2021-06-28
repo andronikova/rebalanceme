@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="09a832da-bc27-4266-ae82-32c9efa2a225" name="Default Changelist" comment="" />
+    <list default="true" id="09a832da-bc27-4266-ae82-32c9efa2a225" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/venv_portfolio/README.md" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,6 +160,7 @@
         <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/helpers.py" />
         <option value="$PROJECT_DIR$/templates/about.html" />
+        <option value="$PROJECT_DIR$/venv_portfolio/README.md" />
       </list>
     </option>
   </component>
@@ -169,10 +172,10 @@
     <option name="CUSTOM_FILTER" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="271" />
-    <option name="y" value="-1080" />
-    <option name="width" value="1299" />
-    <option name="height" value="1080" />
+    <option name="x" value="253" />
+    <option name="y" value="-969" />
+    <option name="width" value="866" />
+    <option name="height" value="704" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -193,7 +196,22 @@
             <path>
               <item name="rebalanceme" type="b2602c69:ProjectViewProjectNode" />
               <item name="rebalanceme" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="venv_portfolio" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rebalanceme" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="rebalanceme" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 (rebalanceme) &gt;" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="rebalanceme" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 (rebalanceme) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="venv_portfolio" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -208,11 +226,11 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\DARIA\py\rebalanceme\templates\trash" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\DARIA\py\portfolio\templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\DARIA\py\rebalanceme\templates\trash" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -368,10 +386,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-1088" width="1936" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info x="515" y="-933" width="672" height="554" id="DB Browser" order="0" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
       <window_info id="Favorites" order="1" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
-      <window_info content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="2" sideWeight="0.57988167" visible="true" weight="0.1076759" />
+      <window_info active="true" content_ui="combo" x="1163" y="-533" width="232" height="360" id="Project" order="2" sideWeight="0.57988167" visible="true" weight="0.1076759" />
       <window_info anchor="bottom" id="DB Execution Console" order="0" weight="0.42992425" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.32795697" />
@@ -384,11 +403,11 @@
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5009914" side_tool="true" weight="0.30510753" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3276515" />
       <window_info anchor="bottom" id="GitHub Pull Requests" order="11" weight="0.3293011" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="12" sideWeight="0.4990086" visible="true" weight="0.38813737" />
+      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.4990086" visible="true" weight="0.38813737" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="24" y="409" width="241" height="248" id="Structure" order="3" sideWeight="0.42011833" visible="true" weight="0.08955224" />
+      <window_info anchor="right" x="24" y="409" width="241" height="248" id="Structure" order="3" sideWeight="0.42011833" weight="0.08955224" />
     </layout>
     <layout-to-restore>
       <window_info x="515" y="-933" width="672" height="554" id="DB Browser" order="0" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
@@ -424,7 +443,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="db://47377ffd-60ee-4126-b90f-b6db67200e78/consoles/Connection 1" />
     <entry file="db://cdc61ee0-9779-4de7-81df-f2348813b5af/objects/schemas/main/tables/portfolio" />
     <entry file="file://$PROJECT_DIR$/sql_query.txt" />
     <entry file="file://$PROJECT_DIR$/templates/trash/history.html" />
@@ -740,6 +758,16 @@
           <folding>
             <element signature="e#0#75#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv_portfolio/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="93">
+            <caret line="18" column="57" selection-start-line="18" selection-start-column="57" selection-end-line="18" selection-end-column="57" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
