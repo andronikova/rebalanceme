@@ -16,4 +16,4 @@ After you set up all the parameters, you will regularly get an email-report with
 Have fun and stay the course!
 
 
-Market data provided by (marketstack.com)[marketstack.com].
+Market data provided by [marketstack.com](marketstack.com).
