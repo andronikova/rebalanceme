@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09a832da-bc27-4266-ae82-32c9efa2a225" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/venv_portfolio/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="55" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="55" />
+            <state relative-caret-position="268">
+              <caret line="475" column="4" selection-start-line="475" selection-start-column="4" selection-end-line="475" selection-end-column="4" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
               </folding>
@@ -28,9 +29,21 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/manage.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="172">
+              <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/about.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
+            <state relative-caret-position="387">
               <caret line="46" column="89" selection-start-line="46" selection-start-column="89" selection-end-line="46" selection-end-column="89" />
               <folding>
                 <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
@@ -44,6 +57,18 @@
                 <element signature="n#style#0;n#span#0;n#p#5;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#p#7;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="323">
+                <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -146,7 +171,6 @@
         <option value="$PROJECT_DIR$/templates/add_class.html" />
         <option value="$PROJECT_DIR$/templates/change_password.html" />
         <option value="$PROJECT_DIR$/templates/settings.html" />
-        <option value="$PROJECT_DIR$/manage.py" />
         <option value="$PROJECT_DIR$/templates/layout.html" />
         <option value="$PROJECT_DIR$/templates/rebalance.html" />
         <option value="$PROJECT_DIR$/static/styles.css" />
@@ -161,6 +185,7 @@
         <option value="$PROJECT_DIR$/helpers.py" />
         <option value="$PROJECT_DIR$/templates/about.html" />
         <option value="$PROJECT_DIR$/venv_portfolio/README.md" />
+        <option value="$PROJECT_DIR$/manage.py" />
       </list>
     </option>
   </component>
@@ -202,17 +227,6 @@
               <item name="rebalanceme" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
-            <path>
-              <item name="rebalanceme" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 (rebalanceme) &gt;" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="rebalanceme" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 (rebalanceme) &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="venv_portfolio" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -230,6 +244,7 @@
       <recent name="C:\DARIA\py\portfolio\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\DARIA\py\rebalanceme" />
       <recent name="C:\DARIA\py\rebalanceme\templates\trash" />
     </key>
   </component>
@@ -407,7 +422,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="24" y="409" width="241" height="248" id="Structure" order="3" sideWeight="0.42011833" weight="0.08955224" />
+      <window_info anchor="right" x="24" y="409" width="241" height="248" id="Structure" order="3" sideWeight="0.42011833" visible="true" weight="0.08955224" />
     </layout>
     <layout-to-restore>
       <window_info x="515" y="-933" width="672" height="554" id="DB Browser" order="0" show_stripe_button="false" sideWeight="0.5804749" side_tool="true" weight="0.16372094" />
@@ -443,7 +458,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="db://cdc61ee0-9779-4de7-81df-f2348813b5af/objects/schemas/main/tables/portfolio" />
     <entry file="file://$PROJECT_DIR$/sql_query.txt" />
     <entry file="file://$PROJECT_DIR$/templates/trash/history.html" />
     <entry file="file://$PROJECT_DIR$/finance.db" />
@@ -618,16 +632,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/manage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="61" column="40" selection-start-line="61" selection-start-column="40" selection-end-line="61" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/styles.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="419">
@@ -741,16 +745,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="55" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8449">
@@ -773,7 +767,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/about.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
+        <state relative-caret-position="387">
           <caret line="46" column="89" selection-start-line="46" selection-start-column="89" selection-end-line="46" selection-end-column="89" />
           <folding>
             <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
@@ -786,6 +780,36 @@
             <element signature="n#style#0;n#p#5;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#p#5;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#7;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="323">
+            <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="475" column="4" selection-start-line="475" selection-start-column="4" selection-end-line="475" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/manage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>

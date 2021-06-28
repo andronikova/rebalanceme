@@ -24,14 +24,28 @@ def scheduled_job():
     print(f"from week_db loaded : {datas}")
 
     if len(datas) == 0:
+        # send message to me
+        with app.app_context():
+            mail = Mail()
+            mail.init_app(app)
+            topic = 'REBALANCEme report'
+            message = Message(topic, recipients=['andronikova.daria@gmail.com'])
+            message.body = 'Heroku made scheduled job, there is no report for today.'
+
+            mail.send(message)
+
         return False
 
     # load exchange info
     exchange = load_exchange_info()
 
+    # save user name
+    user_name = ""
     for row in datas:
         print(f"\n---------\nuserid is : {row.userid}")
         userid = row.userid
+        user_name += row.name + ', '
+
         # Load user unfo
         user_datas = user_db.query.filter_by(userid=userid).all()
 
@@ -75,6 +89,16 @@ def scheduled_job():
                                            recommendation=recommendation)
 
             mail.send(message)
+
+    # send report mail to me
+    with app.app_context():
+        mail = Mail()
+        mail.init_app(app)
+        topic = 'REBALANCEme report'
+        message = Message(topic, recipients=['andronikova.daria@gmail.com'])
+        message.body = 'Heroku made scheduled job, rebalance report has been send to: ' + user_name
+
+        mail.send(message)
 
     print('Scheduled job is done!')
 
