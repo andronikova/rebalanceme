@@ -7,7 +7,7 @@ from flask_moment import Moment
 
 import os, secrets, time
 
-from helpers import apiprice, error_page, load_portfolio_info, prepare_data_for_chart,load_user_settings, send_email
+from helpers import *
 
 app = Flask(__name__)
 moment = Moment(app)
@@ -504,7 +504,7 @@ def add_ticker():
         # check new ticker and load ticker price
         ticker = request.form.get("newticker")
 
-        ticker_info = apiprice(ticker)
+        ticker_info = apiprice_marketstack(ticker)
 
         if  ticker_info['price'] == 0:
             print("apology")

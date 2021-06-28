@@ -3,8 +3,27 @@ from flask import render_template, session
 from sqlalchemy import desc
 from flask_mail import Mail, Message
 
+def apiprice_marketstack(ticker):
 
-def apiprice(ticker):
+    try:
+        API_KEY = os.environ.get('myAPI_KEY_marketstack')
+        response = requests.get(f"http://api.marketstack.com/v1/eod/latest?access_key={API_KEY}&symbols={urllib.parse.quote_plus(ticker)}")
+        response.raise_for_status()
+
+    except requests.RequestException:
+        return None
+
+    try:
+        resp = response.json()
+        return{
+            "price": float(resp['data'][0]['close'])
+        }
+
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+def apiprice_finnhub(ticker):
     # load price from NY
     try:
         API_KEY = os.environ.get('myAPI_KEY_finnhub')
@@ -175,7 +194,7 @@ def load_ticker_info(userid, ticker_db, loadprice):
     # load new prices from api request
     if loadprice == True:
         for row in datas:
-            res = apiprice(row.ticker)
+            res = apiprice_marketstack(row.ticker)
             # TODO: check error messages
 
             if res is not None:
