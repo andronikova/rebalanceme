@@ -11,15 +11,18 @@ def apiprice_marketstack(ticker):
         response.raise_for_status()
 
     except requests.RequestException:
+        print('exception in loading price using merketstack')
         return None
 
     try:
+        print(f"ticket price for {ticker} ist loaded from marketstack")
         resp = response.json()
         return{
             "price": float(resp['data'][0]['close'])
         }
 
     except (KeyError, TypeError, ValueError):
+        print(f"failed to load price for {ticker}")
         return None
 
 
@@ -99,10 +102,12 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
     print(f"\ntotal cash is\n{total_cash}")
 
     # load ticker info: number, price, fullPrice, currency, classname
+    print(f'\nloading ticker info. load new price = {loadprice}\n')
     portfolio_ticker = load_ticker_info(userid, ticker_db, loadprice)
 
     # I put it before check to have empty session in case there is no ticker in portfolio
     session.pop('portfolio_ticker', None)
+
     # if there is no ticker in portfolio - redirect user to create_portfolio page
     if portfolio_ticker == False:
         return False
@@ -203,13 +208,15 @@ def load_ticker_info(userid, ticker_db, loadprice):
                         'price': res['price'],
                         'fullPrice': res['price'] * row.number
                     })
+                # print('ticker price is loaded from marketstack')
             else:
                 portfolio_ticker[row.ticker].update(
                     {
                         'price': None,
                         'fullPrice': None
                     })
-                error_page('ERROR. Could not load price')
+                print(f'failed to load new price for {row.ticker}')
+                # error_page('ERROR. Could not load price')
 
     # load old prices from session for every tck, check the existence of such tck in session
     if loadprice == False:
@@ -228,6 +235,7 @@ def load_ticker_info(userid, ticker_db, loadprice):
                         'price': None,
                         'fullPrice': None
                     })
+                print('Loading ticket price from session. There is no such ticker in old version of portfolio, put None instead price')
 
     return portfolio_ticker
 

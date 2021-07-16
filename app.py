@@ -70,6 +70,9 @@ def index_page():
             if  year_month_day != time.strftime("%Y-%m-%d"):
                 load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, True)
 
+        # forced loading new price for portfolio
+        # load_portfolio_info(userid, ticker_db, cash_db, class_db, user_db, True)
+
         symbols = {"USD": '$', "EUR": '€'}
         main_currency = session.get('main_currency')
 
