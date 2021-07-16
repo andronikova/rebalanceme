@@ -11,7 +11,8 @@ def apiprice_marketstack(ticker):
         response.raise_for_status()
 
     except requests.RequestException:
-        print('exception in loading price using marketstack')
+        print(f'exception in loading price for {ticker} using marketstack')
+        print(response['error'])
         return None
 
     try:
