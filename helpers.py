@@ -16,7 +16,7 @@ def apiprice_marketstack(ticker):
         return None
 
     try:
-        print(f"ticket price for {ticker} ist loaded from marketstack")
+        print(f"ticket price for {ticker} is loaded from marketstack")
         resp = response.json()
         return{
             "price": float(resp['data'][0]['close'])
@@ -35,9 +35,12 @@ def apiprice_finnhub(ticker):
         response.raise_for_status()
 
     except requests.RequestException:
+        print(f'exception in loading price for {ticker} using finnhub')
+        print(f'response error is {response.json()}')
         return None
 
     try:
+        print(f"ticket price for {ticker} is loaded from finnhub")
         resp = response.json()
         return{
             "price": float(resp['c'])
@@ -45,6 +48,23 @@ def apiprice_finnhub(ticker):
 
     except (KeyError, TypeError, ValueError):
         return None
+
+
+def load_api_price(ticker):
+    """
+    choose which service to use for loading ticker price: US ticker - finnhub,  EU ticker - marketstack
+    :param ticker: ticker name
+    :return:
+    """
+
+    if '.' in ticker:
+        response = apiprice_marketstack(ticker)
+    else:
+        response = apiprice_finnhub(ticker)
+
+    print(f"api price loading returns: \n{response}\n")
+
+    return response
 
 
 def apiexchange(base, exchange_currency):
@@ -200,8 +220,7 @@ def load_ticker_info(userid, ticker_db, loadprice):
     # load new prices from api request
     if loadprice == True:
         for row in datas:
-            res = apiprice_marketstack(row.ticker)
-            # TODO: check error messages
+            res = load_api_price(row.ticker)
 
             if res is not None:
                 portfolio_ticker[row.ticker].update(
