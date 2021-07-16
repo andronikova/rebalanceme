@@ -54,7 +54,7 @@ def load_api_price(ticker):
     """
     choose which service to use for loading ticker price: US ticker - finnhub,  EU ticker - marketstack
     :param ticker: ticker name
-    :return:
+    :return: response
     """
 
     if '.' in ticker:

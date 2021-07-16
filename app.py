@@ -507,7 +507,7 @@ def add_ticker():
         # check new ticker and load ticker price
         ticker = request.form.get("newticker")
 
-        ticker_info = apiprice_marketstack(ticker)
+        ticker_info = load_api_price(ticker)
 
         if  ticker_info['price'] == 0:
             print("apology")
