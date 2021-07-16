@@ -12,7 +12,7 @@ def apiprice_marketstack(ticker):
 
     except requests.RequestException:
         print(f'exception in loading price for {ticker} using marketstack')
-        print(f'response error is {response}')
+        print(f'response error is {response["error"]}')
         return None
 
     try:
