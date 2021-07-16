@@ -11,7 +11,7 @@ def apiprice_marketstack(ticker):
         response.raise_for_status()
 
     except requests.RequestException:
-        print('exception in loading price using merketstack')
+        print('exception in loading price using marketstack')
         return None
 
     try:
@@ -22,7 +22,7 @@ def apiprice_marketstack(ticker):
         }
 
     except (KeyError, TypeError, ValueError):
-        print(f"failed to load price for {ticker}")
+        print(f"failed to load price for {ticker}, KeyError is {KeyError}, TypeError is {TypeError}, ValueError is {ValueError}.")
         return None
 
 
