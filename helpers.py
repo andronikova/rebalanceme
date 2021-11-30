@@ -66,23 +66,6 @@ def load_api_price(ticker):
 
     return response
 
-
-def apiexchange(base, exchange_currency):
-    try:
-        API_KEY = os.environ.get('myAPI_KEY_finnhub')
-        response = requests.get(f"https://finnhub.io/api/v1/forex/rates?base={base}&token={API_KEY}")
-        response.raise_for_status()
-
-    except requests.RequestException:
-        return None
-
-    try:
-        resp = response.json()
-        return resp['quote'][exchange_currency]
-
-    except (KeyError, TypeError, ValueError):
-        return None
-
 def error_page(message):
     return render_template("error_page.html",message=message)
 
@@ -182,14 +165,25 @@ def load_portfolio_info(userid,ticker_db,cash_db, class_db, user_db, loadprice):
 
 
 def load_exchange_info():
+    try:
+        API_KEY = os.environ.get('myAPI_KEY_exchangeratesapi')
+        response = requests.get(f"http://api.exchangeratesapi.io/v1/latest?access_key={API_KEY}&base=EUR")
+        response.raise_for_status()
+
+    except requests.RequestException:
+        return None
+
+    try:
+        resp = response.json()
+
+    except (KeyError, TypeError, ValueError):
+        return None
+
     exchange = dict.fromkeys(['USD', 'EUR', 'RUB'])
 
-    for key in exchange:
-        exchange[key] = {key: 1}
-
-        for key2 in exchange:
-            if key != key2:
-                exchange[key].update({ key2: apiexchange(key, key2) })
+    exchange['EUR'] = { 'USD': resp['rates']['USD'], 'RUB': resp['rates']['RUB'], 'EUR': resp['rates']['EUR']}
+    exchange['USD'] = { 'USD':1, 'RUB': resp['rates']['RUB']/resp['rates']['USD'], 'EUR':1/resp['rates']['USD']}
+    exchange['RUB'] = { 'USD':resp['rates']['USD']/resp['rates']['RUB'], 'RUB':1, 'EUR': 1/resp['rates']['RUB']}
 
     print(f"\nexchange info is loaded via api request and saved in dict\n {exchange}")
 
