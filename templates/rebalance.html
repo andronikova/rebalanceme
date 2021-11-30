@@ -139,7 +139,7 @@
                     <td name={{ids[ticker]['exchange']}} style="display:none;">{{exchange[portfolio_ticker[ticker]['currency']][main_currency]}}</td>
 
                     <td>
-                        <input autocomplete='off' name={{ids[ticker]['price']}} class="form-class" type="number"  value={{"{:,.2f}".format(portfolio_ticker[ticker]['price'])}} step="0.01" min="0" max="9999">
+                        <input autocomplete='off' name={{ids[ticker]['price']}} class="form-class" type="number"  value={{portfolio_ticker[ticker]['price']}} step="0.0001" min="0" max="9999">
                         {{symbols[portfolio_ticker[ticker]['currency']]}}
                     </td>
                 </tr>

@@ -180,27 +180,28 @@ def rebalance():
         for ticker in portfolio_ticker:
             # load new number and price
             new_number = float(request.form.get('newnumber_' + ticker))
-            price = float(request.form.get('price_' + ticker))
-
             old_number = portfolio_ticker[ticker]['number']
-            currency = portfolio_ticker[ticker]['currency']
 
-            # change cash in currency of ticker
-            portfolio_cash[currency] += (old_number - new_number) * price
+            if new_number != old_number:
+                price = float(request.form.get('price_' + ticker))
+                currency = portfolio_ticker[ticker]['currency']
 
-            # load new values in ticker_db
-            ticker_db.query.filter_by(userid=session.get('userid'), ticker=ticker).update({
-                'number': new_number
-            })
-            db.session.commit()
+                # change cash in currency of ticker
+                portfolio_cash[currency] += (old_number - new_number) * price
 
-        # load new cash values in db
-        cash_db.query.filter_by(userid=session.get('userid')).update({
-            'USD': portfolio_cash['USD'],
-            'EUR' : portfolio_cash['EUR'],
-            'RUB': portfolio_cash['RUB']
-        })
-        db.session.commit()
+                # load new values in ticker_db
+                ticker_db.query.filter_by(userid=session.get('userid'), ticker=ticker).update({'number': new_number})
+                db.session.commit()
+
+                # load new cash values in db
+                cash_db.query.filter_by(userid=session.get('userid')).update({
+                    'USD': 100 * portfolio_cash['USD'],
+                    'EUR' : 100 * portfolio_cash['EUR'],
+                    'RUB': 100 * portfolio_cash['RUB']
+                })
+                db.session.commit()
+
+                print(f'\n rebalance {ticker}: old_number={old_number}, new_number={new_number},price={price} {currency}')
 
 
         # reload portfolio in session
